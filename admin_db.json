@@ -1,0 +1,69 @@
+{
+  "resources": [
+    {
+    	"type": "array",
+    	"name": "users",
+    	"length": 500,
+    	"model": {
+    		"first_name": {
+    			"type": "random",
+    			"faker_category": "name",
+    			"faker_type": "firstName"
+    		},
+    		"last_name": {
+    			"type": "random",
+    			"faker_category": "name",
+    			"faker_type": "firstName"
+    		},
+    		"address_line_1": {
+    			"type": "random",
+    			"faker_category": "random",
+    			"faker_type": "number",
+    			"params": {
+    				"max": "300",
+    				"min": "1"
+    			}
+    		},
+    		"address_line_2": {
+    			"type": "random",
+    			"faker_category": "address",
+    			"faker_type": "streetName"
+    		},
+    		"town": {
+    			"type": "random",
+    			"faker_category": "address",
+    			"faker_type": "county"
+    		},
+    		"county": {
+    			"type": "random",
+    			"faker_category": "address",
+    			"faker_type": "state"
+    		},
+    		"postcode": {
+    			"type": "random",
+    			"faker_category": "address",
+    			"faker_type": "zipCode"
+    		},
+    		"country": {
+    			"type": "random",
+    			"faker_category": "address",
+    			"faker_type": "country"
+    		},
+    		"date_of_birth": {
+    			"type": "random",
+    			"faker_category": "date",
+    			"faker_type": "between",
+    			"params": {
+    				"from": "2015-01-01",
+    				"to": "2015-12-31"
+    			}
+    		},
+    		"deleted": {
+    			"type": "random",
+    			"faker_category": "random",
+    			"faker_type": "boolean"
+    		}
+    	}
+    }
+  ]
+}
