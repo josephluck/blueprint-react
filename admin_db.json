@@ -62,6 +62,18 @@
     			"type": "random",
     			"faker_category": "random",
     			"faker_type": "boolean"
+    		},
+    		"favourite_programming_language": {
+    			"type": "random",
+    			"faker_category": "random",
+    			"faker_type": "arrayElement",
+    			"params": {
+    				"values": [
+    					"javascript",
+    					"ruby",
+    					"python"
+    				]
+    			}
     		}
     	}
     }

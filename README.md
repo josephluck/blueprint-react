@@ -29,6 +29,7 @@ Each user has the following description:
 - `county`: random county
 - `postcode`: random postcode
 - `deleted`: random boolean
+- `favourite_programming_language`: random value between ['javascript', 'python', 'ruby']
 
 Making a GET request to `/users` returns the following:
 
@@ -44,7 +45,8 @@ Making a GET request to `/users` returns the following:
     "postcode": "70121-2298",
     "country": "Pitcairn Islands",
     "date_of_birth": "2015-09-01T08:59:30.636Z",
-    "deleted": true,
+    "deleted": false,
+    "favourite_programming_language": "ruby",
     "id": 1
   },
   {
@@ -58,6 +60,7 @@ Making a GET request to `/users` returns the following:
     "country": "Iran",
     "date_of_birth": "2015-10-07T06:29:02.414Z",
     "deleted": true,
+    "favourite_programming_language": "python",
     "id": 2
   }
 ]
