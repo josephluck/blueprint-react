@@ -1,17 +1,19 @@
 /*=============================================================================
 	Run the admin database (to store resource descriptions)
 =============================================================================*/
-	var adminJsonServer = require('json-server');
-	var adminServer = adminJsonServer.create();
-	var adminRouter = adminJsonServer.router('admin_db.json');
-	var adminMiddlewares = adminJsonServer.defaults();
+	var startAdminServer = function() {
+		var adminJsonServer = require('json-server');
+		var adminServer = adminJsonServer.create();
+		var adminRouter = adminJsonServer.router('admin_db.json');
+		var adminMiddlewares = adminJsonServer.defaults();
 
-	adminServer.use(adminMiddlewares);
-	adminServer.use(adminRouter);
-	adminServer.listen(1401, function () {
-	  console.log('Admin database running at: http://localhost:1401');
-	  startDataBaseServer();
-	});
+		adminServer.use(adminMiddlewares);
+		adminServer.use(adminRouter);
+		adminServer.listen(1401, function () {
+		  console.log('Admin database running at: http://localhost:1401');
+		  startDatabaseServer();
+		});
+	}
 
 /*=============================================================================
 	Generate a full resource (array of models)
@@ -30,7 +32,8 @@
 
 			return resource;
 		} else {
-			// return generateModel(description.model);
+			// This resource isn't a collection, it's a single object, or another type.
+			// Handle use cases
 		}
 	}
 
@@ -80,14 +83,12 @@
 		return faker[property.faker_category][property.faker_type].apply(null, args);
 	}
 
-
 /*=============================================================================
 	Calculate a value based on other properties
 =============================================================================*/
 	var generateCalculatedValue = function(property) {
 		return property.value;
 	}
-
 
 /*=============================================================================
 	Returns a full database object from the descriptions stored in the
@@ -98,76 +99,8 @@
 
 		for (var i = 0, x = resources.length; i < x; i ++) {
 			var resource = resources[i];
-			console.log(resource);
-
 			database[resource.name] = generateResource(resource);
 		}
-
-		// database['users'] = generateResource({
-		// 	type: 'array',
-		// 	name: 'users',
-		// 	length: 500,
-		// 	model: {
-		// 		first_name: {
-		// 			type: 'random',
-		// 			faker_category: 'name',
-		// 			faker_type: 'firstName',
-		// 		},
-		// 		last_name: {
-		// 			type: 'random',
-		// 			faker_category: 'name',
-		// 			faker_type: 'firstName'
-		// 		},
-		// 		address_line_1: {
-		// 			type: 'random',
-		// 			faker_category: 'random',
-		// 			faker_type: 'number',
-		// 			params: {
-		// 				max: 300,
-		// 				min: 1
-		// 			}
-		// 		},
-		// 		address_line_2: {
-		// 			type: 'random',
-		// 			faker_category: 'address',
-		// 			faker_type: 'streetName'
-		// 		},
-		// 		town: {
-		// 			type: 'random',
-		// 			faker_category: 'address',
-		// 			faker_type: 'county'
-		// 		},
-		// 		county: {
-		// 			type: 'random',
-		// 			faker_category: 'address',
-		// 			faker_type: 'state'
-		// 		},
-		// 		postcode: {
-		// 			type: 'random',
-		// 			faker_category: 'address',
-		// 			faker_type: 'zipCode'
-		// 		},
-		// 		country: {
-		// 			type: 'random',
-		// 			faker_category: 'address',
-		// 			faker_type: 'country'
-		// 		},
-		// 		date_of_birth: {
-		// 			type: 'random',
-		// 			faker_category: 'date',
-		// 			faker_type: 'between',
-		// 			params: {
-		// 				from: '2015-01-01',
-		// 				to: '2015-12-31'
-		// 			}
-		// 		},
-		// 		deleted: {
-		// 			type: 'random',
-		// 			faker_category: 'random',
-		// 			faker_type: 'boolean'
-		// 		}
-		// 	}
-		// });
 
 		return database;
 	}
@@ -177,7 +110,7 @@
 	front-end projects).
 	Uses JSON server (see docs for more info)
 =============================================================================*/
-	var startDataBaseServer = function() {
+	var startDatabaseServer = function() {
 		var http = require('request');
 
 		http('http://localhost:1401/resources', function (error, response, body) {
@@ -193,42 +126,30 @@
 		    console.log('Database running at: http://localhost:1400');
 		  });
 		});
-
-		// http.get({
-	 //    host: 'localhost',
-	 //    port: 1401,
-	 //    path: '/resources'
-	 //  }, function(request) {
-	 //  	request.on('data', function(response) {
-	 //  		console.log(response);
-	 //  		var dataJsonServer = require('json-server');
-	 //  		var dataServer = dataJsonServer.create();
-	 //  		var dataRouter = dataJsonServer.router(generateDatabase());
-	 //  		var dataMiddlewares = dataJsonServer.defaults();
-
-	 //  		dataServer.use(dataMiddlewares);
-	 //  		dataServer.use(dataRouter);
-	 //  		dataServer.listen(1400, function () {
-	 //  		  console.log('Database running at: http://localhost:1400');
-	 //  		});
-	 //  	})
-	 //  });
 	}
 
+/*=============================================================================
+	Start up the admin front-end for managing resources and settings
+=============================================================================*/
+	var startFrontEndServer = function() {
+		var webpack = require('webpack');
+		var WebpackDevServer = require('webpack-dev-server');
+		var config = require('./webpack.config');
 
+		new WebpackDevServer(webpack(config), {
+		  publicPath: config.output.publicPath,
+		  hot: true,
+		  historyApiFallback: true
+		}).listen(1402, 'localhost', function (err) {
+		  if (err) {
+		    console.log(err);
+		  }
+		  console.log('Frontend server running at: http://localhost:1402');
+		});
+	}
 
-// // Local front-end dev server for consumer facing app
-// var webpack = require('webpack');
-// var WebpackDevServer = require('webpack-dev-server');
-// var config = require('./webpack.config');
-
-// new WebpackDevServer(webpack(config), {
-//   publicPath: config.output.publicPath,
-//   hot: true,
-//   historyApiFallback: true
-// }).listen(1402, 'localhost', function (err) {
-//   if (err) {
-//     console.log(err);
-//   }
-//   console.log('Frontend server running at: http://localhost:1402');
-// });
+/*=============================================================================
+	Bootstrap
+=============================================================================*/
+	startAdminServer();
+	// startFrontEndServer();
