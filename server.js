@@ -10,6 +10,7 @@
 	adminServer.use(adminRouter);
 	adminServer.listen(1401, function () {
 	  console.log('Admin database running at: http://localhost:1401');
+	  startDataBaseServer();
 	});
 
 /*=============================================================================
@@ -29,7 +30,7 @@
 
 			return resource;
 		} else {
-			return generateModel(description.model);
+			// return generateModel(description.model);
 		}
 	}
 
@@ -92,93 +93,127 @@
 	Returns a full database object from the descriptions stored in the
 	admin DB
 =============================================================================*/
-	var generateDatabase = function() {
+	var generateDatabase = function(resources) {
 		var database = {};
 
-		database['users'] = generateResource({
-			type: 'array',
-			name: 'users',
-			length: 500,
-			model: {
-				first_name: {
-					type: 'random',
-					faker_category: 'name',
-					faker_type: 'firstName',
-				},
-				last_name: {
-					type: 'random',
-					faker_category: 'name',
-					faker_type: 'firstName'
-				},
-				address_line_1: {
-					type: 'random',
-					faker_category: 'random',
-					faker_type: 'number',
-					params: {
-						max: 300,
-						min: 1
-					}
-				},
-				address_line_2: {
-					type: 'random',
-					faker_category: 'address',
-					faker_type: 'streetName'
-				},
-				town: {
-					type: 'random',
-					faker_category: 'address',
-					faker_type: 'county'
-				},
-				county: {
-					type: 'random',
-					faker_category: 'address',
-					faker_type: 'state'
-				},
-				postcode: {
-					type: 'random',
-					faker_category: 'address',
-					faker_type: 'zipCode'
-				},
-				country: {
-					type: 'random',
-					faker_category: 'address',
-					faker_type: 'country'
-				},
-				date_of_birth: {
-					type: 'random',
-					faker_category: 'date',
-					faker_type: 'between',
-					params: {
-						from: '2015-01-01',
-						to: '2015-12-31'
-					}
-				},
-				deleted: {
-					type: 'random',
-					faker_category: 'random',
-					faker_type: 'boolean'
-				}
-			}
-		});
+		for (var i = 0, x = resources.length; i < x; i ++) {
+			var resource = resources[i];
+			console.log(resource);
+
+			database[resource.name] = generateResource(resource);
+		}
+
+		// database['users'] = generateResource({
+		// 	type: 'array',
+		// 	name: 'users',
+		// 	length: 500,
+		// 	model: {
+		// 		first_name: {
+		// 			type: 'random',
+		// 			faker_category: 'name',
+		// 			faker_type: 'firstName',
+		// 		},
+		// 		last_name: {
+		// 			type: 'random',
+		// 			faker_category: 'name',
+		// 			faker_type: 'firstName'
+		// 		},
+		// 		address_line_1: {
+		// 			type: 'random',
+		// 			faker_category: 'random',
+		// 			faker_type: 'number',
+		// 			params: {
+		// 				max: 300,
+		// 				min: 1
+		// 			}
+		// 		},
+		// 		address_line_2: {
+		// 			type: 'random',
+		// 			faker_category: 'address',
+		// 			faker_type: 'streetName'
+		// 		},
+		// 		town: {
+		// 			type: 'random',
+		// 			faker_category: 'address',
+		// 			faker_type: 'county'
+		// 		},
+		// 		county: {
+		// 			type: 'random',
+		// 			faker_category: 'address',
+		// 			faker_type: 'state'
+		// 		},
+		// 		postcode: {
+		// 			type: 'random',
+		// 			faker_category: 'address',
+		// 			faker_type: 'zipCode'
+		// 		},
+		// 		country: {
+		// 			type: 'random',
+		// 			faker_category: 'address',
+		// 			faker_type: 'country'
+		// 		},
+		// 		date_of_birth: {
+		// 			type: 'random',
+		// 			faker_category: 'date',
+		// 			faker_type: 'between',
+		// 			params: {
+		// 				from: '2015-01-01',
+		// 				to: '2015-12-31'
+		// 			}
+		// 		},
+		// 		deleted: {
+		// 			type: 'random',
+		// 			faker_category: 'random',
+		// 			faker_type: 'boolean'
+		// 		}
+		// 	}
+		// });
 
 		return database;
 	}
 
 /*=============================================================================
-	Start up the API.
+	Start up the database API (one that will be consumed by client's
+	front-end projects).
 	Uses JSON server (see docs for more info)
 =============================================================================*/
-	var dataJsonServer = require('json-server');
-	var dataServer = dataJsonServer.create();
-	var dataRouter = dataJsonServer.router(generateDatabase());
-	var dataMiddlewares = dataJsonServer.defaults();
+	var startDataBaseServer = function() {
+		var http = require('request');
 
-	dataServer.use(dataMiddlewares);
-	dataServer.use(dataRouter);
-	dataServer.listen(1400, function () {
-	  console.log('Database running at: http://localhost:1400');
-	});
+		http('http://localhost:1401/resources', function (error, response, body) {
+		  var resources = JSON.parse(body);
+		  var dataJsonServer = require('json-server');
+		  var dataServer = dataJsonServer.create();
+		  var dataRouter = dataJsonServer.router(generateDatabase(resources));
+		  var dataMiddlewares = dataJsonServer.defaults();
 
+		  dataServer.use(dataMiddlewares);
+		  dataServer.use(dataRouter);
+		  dataServer.listen(1400, function () {
+		    console.log('Database running at: http://localhost:1400');
+		  });
+		});
+
+		// http.get({
+	 //    host: 'localhost',
+	 //    port: 1401,
+	 //    path: '/resources'
+	 //  }, function(request) {
+	 //  	request.on('data', function(response) {
+	 //  		console.log(response);
+	 //  		var dataJsonServer = require('json-server');
+	 //  		var dataServer = dataJsonServer.create();
+	 //  		var dataRouter = dataJsonServer.router(generateDatabase());
+	 //  		var dataMiddlewares = dataJsonServer.defaults();
+
+	 //  		dataServer.use(dataMiddlewares);
+	 //  		dataServer.use(dataRouter);
+	 //  		dataServer.listen(1400, function () {
+	 //  		  console.log('Database running at: http://localhost:1400');
+	 //  		});
+	 //  	})
+	 //  });
+	}
 
 
 
