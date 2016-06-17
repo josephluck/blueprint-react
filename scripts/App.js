@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { cool } from 'react-freezer-js';
 
-import Store from 'store/Store';
+import Store from 'stores/Store';
 
 function App({
 	children

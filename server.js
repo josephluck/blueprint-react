@@ -152,4 +152,4 @@
 	Bootstrap
 =============================================================================*/
 	startAdminServer();
-	// startFrontEndServer();
+	startFrontEndServer();
