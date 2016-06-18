@@ -5,7 +5,9 @@ import Freezer from 'freezer-js';
 	State for sub-stores are handled in their constructors.
 	This is for encapsulation and in order to handle computed derived state.
 =============================================================================*/
-var Store = new Freezer({});
+var Store = new Freezer({
+	params: {}
+});
 
 /*=============================================================================
 	An intialize method that lets a sub-store initialize some state.
@@ -110,7 +112,6 @@ window.onerror = function(message, url, line, column) {
 		error_occured_at_column: column,
 		application_state_at_time_of_error: Store.get().toJS()
 	});
-	console.log(window.application_errors);
 }
 
 export default Store;

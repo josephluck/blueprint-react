@@ -21,11 +21,18 @@ class Resources extends Component {
 	Render office tasks
 =============================================================================*/
 	render() {
+		console.log(this.props.params);
 		return (
 			<div className="list">
 				{this.props.resources.map((resource, i) => {
+					let class_name = "list-item";
+
+					if (resource.id == this.props.params.resourceId) {
+						class_name += " active";
+					}
+
 					return (
-						<div key={i} className="list-item">
+						<div key={i} className={class_name}>
 							<Link to={`/resources/${resource.id}/view`}>{resource.name}</Link>
 						</div>
 					)
@@ -37,5 +44,6 @@ class Resources extends Component {
 
 export default Provide(Resources, [
 	'resources',
-	'resources_loading'
+	'resources_loading',
+	'params'
 ])
