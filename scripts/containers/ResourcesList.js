@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Provide from 'hoc/Provide';
+import {Link} from 'react-router';
 
 // Stores
 import ResourcesStore from 'stores/ResourcesStore';
@@ -13,9 +14,7 @@ class Resources extends Component {
 	Fire AJAX requests for office tasks
 =============================================================================*/
 	componentWillMount() {
-		ResourcesStore.getResources({
-			...this.props
-		});
+		ResourcesStore.getResources();
 	}
 
 /*=============================================================================
@@ -23,11 +22,11 @@ class Resources extends Component {
 =============================================================================*/
 	render() {
 		return (
-			<div>
+			<div className="list">
 				{this.props.resources.map((resource, i) => {
 					return (
-						<div key={i}>
-							<h1>{resource.name}</h1>
+						<div key={i} className="list-item">
+							<Link to={`/resources/${resource.id}/view`}>{resource.name}</Link>
 						</div>
 					)
 				})}

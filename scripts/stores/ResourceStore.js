@@ -1,28 +1,31 @@
 import Store from 'stores/Store';
 import Api from 'utils/Api';
 
-class ResourcesStore {
+class ResourceStore {
 /*=============================================================================
 	Set initial state in the Store.
 =============================================================================*/
 	constructor() {
 		Store.initialize({
-			resources: [],
-			resources_loading: true
+			resource: {},
+			resource_loading: true
 		});
 	}
 
-	getResources() {
-		Store.get().set({resources_loading: true});
+	getResource({
+		resourceId
+	}) {
+		Store.get().set({resource_loading: true});
 		Api.get({
 			url: {
-				name: 'resources'
+				name: 'resource',
+				resourceId: resourceId
 			}
 		}).then((res) => {
-			Store.get().resources.reset(res);
+			Store.get().resource.reset(res);
 		});
-		Store.get().set({resources_loading: false});
+		Store.get().set({resource_loading: false});
 	}
 }
 
-export default new ResourcesStore();
+export default new ResourceStore();

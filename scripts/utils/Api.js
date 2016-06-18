@@ -100,6 +100,10 @@ function getApiUrl(options) {
       return API_ROOT + 'resources';
       break;
 
+    case 'resource':
+      return API_ROOT + `resources/${options.resourceId}`;
+      break;
+
     default:
       return false;
       break

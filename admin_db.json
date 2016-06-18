@@ -1,6 +1,7 @@
 {
   "resources": [
     {
+        "id": 1,
     	"type": "array",
     	"name": "users",
     	"length": 500,
@@ -76,6 +77,19 @@
     			}
     		}
     	}
+    },
+    {
+        "id": 2,
+        "type": "array",
+        "name": "anotherendpoint",
+        "length": 2,
+        "model": {
+            "first_name": {
+                "type": "random",
+                "faker_category": "name",
+                "faker_type": "firstName"
+            }
+        }
     }
   ]
 }
