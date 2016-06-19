@@ -42,11 +42,10 @@
 =============================================================================*/
 	var generateModel = function(description) {
 		var model = {};
-		var model_keys = Object.keys(description);
 
-		for (var i = 0, x = model_keys.length; i < x; i++) {
-			var key = model_keys[i];
-			model[key] = generatePropertyValue(description[key]);
+		for (var i = 0, x = description.length; i < x; i++) {
+			var key = description[i].key;
+			model[key] = generatePropertyValue(description);
 		}
 
 		return model;
