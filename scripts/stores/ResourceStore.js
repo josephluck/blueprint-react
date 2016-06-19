@@ -8,6 +8,7 @@ class ResourceStore {
 	constructor() {
 		Store.initialize({
 			resource: {},
+			edited_resource: {},
 			resource_loading: true
 		});
 	}
@@ -23,8 +24,9 @@ class ResourceStore {
 			}
 		}).then((res) => {
 			Store.get().resource.reset(res);
+			Store.get().edited_resource.reset(res);
+			Store.get().set({resource_loading: false});
 		});
-		Store.get().set({resource_loading: false});
 	}
 }
 

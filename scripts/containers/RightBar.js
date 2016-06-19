@@ -36,8 +36,10 @@ class RightBar extends Component {
 
 		return (
 			<div>
-				<div className="section-title">
-					{`GET /${this.props.resource.name}`}
+				<div className="section-title flex">
+					<span className="flex-1">
+						{`GET /${this.props.resource.name}`}
+					</span>
 				</div>
 				<div className="box">
 					<Highlight className='javascript'>
