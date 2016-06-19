@@ -27,6 +27,9 @@ class App extends Component {
 	  	<div className="app-container">
 	  		<div className="left-nav">
 		  		<ResourcesList></ResourcesList>
+		  		<div className="list-item">
+		  			<a href="" className="button">{"New resource"}</a>
+		  		</div>
 		  	</div>
 		  	<div className="main-content">
 			  	{this.props.children}

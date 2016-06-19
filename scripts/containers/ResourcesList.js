@@ -36,9 +36,6 @@ class Resources extends Component {
 						</div>
 					)
 				})}
-				<div className="list-item">
-					<a href="" className="button">{"New resource"}</a>
-				</div>
 			</div>
 		)
 	}

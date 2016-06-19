@@ -5,6 +5,9 @@
 input,
 select,
 textarea {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
 	border: solid @borderWidth @borderColor;
 	padding: @padding/2 @padding/2;
 	border-radius: 4px;
@@ -17,8 +20,19 @@ textarea {
 	-webkit-font-smoothing: antialiased;
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
 	width: 100%;
+	margin-bottom: @padding;
+	background: @pureWhite;
 	&:focus {
 		border-color: @lightBlue;
 		outline: none;
 	}
+	&.without-bottom-margin {
+		margin-bottom: 0px;
+	}
+}
+
+.model-input-group {
+	// padding-bottom: @padding;
+	margin-bottom: @padding;
+	border-bottom: solid @borderWidth @borderColor;
 }

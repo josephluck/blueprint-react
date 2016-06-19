@@ -7,50 +7,60 @@
     	"length": 500,
     	"model": {
     		"first_name": {
+                "key": "first_name",
     			"type": "random",
     			"faker_category": "name",
     			"faker_type": "firstName"
     		},
     		"last_name": {
+                "key": "last_name",
     			"type": "random",
     			"faker_category": "name",
     			"faker_type": "firstName"
     		},
     		"address_line_1": {
+                "key": "address_line_1",
     			"type": "random",
     			"faker_category": "random",
     			"faker_type": "number",
     			"params": {
+                    "key": "params",
     				"max": "300",
     				"min": "1"
     			}
     		},
     		"address_line_2": {
+                "key": "address_line_2",
     			"type": "random",
     			"faker_category": "address",
     			"faker_type": "streetName"
     		},
     		"town": {
+                "key": "town",
     			"type": "random",
     			"faker_category": "address",
     			"faker_type": "county"
     		},
     		"county": {
+                "key": "county",
     			"type": "random",
     			"faker_category": "address",
     			"faker_type": "state"
     		},
     		"postcode": {
+                "key": "postcode",
     			"type": "random",
     			"faker_category": "address",
     			"faker_type": "zipCode"
     		},
     		"country": {
+                "key": "country",
     			"type": "random",
     			"faker_category": "address",
     			"faker_type": "country"
     		},
     		"date_of_birth": {
+                "key": "date_of_birth",
     			"type": "random",
     			"faker_category": "date",
     			"faker_type": "between",
@@ -60,11 +70,13 @@
     			}
     		},
     		"deleted": {
+                "key": "deleted",
     			"type": "random",
     			"faker_category": "random",
     			"faker_type": "boolean"
     		},
     		"favourite_programming_language": {
+                "key": "favourite_programming_language",
     			"type": "random",
     			"faker_category": "random",
     			"faker_type": "arrayElement",
