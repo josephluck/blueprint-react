@@ -33,6 +33,7 @@
     "react-addons-css-transition-group": "^15.0.1",
     "react-dom": "^15.0.1",
     "react-freezer-js": "^2.0.0",
+    "react-highlight": "^0.8.0",
     "react-lite": "^0.15.14",
     "react-router": "^2.2.1",
     "request": "^2.72.0",

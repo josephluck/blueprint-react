@@ -16,7 +16,8 @@ class ResourcesStore {
 		Store.get().set({resources_loading: true});
 		Api.get({
 			url: {
-				name: 'resources'
+				name: 'resources',
+				params: '?_sort=name&_order=ASC'
 			}
 		}).then((res) => {
 			Store.get().resources.reset(res);

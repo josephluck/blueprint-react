@@ -9,6 +9,8 @@ html {
 	color: @textColor;
 	font-size: 18px;
 	line-height: 1.2em;
+	-webkit-font-smoothing: antialiased;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
 }
 
 .app-container {
@@ -22,18 +24,46 @@ html {
 .right-bar {
 	flex: 0 0 auto;
 	width: 200px;
-	background: @pureWhite;
+	overflow: auto;
 }
 
 .left-nav {
 	border-right: solid @borderWidth @borderColor;
+	background: @pureWhite;
+}
+
+.right-bar {
+	width: 400px;
+	border-left: solid @borderWidth @borderColor;
 }
 
 .main-content {
 	flex: 1;
+	overflow: auto;
+}
+
+.section-title {
+	border-bottom: solid @borderWidth @borderColor;
+	background: @white;
+	padding: @padding;
+	&.with-top-border {
+		border-top: solid @borderWidth @borderColor;
+	}
+}
+
+.box {
 	padding: @padding;
 }
 
+code {
+	padding: 0px !important;
+	font-size: 0.7em;
+	background: transparent !important;
+}
+
+pre {
+	margin: 0px;
+}
 
 a {
 	text-decoration: none;

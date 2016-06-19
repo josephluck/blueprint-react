@@ -21,7 +21,6 @@ class Resources extends Component {
 	Render office tasks
 =============================================================================*/
 	render() {
-		console.log(this.props.params);
 		return (
 			<div className="list">
 				{this.props.resources.map((resource, i) => {
@@ -33,10 +32,13 @@ class Resources extends Component {
 
 					return (
 						<div key={i} className={class_name}>
-							<Link to={`/resources/${resource.id}/view`}>{resource.name}</Link>
+							<Link to={`/resources/${resource.id}`}>{resource.name}</Link>
 						</div>
 					)
 				})}
+				<div className="list-item">
+					<a href="" className="button">{"New resource"}</a>
+				</div>
 			</div>
 		)
 	}

@@ -97,7 +97,7 @@ function destroy(params) {
 function getApiUrl(options) {
   switch (options.name) {
     case 'resources':
-      return API_ROOT + 'resources';
+      return API_ROOT + `resources${options.params}`;
       break;
 
     case 'resource':

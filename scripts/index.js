@@ -6,14 +6,14 @@ import { browserHistory, Router, Route, IndexRoute } from 'react-router';
 import App from './App';
 import ResourcesList from 'containers/ResourcesList';
 import Resource from 'containers/Resource';
-import ResourceView from 'containers/ResourceView';
+import ResourceEdit from 'containers/ResourceEdit';
 
 render((
   <Router history={browserHistory}>
     <Route path="/" component={App}>
     	<Route path="resources">
-	    	<Route path=":resourceId" component={Resource}>
-	    		<Route path="view" component={ResourceView}></Route>
+    		<Route component={Resource}>
+	    		<Route path=":resourceId" component={ResourceEdit}></Route>
 	    	</Route>
 	    </Route>
     </Route>

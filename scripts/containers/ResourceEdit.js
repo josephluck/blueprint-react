@@ -5,7 +5,7 @@ import {Link} from 'react-router';
 // Stores
 import ResourcesStore from 'stores/ResourcesStore';
 
-class ResourceView extends Component {
+class ResourceEdit extends Component {
 	constructor(props) {
 		super(props);
 	}
@@ -15,14 +15,24 @@ class ResourceView extends Component {
 =============================================================================*/
 	render() {
 		return (
-			<div className="list">
-				{this.props.resource.name}
+			<div>
+				<div className="section-title">
+					{`${this.props.resource.name} resource description`}
+				</div>
+				<div className="box">
+					{this.props.resource.name}
+				</div>
+
+
+				<div className="section-title with-top-border">
+					{`${this.props.resource.name} model description`}
+				</div>
 			</div>
 		)
 	}
 }
 
-export default Provide(ResourceView, [
+export default Provide(ResourceEdit, [
 	'resource',
 	'resource_loading'
 ])

@@ -4,6 +4,7 @@ import { cool } from 'react-freezer-js';
 import Store from 'stores/Store';
 
 import ResourcesList from 'containers/ResourcesList';
+import RightBar from 'containers/RightBar';
 
 class App extends Component {
 	constructor(props) {
@@ -29,6 +30,9 @@ class App extends Component {
 		  	</div>
 		  	<div className="main-content">
 			  	{this.props.children}
+			  </div>
+			  <div className="right-bar">
+			  	<RightBar></RightBar>
 			  </div>
 		  </div>
 		)
