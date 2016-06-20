@@ -462,6 +462,26 @@ class ResourceEdit extends Component {
 														</div>
 														: null
 													}
+													{model.faker_type === "firstName" || model.faker_type === 'lastName' || model.faker_type === 'prefix' ?
+														<div>
+															<div className="input-label">{"Gender"}</div>
+															<select value={model.gender}
+																onChange={(e) => {
+																	this.handleModelChange(model, 'gender', e.target.value);
+																}}>
+																<option value={""}>
+																	{"Either"}
+																</option>
+																<option value={"male"}>
+																	{"Male"}
+																</option>
+																<option value={"female"}>
+																	{"Female"}
+																</option>
+															</select>
+														</div>
+														: null
+													}
 
 												</div>
 												: null

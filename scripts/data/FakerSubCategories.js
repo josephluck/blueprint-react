@@ -367,8 +367,36 @@ export default {
 			value: 'firstName'
 		},
 		{
+			name: 'Job area',
+			value: 'jobArea'
+		},
+		{
+			name: 'Job descriptor',
+			value: 'jobDescriptor'
+		},
+		{
+			name: 'Job title',
+			value: 'jobTitle'
+		},
+		{
+			name: 'Job type',
+			value: 'jobType'
+		},
+		{
 			name: 'Last name',
 			value: 'lastName'
+		},
+		{
+			name: 'Prefix',
+			value: 'prefix'
+		},
+		{
+			name: 'Suffix',
+			value: 'suffix'
+		},
+		{
+			name: 'Title',
+			value: 'title'
 		}
 	],
 	"phone": [],
