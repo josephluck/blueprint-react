@@ -258,6 +258,57 @@ class ResourceEdit extends Component {
 														</div>
 														: null
 													}
+													{model.faker_type === "amount" ?
+														<div>
+															<div className="input-label">{"Min value"}</div>
+															<input value={model.params.min}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'min', e.target.value);
+																}} />
+															<div className="input-label">{"Max value"}</div>
+															<input value={model.params.max}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'max', e.target.value);
+																}} />
+															<div className="input-label">{"Decimal places"}</div>
+															<input value={model.params.dec}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'dec', e.target.value);
+																}} />
+															<div className="input-label">{"Symbol"}</div>
+															<input value={model.params.symbol}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'symbol', e.target.value);
+																}} />
+														</div>
+														: null
+													}
+													{model.faker_type === "mask" ?
+														<div>
+															<div className="input-label">{"Length of number"}</div>
+															<input value={model.params.length}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'length', e.target.value);
+																}} />
+															<div className="checkbox-wrap">
+																<input type="checkbox"
+																	checked={model.params.parens === true}
+																	onChange={(e) => {
+																		this.handleModelParamsChange(model, 'parens', e.target.checked);
+																	}} />
+															</div>
+															<div className="checkbox-wrap">
+																<span className="checkbox-label">{"Wrap in parenthesis?"}</span>
+																<input type="checkbox"
+																	checked={model.params.ellipsis === true}
+																	onChange={(e) => {
+																		this.handleModelParamsChange(model, 'ellipsis', e.target.checked);
+																	}} />
+																<span className="checkbox-label">{"Include an ellipsis?"}</span>
+															</div>
+														</div>
+														: null
+													}
 												</div>
 												: null
 											}

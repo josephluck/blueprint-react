@@ -151,7 +151,40 @@ export default {
 			"value": "recent"
 		}
 	],
-	"finance": [],
+	"finance": [
+		{
+			"name": "Account number",
+			"value": "account"
+		},
+		{
+			"name": "Account name",
+			"value": "accountName"
+		},
+		{
+			"name": "Amount",
+			"value": "amount"
+		},
+		{
+			"name": "Bitcoin address",
+			"value": "bitcoinAddress"
+		},
+		{
+			"name": "Currency code",
+			"value": "currencyCode"
+		},
+		{
+			"name": "Currency name",
+			"value": "currencyName"
+		},
+		{
+			"name": "Currency symbol",
+			"value": "currencySymbol"
+		},
+		{
+			"name": "Masked number (i.e. account number)",
+			"value": "mask"
+		},
+	],
 	"hacker": [],
 	"image": [],
 	"image": [],
