@@ -296,9 +296,9 @@ class ResourceEdit extends Component {
 																	onChange={(e) => {
 																		this.handleModelParamsChange(model, 'parens', e.target.checked);
 																	}} />
+																<span className="checkbox-label">{"Wrap in parenthesis?"}</span>
 															</div>
 															<div className="checkbox-wrap">
-																<span className="checkbox-label">{"Wrap in parenthesis?"}</span>
 																<input type="checkbox"
 																	checked={model.params.ellipsis === true}
 																	onChange={(e) => {
@@ -309,6 +309,90 @@ class ResourceEdit extends Component {
 														</div>
 														: null
 													}
+													{model.faker_category === "image" && model.faker_type !== "avatar" ?
+														<div>
+															<div className="input-label">{"Width"}</div>
+															<input value={model.params.width}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'width', e.target.value);
+																}} />
+															<div className="input-label">{"Height"}</div>
+															<input value={model.params.height}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'height', e.target.value);
+																}} />
+														</div>
+														: null
+													}
+													{model.faker_type === "email" ?
+														<div>
+															<div className="input-label">{"First name"}</div>
+															<input value={model.params.firstName}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'firstName', e.target.value);
+																}} />
+															<div className="input-label">{"Last name"}</div>
+															<input value={model.params.lastName}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'lastName', e.target.value);
+																}} />
+															<div className="input-label">{"Provider"}</div>
+															<input value={model.params.provider}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'provider', e.target.value);
+																}} />
+														</div>
+														: null
+													}
+													{model.faker_type === "exampleEmail" ?
+														<div>
+															<div className="input-label">{"First name"}</div>
+															<input value={model.params.firstName}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'firstName', e.target.value);
+																}} />
+															<div className="input-label">{"Last name"}</div>
+															<input value={model.params.lastName}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'lastName', e.target.value);
+																}} />
+														</div>
+														: null
+													}
+													{model.faker_type === "password" ?
+														<div>
+															<div className="input-label">{"Length of password"}</div>
+															<input value={model.params.length}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'length', e.target.value);
+																}} />
+															<div className="checkbox-wrap">
+																<input type="checkbox"
+																	checked={model.params.memorable === true}
+																	onChange={(e) => {
+																		this.handleModelParamsChange(model, 'memorable', e.target.checked);
+																	}} />
+																<span className="checkbox-label">{"Memorable password?"}</span>
+															</div>
+														</div>
+														: null
+													}
+													{model.faker_type === "ussername" ?
+														<div>
+															<div className="input-label">{"First name"}</div>
+															<input value={model.params.firstName}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'firstName', e.target.value);
+																}} />
+															<div className="input-label">{"Last name"}</div>
+															<input value={model.params.lastName}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'lastName', e.target.value);
+																}} />
+														</div>
+														: null
+													}
+
 												</div>
 												: null
 											}

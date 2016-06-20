@@ -184,11 +184,153 @@ export default {
 			"name": "Masked number (i.e. account number)",
 			"value": "mask"
 		},
+		{
+			"name": "Transaction type",
+			"value": "transactionType"
+		}
 	],
-	"hacker": [],
-	"image": [],
-	"image": [],
-	"internet": [],
+	"hacker": [
+		{
+			"name": "Abbreviation",
+			"value": "abbreviation"
+		},
+		{
+			"name": "Adjective",
+			"value": "adjective"
+		},
+		{
+			"name": "Ingverb",
+			"value": "ingverb"
+		},
+		{
+			"name": "Noun",
+			"value": "noun"
+		},
+		{
+			"name": "Phrase",
+			"value": "phrase"
+		},
+		{
+			"name": "Verb",
+			"value": "verb"
+		}
+	],
+	"image": [
+		{
+			"name": "Abstract",
+			"value": "abstract"
+		},
+		{
+			"name": "Animals",
+			"value": "animals"
+		},
+		{
+			"name": "Avatar",
+			"value": "avatar"
+		},
+		{
+			"name": "Business",
+			"value": "business"
+		},
+		{
+			"name": "Cats",
+			"value": "cats"
+		},
+		{
+			"name": "City",
+			"value": "city"
+		},
+		{
+			"name": "Fashion",
+			"value": "fashion"
+		},
+		{
+			"name": "Food",
+			"value": "food"
+		},
+		{
+			"name": "Image",
+			"value": "image"
+		},
+		{
+			"name": "Nature",
+			"value": "nature"
+		},
+		{
+			"name": "Nightlife",
+			"value": "nightlife"
+		},
+		{
+			"name": "People",
+			"value": "people"
+		},
+		{
+			"name": "Sports",
+			"value": "sports"
+		},
+		{
+			"name": "Technics",
+			"value": "technics"
+		},
+		{
+			"name": "Transport",
+			"value": "transport"
+		}
+	],
+	"internet": [
+		{
+			"name": "Avatar",
+			"value": "avatar"
+		},
+		{
+			"name": "Color",
+			"value": "color"
+		},
+		{
+			"name": "Domain name",
+			"value": "domainName"
+		},
+		{
+			"name": "Domain word",
+			"value": "domainWord"
+		},
+		{
+			"name": "Email",
+			"value": "email"
+		},
+		{
+			"name": "Example email",
+			"value": "exampleEmail"
+		},
+		{
+			"name": "IP address",
+			"value": "ip"
+		},
+		{
+			"name": "Mac address",
+			"value": "mac"
+		},
+		{
+			"name": "Password",
+			"value": "password"
+		},
+		{
+			"name": "Protocol",
+			"value": "protocol"
+		},
+		{
+			"name": "Url",
+			"value": "url"
+		},
+		{
+			"name": "User agent",
+			"value": "userAgent"
+		},
+		{
+			"name": "Username",
+			"value": "userName"
+		}
+	],
 	"lorem": [],
 	"name": [
 		{
