@@ -377,7 +377,7 @@ class ResourceEdit extends Component {
 														</div>
 														: null
 													}
-													{model.faker_type === "ussername" ?
+													{model.faker_type === "userName" ?
 														<div>
 															<div className="input-label">{"First name"}</div>
 															<input value={model.params.firstName}
@@ -388,6 +388,76 @@ class ResourceEdit extends Component {
 															<input value={model.params.lastName}
 																onChange={(e) => {
 																	this.handleModelParamsChange(model, 'lastName', e.target.value);
+																}} />
+														</div>
+														: null
+													}
+													{model.faker_type === "lines" ?
+														<div>
+															<div className="input-label">{"Number of lines"}</div>
+															<input value={model.params.lines}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'lines', e.target.value);
+																}} />
+														</div>
+														: null
+													}
+													{model.faker_type === "paragraphs" ?
+														<div>
+															<div className="input-label">{"Number of paragraphs"}</div>
+															<input value={model.params.paragraphCount}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'paragraphCount', e.target.value);
+																}} />
+															<div className="input-label">{"Separator"}</div>
+															<input value={model.params.seperator}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'seperator', e.target.value);
+																}} />
+														</div>
+														: null
+													}
+													{model.faker_type === "sentence" ?
+														<div>
+															<div className="input-label">{"Number of words"}</div>
+															<input value={model.params.wordCount}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'wordCount', e.target.value);
+																}} />
+														</div>
+														: null
+													}
+													{model.faker_type === "sentences" ?
+														<div>
+															<div className="input-label">{"Number of sentences"}</div>
+															<input value={model.params.sentenceCount}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'sentenceCount', e.target.value);
+																}} />
+															<div className="input-label">{"Separator"}</div>
+															<input value={model.params.seperator}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'seperator', e.target.value);
+																}} />
+														</div>
+														: null
+													}
+													{model.faker_type === "text" ?
+														<div>
+															<div className="input-label">{"Number of times"}</div>
+															<input value={model.params.times}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'times', e.target.value);
+																}} />
+														</div>
+														: null
+													}
+													{model.faker_type === "words" ?
+														<div>
+															<div className="input-label">{"Number of words"}</div>
+															<input value={model.params.words}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'words', e.target.value);
 																}} />
 														</div>
 														: null

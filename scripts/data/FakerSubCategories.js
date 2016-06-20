@@ -331,7 +331,36 @@ export default {
 			"value": "userName"
 		}
 	],
-	"lorem": [],
+	"lorem": [
+		{
+			"name": "Lines",
+			"value": "lines"
+		},
+		{
+			"name": "Paragraphs",
+			"value": "paragraphs"
+		},
+		{
+			"name": "Sentence",
+			"value": "sentence"
+		},
+		{
+			"name": "Sentences",
+			"value": "sentences"
+		},
+		{
+			"name": "Text",
+			"value": "text"
+		},
+		{
+			"name": "Word",
+			"value": "word"
+		},
+		{
+			"name": "Words",
+			"value": "words"
+		}
+	],
 	"name": [
 		{
 			name: 'First name',
