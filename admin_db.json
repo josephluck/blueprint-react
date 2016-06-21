@@ -7,7 +7,21 @@
       "length": 1,
       "model": [
         {
-          "key": "first_nameeeeeeee",
+          "type": "random",
+          "params": {
+            "values": "[\n  \"a\",\n  \"b\",\n  \"c\"\n]",
+            "json": [
+              "a",
+              "b",
+              "c"
+            ]
+          },
+          "faker_category": "random",
+          "faker_type": "arrayElement",
+          "key": "favourite_programming_language"
+        },
+        {
+          "key": "first_name",
           "type": "random",
           "faker_category": "name",
           "faker_type": "firstName",
@@ -35,13 +49,6 @@
           "type": "random",
           "faker_category": "address",
           "faker_type": "streetName",
-          "params": {}
-        },
-        {
-          "key": "town",
-          "type": "random",
-          "faker_category": "address",
-          "faker_type": "county",
           "params": {}
         },
         {
@@ -81,19 +88,6 @@
           "faker_category": "random",
           "faker_type": "boolean",
           "params": {}
-        },
-        {
-          "key": "favourite_programming_language",
-          "type": "random",
-          "faker_category": "random",
-          "faker_type": "arrayElement",
-          "params": {
-            "values": [
-              "javascript",
-              "ruby",
-              "python"
-            ]
-          }
         }
       ]
     }

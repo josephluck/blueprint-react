@@ -25,16 +25,16 @@ class App extends Component {
 	render() {
 	  return (
 	  	<div className="app-container">
-	  		<div className="left-nav">
+	  		<div className="left-nav flex flex-vertical">
 		  		<ResourcesList></ResourcesList>
 		  		<div className="list-item">
 		  			<a href="" className="button">{"New resource"}</a>
 		  		</div>
 		  	</div>
-		  	<div className="main-content">
+		  	<div className="main-content flex flex-vertical">
 			  	{this.props.children}
 			  </div>
-			  <div className="right-bar">
+			  <div className="right-bar flex flex-vertical">
 			  	<RightBar></RightBar>
 			  </div>
 		  </div>
