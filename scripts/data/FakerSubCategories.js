@@ -399,19 +399,48 @@ export default {
 			value: 'title'
 		}
 	],
-	"phone": [],
+	"phone": [
+		{
+			name: 'Phone formats',
+			value: 'phoneFormats'
+		},
+		{
+			name: 'Phone number',
+			value: 'phoneNumber'
+		}
+	],
 	"random": [
 		{
-			"name": "Boolean",
-			"value": "boolean"
+			"name": "Alpha numeric",
+			"value": "alphaNumeric"
 		},
 		{
 			"name": "Array element",
 			"value": "arrayElement"
 		},
 		{
+			"name": "Boolean",
+			"value": "boolean"
+		},
+		{
+			"name": "Image",
+			"value": "image"
+		},
+		{
+			"name": "Locale",
+			"value": "locale"
+		},
+		{
 			"name": "Number",
 			"value": "number"
+		},
+		{
+			"name": "Object element",
+			"value": "objectElement"
+		},
+		{
+			"name": "UUID",
+			"value": "uuid"
 		}
 	],
 	"system": []

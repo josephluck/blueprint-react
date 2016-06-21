@@ -1,101 +1,101 @@
 {
   "resources": [
     {
-        "id": 1,
-    	"type": "array",
-    	"name": "users",
-    	"length": 500,
-    	"model": [
-    		{
-                "key": "first_name",
-    			"type": "random",
-    			"faker_category": "name",
-    			"faker_type": "firstName",
-                "params": {}
-    		},
-    		{
-                "key": "last_name",
-    			"type": "random",
-    			"faker_category": "name",
-    			"faker_type": "lastName",
-                "params": {}
-    		},
-    		{
-                "key": "address_line_1",
-    			"type": "random",
-    			"faker_category": "random",
-    			"faker_type": "number",
-    			"params": {
-    				"max": "300",
-    				"min": "1"
-    			}
-    		},
-    		{
-                "key": "address_line_2",
-    			"type": "random",
-    			"faker_category": "address",
-    			"faker_type": "streetName",
-                "params": {}
-    		},
-    		{
-                "key": "town",
-    			"type": "random",
-    			"faker_category": "address",
-    			"faker_type": "county",
-                "params": {}
-    		},
-    		{
-                "key": "county",
-    			"type": "random",
-    			"faker_category": "address",
-    			"faker_type": "state",
-                "params": {}
-    		},
-    		{
-                "key": "postcode",
-    			"type": "random",
-    			"faker_category": "address",
-    			"faker_type": "zipCode",
-                "params": {}
-    		},
-    		{
-                "key": "country",
-    			"type": "random",
-    			"faker_category": "address",
-    			"faker_type": "country",
-                "params": {}
-    		},
-    		{
-                "key": "date_of_birth",
-    			"type": "random",
-    			"faker_category": "date",
-    			"faker_type": "between",
-    			"params": {
-    				"from": "2015-01-01",
-    				"to": "2015-12-31"
-    			}
-    		},
-    		{
-                "key": "deleted",
-    			"type": "random",
-    			"faker_category": "random",
-    			"faker_type": "boolean",
-                "params": {}
-    		},
-    		{
-                "key": "favourite_programming_language",
-    			"type": "random",
-    			"faker_category": "random",
-    			"faker_type": "arrayElement",
-    			"params": {
-    				"values": [
-    					"javascript",
-    					"ruby",
-    					"python"
-    				]
-    			}
-    		}
-    	]
+      "id": 1,
+      "type": "array",
+      "name": "userss",
+      "length": 1,
+      "model": [
+        {
+          "key": "first_nameeeeeeee",
+          "type": "random",
+          "faker_category": "name",
+          "faker_type": "firstName",
+          "params": {}
+        },
+        {
+          "key": "last_name",
+          "type": "random",
+          "faker_category": "name",
+          "faker_type": "lastName",
+          "params": {}
+        },
+        {
+          "key": "address_line_1",
+          "type": "random",
+          "faker_category": "random",
+          "faker_type": "number",
+          "params": {
+            "max": "300",
+            "min": "1"
+          }
+        },
+        {
+          "key": "address_line_2",
+          "type": "random",
+          "faker_category": "address",
+          "faker_type": "streetName",
+          "params": {}
+        },
+        {
+          "key": "town",
+          "type": "random",
+          "faker_category": "address",
+          "faker_type": "county",
+          "params": {}
+        },
+        {
+          "key": "county",
+          "type": "random",
+          "faker_category": "address",
+          "faker_type": "state",
+          "params": {}
+        },
+        {
+          "key": "postcode",
+          "type": "random",
+          "faker_category": "address",
+          "faker_type": "zipCode",
+          "params": {}
+        },
+        {
+          "key": "country",
+          "type": "random",
+          "faker_category": "address",
+          "faker_type": "country",
+          "params": {}
+        },
+        {
+          "key": "date_of_birth",
+          "type": "random",
+          "faker_category": "date",
+          "faker_type": "between",
+          "params": {
+            "from": "2015-01-01",
+            "to": "2015-12-31"
+          }
+        },
+        {
+          "key": "deleted",
+          "type": "random",
+          "faker_category": "random",
+          "faker_type": "boolean",
+          "params": {}
+        },
+        {
+          "key": "favourite_programming_language",
+          "type": "random",
+          "faker_category": "random",
+          "faker_type": "arrayElement",
+          "params": {
+            "values": [
+              "javascript",
+              "ruby",
+              "python"
+            ]
+          }
+        }
+      ]
     }
   ]
 }

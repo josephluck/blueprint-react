@@ -28,6 +28,22 @@ class ResourceStore {
 			Store.get().set({resource_loading: false});
 		});
 	}
+
+	saveResource(resource) {
+		console.log(resource);
+		Store.get().set({resource_saving: true});
+		Api.put({
+			url: {
+				name: 'resource',
+				resourceId: resource.id
+			},
+			payload: resource
+		}).then((res) => {
+			Store.get().resource.reset(res);
+			Store.get().edited_resource.reset(res);
+			Store.get().set({resource_saving: false});
+		});
+	}
 }
 
 export default new ResourceStore();

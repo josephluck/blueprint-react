@@ -8,7 +8,7 @@ import Faker from 'faker';
 window.faker = Faker;
 
 // Stores
-import ResourcesStore from 'stores/ResourcesStore';
+import ResourceStore from 'stores/ResourceStore';
 
 class ResourceEdit extends Component {
 	constructor(props) {
@@ -39,6 +39,10 @@ class ResourceEdit extends Component {
 		this.forceUpdate();
 	}
 
+	handleSave() {
+		ResourceStore.saveResource(this.state.resource);
+	}
+
 /*=============================================================================
 	Render office tasks
 =============================================================================*/
@@ -51,7 +55,10 @@ class ResourceEdit extends Component {
 							<span className="flex-1">
 								{`${this.props.resource.name} resource description`}
 							</span>
-							<a>
+							<a onClick={(e) => {
+								e.preventDefault();
+								this.handleSave();
+							}}>
 								{"Save"}
 							</a>
 						</div>
@@ -479,6 +486,28 @@ class ResourceEdit extends Component {
 																	{"Female"}
 																</option>
 															</select>
+														</div>
+														: null
+													}
+													{model.faker_type === "arrayElement" ?
+														<div>
+															<div className="input-label">{"Array"}</div>
+															<textarea value={model.params.array}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'array', e.target.value);
+																}}>
+															</textarea>
+														</div>
+														: null
+													}
+													{model.faker_type === "objectElement" ?
+														<div>
+															<div className="input-label">{"Object"}</div>
+															<textarea value={model.params.object}
+																onChange={(e) => {
+																	this.handleModelParamsChange(model, 'object', e.target.value);
+																}}>
+															</textarea>
 														</div>
 														: null
 													}

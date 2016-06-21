@@ -38,7 +38,6 @@ function put(params) {
   return new Promise((resolve, reject) => {
     superagent
       .put(getApiUrl(params.url))
-      .withCredentials()
       .send(params.payload)
       .set('Content-Type', 'application/json')
       .end((error, res, a, b, c) => {

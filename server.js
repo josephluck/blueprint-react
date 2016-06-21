@@ -1,13 +1,44 @@
+// Declare variables here for global use
+var http = require('request');
+var jsonServer = require('json-server');
+var adminServer;
+var adminRouter;
+var adminMiddlewares;
+var dataJsonServer;
+var dataServer;
+var dataServerInstance;
+var dataRouter;
+var dataMiddlewares;
+
 /*=============================================================================
 	Run the admin database (to store resource descriptions)
 =============================================================================*/
 	var startAdminServer = function() {
-		var adminJsonServer = require('json-server');
-		var adminServer = adminJsonServer.create();
-		var adminRouter = adminJsonServer.router('admin_db.json');
-		var adminMiddlewares = adminJsonServer.defaults();
+		adminServer = jsonServer.create();
+		adminRouter = jsonServer.router('admin_db.json');
+		adminMiddlewares = jsonServer.defaults();
 
 		adminServer.use(adminMiddlewares);
+
+		adminServer.use(function (req, res, next) {
+			// Pass immediately on to JSON server
+			next();
+
+			// Stop and start the JSON server
+		  if (req.method === 'POST' ||
+		  		req.method === 'PUT' ||
+		  		req.method === 'DELETE') {
+
+		  	setTimeout(function() {
+		  		http('http://localhost:1401/resources', function(error, response, body) {
+		  			var resources = JSON.parse(body);
+		  			console.log("Database updated at: http://localhost:1400");
+		  			dataRouter.db.setState(generateDatabase(resources));
+		  		});
+		  	}, 2000);
+		  }
+		});
+
 		adminServer.use(adminRouter);
 		adminServer.listen(1401, function () {
 		  console.log('Admin database running at: http://localhost:1401');
@@ -45,7 +76,7 @@
 
 		for (var i = 0, x = description.length; i < x; i++) {
 			var key = description[i].key;
-			model[key] = generatePropertyValue(description);
+			model[key] = generatePropertyValue(description[i]);
 		}
 
 		return model;
@@ -110,18 +141,17 @@
 	Uses JSON server (see docs for more info)
 =============================================================================*/
 	var startDatabaseServer = function() {
-		var http = require('request');
+		console.log('Starting database server')
 
-		http('http://localhost:1401/resources', function (error, response, body) {
+		http('http://localhost:1401/resources', function(error, response, body) {
 		  var resources = JSON.parse(body);
-		  var dataJsonServer = require('json-server');
-		  var dataServer = dataJsonServer.create();
-		  var dataRouter = dataJsonServer.router(generateDatabase(resources));
-		  var dataMiddlewares = dataJsonServer.defaults();
+		  dataServer = jsonServer.create();
+		  dataRouter = jsonServer.router(generateDatabase(resources));
+		  dataMiddlewares = jsonServer.defaults();
 
 		  dataServer.use(dataMiddlewares);
 		  dataServer.use(dataRouter);
-		  dataServer.listen(1400, function () {
+		  dataServerInstance = dataServer.listen(1400, function () {
 		    console.log('Database running at: http://localhost:1400');
 		  });
 		});
@@ -152,3 +182,6 @@
 =============================================================================*/
 	startAdminServer();
 	startFrontEndServer();
+
+
+
