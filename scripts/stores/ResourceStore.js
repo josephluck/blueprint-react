@@ -25,7 +25,7 @@ class ResourceStore {
 		}).then((resource) => {
 			resource.model = resource.model.map((model, value) => {
 				if (model.faker_type === 'arrayElement' || model.faker_type === 'objectElement') {
-					model.params.json = JSON.stringify(model.params.json, 2);
+					model.params.json = JSON.stringify(model.params.json, null, 2);
 				}
 
 				return model;
@@ -57,7 +57,7 @@ class ResourceStore {
 		}).then((resource) => {
 			resource.model = resource.model.map((model, value) => {
 				if (model.faker_type === 'arrayElement' || model.faker_type === 'objectElement') {
-					model.params.json = JSON.stringify(model.params.json, 2);
+					model.params.json = JSON.stringify(model.params.json, null, 2);
 				}
 
 				return model;

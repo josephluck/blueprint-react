@@ -102,7 +102,12 @@ class ResourceEdit extends Component {
 										<div className="input-label">{"Length"}</div>
 										<input value={this.state.resource.length}
 											onChange={(e) => {
-												this.saveValue('length', parseInt(e.target.value));
+												let value = 0;
+
+												if (!isNaN(parseFloat(e.target.value)) && isFinite(e.target.value)) {
+													value = parseFloat(e.target.value);
+												}
+												this.saveValue('length', value);
 											}}>
 										</input>
 									</div>
@@ -136,7 +141,7 @@ class ResourceEdit extends Component {
 														this.handleModelChange(model, 'key', e.target.value);
 													}} />
 											</div>
-											<div className="flex-2">
+											<div className="flex-2 overflow-hidden">
 												<div className="input-label flex">
 													<span className="flex-1">{"Type"}</span>
 													<a href=""
@@ -541,19 +546,24 @@ class ResourceEdit extends Component {
 																					<AceEditor
 																				    mode="json"
 																				    theme="tomorrow"
-																				    showPrintMargin={false}
-																				    enableSnippets={true}
+																				    width="100%"
+																				    height="100%"
+																				    editorProps={{
+																				    	$blockScrolling: true
+																				    }}
+																				    setOptions={{
+																				    	showGutter: false,
+																				    	showLineNumbers: false,
+																				    	highlightGutterLine: false
+																				    }}
+																				    highlightActiveLine={false}
 																				    enableLiveAutocompletion={true}
 																				    tabSize={2}
 																				    onChange={(value) => {
 																				    	this.handleModelParamsChange(model, 'json', value);
 																				    }}
 																				    value={model.params.json}
-																				    name="UNIQUE_ID_OF_DIV"
-																				    editorProps={{
-																				    	$blockScrolling: true,
-																				    	showGutter: false
-																				    }}
+																				    name={`model-${i}`}
 																				  />
 																				</div>
 																			</div>

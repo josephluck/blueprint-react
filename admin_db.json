@@ -4,21 +4,20 @@
       "id": 1,
       "type": "array",
       "name": "userss",
-      "length": 1,
+      "length": 5,
       "model": [
         {
           "type": "random",
           "params": {
-            "values": "[\n  \"a\",\n  \"b\",\n  \"c\"\n]",
             "json": [
-              "a",
-              "b",
-              "c"
+              "javascript",
+              "ruby",
+              "python"
             ]
           },
+          "key": "favourite_language",
           "faker_category": "random",
-          "faker_type": "arrayElement",
-          "key": "favourite_programming_language"
+          "faker_type": "arrayElement"
         },
         {
           "key": "first_name",
