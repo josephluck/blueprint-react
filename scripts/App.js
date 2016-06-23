@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { cool } from 'react-freezer-js';
 
 import Store from 'stores/Store';
+import ResourcesStore from 'stores/ResourcesStore';
 
 import ResourcesList from 'containers/ResourcesList';
 import RightBar from 'containers/RightBar';
@@ -12,6 +13,10 @@ class App extends Component {
 		Store.get().set({
 			params: props.params
 		})
+	}
+
+	componentWillMount() {
+		ResourcesStore.getResources();
 	}
 
 	componentWillReceiveProps(props) {
@@ -27,12 +32,12 @@ class App extends Component {
 	  	<div className="app-container">
 	  		<div className="left-nav flex flex-vertical">
 		  		<ResourcesList></ResourcesList>
-		  		<div className="list-item">
-		  			<a href="" className="button">{"New resource"}</a>
-		  		</div>
 		  	</div>
 		  	<div className="main-content flex flex-vertical">
-			  	{this.props.children}
+		  	{Store.get().resources.length > 0 ?
+			  	<div className="flex">{this.props.children}</div>
+			  	: null
+			  }
 			  </div>
 			  <div className="right-bar flex flex-vertical">
 			  	<RightBar></RightBar>

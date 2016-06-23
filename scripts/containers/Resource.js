@@ -18,7 +18,7 @@ class Resource extends Component {
 		If the user clicks between resources using the left nav
 	=============================================================================*/
 	componentWillReceiveProps(props) {
-		if (this.props.params.resourceId !== props.params.resourceId) {
+		if (this.props.params.resource_name !== props.params.resource_name) {
 			this.getResource(props.params);
 		}
 	}

@@ -23,19 +23,6 @@ export default function Provide(ComponentToBeProvided, requested_props) {
   });
 
 	const ProvidedComponent = React.createClass({
-		/*=============================================================================
-			Perf.
-		=============================================================================*/
-		shouldComponentUpdate(props) {
-			let should_update = false;
-			for (var i = 0, x = requested_props.length; i < x; i++) {
-				if (props[requested_props[i]] != this.props[requested_props[i]]) {
-					should_update = true;
-				}
-			}
-
-			return should_update;
-		},
 		render() {
 			return <ComponentToBeProvided {...this.props} />
 		}

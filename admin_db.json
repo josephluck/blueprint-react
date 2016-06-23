@@ -3,7 +3,7 @@
     {
       "id": 1,
       "type": "array",
-      "name": "userss",
+      "name": "users",
       "length": 5,
       "model": [
         {
@@ -89,6 +89,39 @@
           "params": {}
         }
       ]
+    },
+    {
+      "type": "array",
+      "length": 2,
+      "name": "posts",
+      "model": [
+        {
+          "type": "random",
+          "params": {
+            "paragraphCount": "2",
+            "seperator": ""
+          },
+          "key": "content",
+          "faker_category": "lorem",
+          "faker_type": "paragraphs"
+        }
+      ],
+      "id": 2
+    },
+    {
+      "type": "array",
+      "length": 10,
+      "name": "comments",
+      "model": [
+        {
+          "type": "random",
+          "params": {},
+          "key": "content",
+          "faker_category": "lorem",
+          "faker_type": "paragraphs"
+        }
+      ],
+      "id": 3
     }
   ]
 }

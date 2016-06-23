@@ -110,7 +110,11 @@ var dataMiddlewares;
 				return property.params[key];
 			});
 		}
-		return faker[property.faker_category][property.faker_type].apply(null, args);
+		if (property.faker_category && property.faker_type) {
+			return faker[property.faker_category][property.faker_type].apply(null, args);
+		} else {
+			return null;
+		}
 	}
 
 /*=============================================================================

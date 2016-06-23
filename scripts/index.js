@@ -11,11 +11,9 @@ import ResourceEdit from 'containers/ResourceEdit';
 render((
   <Router history={browserHistory}>
     <Route path="/" component={App}>
-    	<Route path="resources">
-    		<Route component={Resource}>
-	    		<Route path=":resourceId" component={ResourceEdit}></Route>
-	    	</Route>
-	    </Route>
+  		<Route component={Resource}>
+    		<Route path=":resource_name" component={ResourceEdit}></Route>
+    	</Route>
     </Route>
   </Router>
 ), document.getElementById('root'))

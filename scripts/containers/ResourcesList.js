@@ -11,13 +11,6 @@ class Resources extends Component {
 	}
 
 /*=============================================================================
-	Fire AJAX requests for office tasks
-=============================================================================*/
-	componentWillMount() {
-		ResourcesStore.getResources();
-	}
-
-/*=============================================================================
 	Render office tasks
 =============================================================================*/
 	render() {
@@ -32,10 +25,20 @@ class Resources extends Component {
 
 					return (
 						<div key={i} className={class_name}>
-							<Link to={`/resources/${resource.id}`}>{resource.name}</Link>
+							<Link to={`/${resource.name}`}>{resource.name}</Link>
 						</div>
 					)
 				})}
+				<div className="list-item">
+					<a href=""
+						className="button"
+						onClick={(e) => {
+							e.preventDefault();
+							ResourcesStore.createNewResource();
+						}}>
+						{"New resource"}
+					</a>
+				</div>
 			</div>
 		)
 	}

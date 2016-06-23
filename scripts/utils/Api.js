@@ -96,7 +96,11 @@ function destroy(params) {
 function getApiUrl(options) {
   switch (options.name) {
     case 'resources':
-      return API_ROOT + `resources${options.params}`;
+      if (options.params) {
+        return API_ROOT + `resources${options.params}`;
+      } else {
+        return API_ROOT + `resources`;
+      }
       break;
 
     case 'resource':
@@ -120,7 +124,7 @@ export default {
   post,
   put,
   get,
-  destroy,
+  delete: destroy,
   redirect,
   API_ROOT
 }
