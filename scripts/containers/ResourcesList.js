@@ -24,36 +24,46 @@ class Resources extends Component {
 	render() {
 		return (
 			<div className="flex flex-vertical">
-				<div className="list flex-1">
-					<div className="list-item">
-						<div className="input-with-icon">
-							<span className="ss-search"></span>
-							<input className="without-bottom-margin"
-								onChange={(e) => {
-									this.handleSearchingResources(e.target.value);
-								}} />
+				<div className="section-title flex flex-0">
+					<span className="flex-1">
+						{"Resources"}
+					</span>
+				</div>
+				<div className="flex flex-vertical">
+					<div className="flex flex-vertical">
+						<div className="flex-0 list-item without-bottom-padding">
+							<div className="input-with-icon">
+								<span className="ss-search"></span>
+								<input className="without-bottom-margin"
+									placeholder="Search"
+									onChange={(e) => {
+										this.handleSearchingResources(e.target.value);
+									}} />
+							</div>
+						</div>
+						<div className="flex-1 overflow-auto">
+							{this.props.resources.filter((resource, i) => {
+								return resource.name.toLowerCase().includes(this.state.search.toLowerCase());
+							}).map((resource, i) => {
+								let class_name = "list-item";
+
+								if (resource.name == this.props.params.resource_name) {
+									class_name += " active";
+								}
+
+								return (
+									<div key={i} className={class_name}>
+										<Link to={`/${resource.name}`}>{resource.name}</Link>
+									</div>
+								)
+							})}
 						</div>
 					</div>
-					{this.props.resources.filter((resource, i) => {
-						return resource.name.toLowerCase().includes(this.state.search.toLowerCase());
-					}).map((resource, i) => {
-						let class_name = "list-item";
-
-						if (resource.name == this.props.params.resource_name) {
-							class_name += " active";
-						}
-
-						return (
-							<div key={i} className={class_name}>
-								<Link to={`/${resource.name}`}>{resource.name}</Link>
-							</div>
-						)
-					})}
 				</div>
-				<div className="list">
-					<div className="list-item with-bottom-padding">
+				<div className="list flex flex-0">
+					<div className="list-item with-bottom-padding flex text-align-center">
 						<a href=""
-							className="button"
+							className="button flex-1"
 							onClick={(e) => {
 								e.preventDefault();
 								ResourcesStore.createNewResource();

@@ -39,7 +39,7 @@
         {
           "type": "child_resource",
           "params": {},
-          "child_resource_method": "object",
+          "child_resource_method": "id",
           "child_resource_limit": "6",
           "key": "author",
           "child_resource_name": "users",
