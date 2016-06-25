@@ -9,6 +9,7 @@ var dataServer;
 var dataServerInstance;
 var dataRouter;
 var dataMiddlewares;
+var _resources;
 
 /*=============================================================================
 	Run the admin database (to store resource descriptions)
@@ -32,6 +33,7 @@ var dataMiddlewares;
 		  	setTimeout(function() {
 		  		http('http://localhost:1401/resources', function(error, response, body) {
 		  			var resources = JSON.parse(body);
+		  			_resources = JSON.parse(body);
 		  			console.log("Database updated at: http://localhost:1400");
 		  			dataRouter.db.setState(generateDatabase(resources));
 		  		});
@@ -116,11 +118,46 @@ var dataMiddlewares;
 	}
 
 /*=============================================================================
-	Returns a random value given a properties description
-	Uses faker.js (see docs for more info)
+	Generate a key's value from another resource i.e. a post has an author
+	where posts and users are resources
 =============================================================================*/
+	function getRandomSample(array, count) {
+    var indices = [];
+    var result = new Array(count);
+    for (var i = 0; i < count; i++) {
+      var j = Math.floor(Math.random() * (array.length - i) + i);
+      result[i] = array[indices[j] === undefined ? j : indices[j]];
+      indices[j] = indices[i] === undefined ? i : indices[i];
+    }
+    return result;
+	}
+
 	generateValueFromAnotherResource = function(property) {
-		console.log(property);
+		for (var i = 0, x = _resources.length; i < x; i++) {
+			if (_resources[i].name === property.child_resource_name) {
+				var resource_description = _resources[i];
+				break;
+			}
+		}
+
+		// Refactor this line below so it doesn't generate the resource
+		// but is the prevously-generated resource.
+		var resource = generateResource(resource_description);
+
+		if (property.child_resource_method === 'array') {
+			if (property.child_resource_limit) {
+				var limit = parseFloat(property.child_resource_limit);
+				if (limit > resource.length) {
+					return resource;
+				} else {
+					return getRandomSample(resource, limit);
+				}
+			} else {
+				return resource;
+			}
+		} else {
+			return resource[Math.floor((Math.random() * resource.length))];
+		}
 	}
 
 /*=============================================================================
@@ -148,6 +185,7 @@ var dataMiddlewares;
 
 		http('http://localhost:1401/resources', function(error, response, body) {
 		  var resources = JSON.parse(body);
+		  _resources = resources;
 		  dataServer = jsonServer.create();
 		  dataRouter = jsonServer.router(generateDatabase(resources));
 		  dataMiddlewares = jsonServer.defaults();

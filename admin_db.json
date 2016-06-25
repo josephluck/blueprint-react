@@ -4,114 +4,30 @@
       "id": 1,
       "type": "array",
       "name": "users",
-      "length": 1,
+      "length": 8,
       "model": [
         {
           "type": "random",
-          "params": {
-            "json": [
-              "javascript",
-              "ruby",
-              "python"
-            ]
-          },
-          "key": "favourite_language",
-          "faker_category": "random",
-          "faker_type": "arrayElement"
-        },
-        {
+          "params": {},
           "key": "first_name",
-          "type": "random",
           "faker_category": "name",
-          "faker_type": "firstName",
-          "params": {}
-        },
-        {
-          "key": "last_name",
-          "type": "random",
-          "faker_category": "name",
-          "faker_type": "lastName",
-          "params": {}
-        },
-        {
-          "key": "address_line_1",
-          "type": "random",
-          "faker_category": "random",
-          "faker_type": "number",
-          "params": {
-            "max": "300",
-            "min": "1"
-          }
-        },
-        {
-          "key": "address_line_2",
-          "type": "random",
-          "faker_category": "address",
-          "faker_type": "streetName",
-          "params": {}
-        },
-        {
-          "key": "county",
-          "type": "random",
-          "faker_category": "address",
-          "faker_type": "state",
-          "params": {}
-        },
-        {
-          "key": "postcode",
-          "type": "random",
-          "faker_category": "address",
-          "faker_type": "zipCode",
-          "params": {}
-        },
-        {
-          "key": "country",
-          "type": "random",
-          "faker_category": "address",
-          "faker_type": "country",
-          "params": {}
-        },
-        {
-          "key": "date_of_birth",
-          "type": "random",
-          "faker_category": "date",
-          "faker_type": "between",
-          "params": {
-            "from": "2015-01-01",
-            "to": "2015-12-31"
-          }
-        },
-        {
-          "key": "deleted",
-          "type": "random",
-          "faker_category": "random",
-          "faker_type": "boolean",
-          "params": {}
+          "faker_type": "firstName"
         }
       ]
     },
     {
       "type": "array",
-      "length": 2,
+      "length": 1,
       "name": "comments",
       "model": [
         {
           "type": "child_resource",
           "params": {},
-          "child_resource_method": "array",
-          "child_resource_limit": "5",
+          "child_resource_method": "object",
+          "child_resource_limit": "6",
           "key": "author",
           "child_resource_name": "users",
           "child_resource_type": "array"
-        },
-        {
-          "type": "random",
-          "params": {
-            "paragraphCount": "1"
-          },
-          "key": "content",
-          "faker_category": "lorem",
-          "faker_type": "paragraphs"
         }
       ],
       "id": 3
