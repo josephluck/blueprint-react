@@ -231,8 +231,10 @@ class ResourceEdit extends Component {
 																onChange={(e) => {
 																	this.handleModelChange(model, 'child_resource_method', e.target.value);
 																}}>
+																<option disabled value="pleasechoose">{"Please choose"}</option>
+																<option value="id">{"Randomly selected id from array"}</option>
 																<option value="object">{"Randomly selected object from array"}</option>
-																<option value="array">{"Array"}</option>
+																<option value="array">{"Subset from array"}</option>
 															</select>
 														</div>
 														: null
@@ -240,7 +242,7 @@ class ResourceEdit extends Component {
 
 													{model.child_resource_method === 'array' ?
 														<div>
-															<div className="input-label">{"Limit"}</div>
+															<div className="input-label">{"Limit (leave blank for entire array)"}</div>
 															<input value={model.child_resource_limit}
 																onChange={(e) => {
 																	this.handleModelChange(model, 'child_resource_limit', e.target.value);

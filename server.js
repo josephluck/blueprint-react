@@ -138,7 +138,7 @@ var _resources;
 	function childResourceContainsRecursiveParent(resource_name, child_resource) {
 		for (var i = 0, x = child_resource.model.length; i < x; i++) {
 			if (child_resource.model[i].type === 'child_resource') {
-				if (child_resource.name === resource_name) {
+				if (child_resource.model[i].name === resource_name) {
 					return true
 				}
 			}
@@ -174,7 +174,7 @@ var _resources;
 		}
 
 		if (childResourceContainsRecursiveParent(property.child_resource_name, resource_description)) {
-			return undefined;
+			return "ERROR, " + property.child_resource_name + " is a recursive key";
 		} else {
 			// Refactor this line below so it doesn't generate the resource
 			// but is the prevously-generated resource.
@@ -191,8 +191,10 @@ var _resources;
 				} else {
 					return resource;
 				}
-			} else {
+			} else if (property.child_resource_method === 'object') {
 				return resource[Math.floor((Math.random() * resource.length))];
+			} else if  (property.child_resource_method === 'id') {
+				return resource[Math.floor((Math.random() * resource.length))].id;
 			}
 		}
 	}

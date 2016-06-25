@@ -77,3 +77,22 @@ select {
 	-webkit-font-smoothing: antialiased;
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
 }
+
+.input-with-icon {
+	display: flex;
+	border: solid @borderWidth @lightBlue;
+	padding: @padding/2 @padding/2;
+	border-radius: 4px;
+	align-items: center;
+	span {
+		position: relative;
+		top: 2px;
+		color: @blue;
+		font-size: 0.8em;
+	}
+	input {
+		margin-left: @padding/2;
+		border: 0px;
+		padding: 0px;
+	}
+}
