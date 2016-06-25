@@ -209,13 +209,17 @@ class ResourceEdit extends Component {
 															this.handleSelectedChildResource(model, e.target.value);
 														}}>
 														<option disabled value="pleasechoose">{"Please choose"}</option>
-														{this.props.resources.map((res, i) => {
-															return (
-																<option key={i}
-																	value={res.name}>
-																	{res.name}
-																</option>
-															)
+														{this.props.resources.map((resource, i) => {
+															if (resource.id !== this.props.resource.id) {
+																return (
+																	<option key={i}
+																		value={resource.name}>
+																		{resource.name}
+																	</option>
+																)
+															} else {
+																return null
+															}
 														})}
 													</select>
 

@@ -121,6 +121,18 @@ var _resources;
 	Generate a key's value from another resource i.e. a post has an author
 	where posts and users are resources
 =============================================================================*/
+	function childResourceContainsRecursiveParent(resource_name, child_resource) {
+		for (var i = 0, x = child_resource.model.length; i < x; i++) {
+			if (child_resource.model[i].type === 'child_resource') {
+				if (child_resource.name === resource_name) {
+					return true
+				}
+			}
+		}
+
+		return false
+	}
+
 	function getRandomSample(array, count) {
     var indices = [];
     var result = new Array(count);
@@ -140,23 +152,27 @@ var _resources;
 			}
 		}
 
-		// Refactor this line below so it doesn't generate the resource
-		// but is the prevously-generated resource.
-		var resource = generateResource(resource_description);
+		if (childResourceContainsRecursiveParent(property.child_resource_name, resource_description)) {
+			return undefined;
+		} else {
+			// Refactor this line below so it doesn't generate the resource
+			// but is the prevously-generated resource.
+			var resource = generateResource(resource_description);
 
-		if (property.child_resource_method === 'array') {
-			if (property.child_resource_limit) {
-				var limit = parseFloat(property.child_resource_limit);
-				if (limit > resource.length) {
-					return resource;
+			if (property.child_resource_method === 'array') {
+				if (property.child_resource_limit) {
+					var limit = parseFloat(property.child_resource_limit);
+					if (limit > resource.length) {
+						return resource;
+					} else {
+						return getRandomSample(resource, limit);
+					}
 				} else {
-					return getRandomSample(resource, limit);
+					return resource;
 				}
 			} else {
-				return resource;
+				return resource[Math.floor((Math.random() * resource.length))];
 			}
-		} else {
-			return resource[Math.floor((Math.random() * resource.length))];
 		}
 	}
 

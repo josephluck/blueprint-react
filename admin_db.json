@@ -7,6 +7,15 @@
       "length": 8,
       "model": [
         {
+          "type": "child_resource",
+          "params": {},
+          "key": "interests",
+          "child_resource_name": "interests",
+          "child_resource_type": "array",
+          "child_resource_method": "array",
+          "child_resource_limit": "3"
+        },
+        {
           "type": "random",
           "params": {},
           "key": "first_name",
@@ -31,6 +40,35 @@
         }
       ],
       "id": 3
+    },
+    {
+      "type": "array",
+      "length": 5,
+      "name": "interests",
+      "model": [
+        {
+          "type": "random",
+          "params": {
+            "json": [
+              "Cycling",
+              "Reading",
+              "Design",
+              "Walking",
+              "Politics",
+              "Football",
+              "Rubgy",
+              "Cooking",
+              "Music",
+              "Technology",
+              "Games"
+            ]
+          },
+          "key": "name",
+          "faker_category": "random",
+          "faker_type": "arrayElement"
+        }
+      ],
+      "id": 4
     }
   ]
 }
