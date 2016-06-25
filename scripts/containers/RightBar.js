@@ -47,6 +47,16 @@ class RightBar extends Component {
 					  {JSON.stringify(get_code_example, null, 2)}
 					</Highlight>
 				</div>
+				<div className="section-title with-top-border flex">
+					<span className="flex-1">
+						{`GET /${this.props.edited_resource.name}/1`}
+					</span>
+				</div>
+				<div className="box">
+					<Highlight className="javascript">
+					  {JSON.stringify(get_code_example, null, 2)}
+					</Highlight>
+				</div>
 			</div>
 		)
 	}

@@ -45,17 +45,19 @@ class Resources extends Component {
 							{this.props.resources.filter((resource, i) => {
 								return resource.name.toLowerCase().includes(this.state.search.toLowerCase());
 							}).map((resource, i) => {
-								let class_name = "list-item";
-
 								if (resource.name == this.props.params.resource_name) {
-									class_name += " active";
+									return (
+										<div key={i} className="list-item active">
+											<span>{this.props.edited_resource.name}</span>
+										</div>
+									)
+								} else {
+									return (
+										<div key={i} className="list-item">
+											<Link to={`/${resource.name}`}>{resource.name}</Link>
+										</div>
+									)
 								}
-
-								return (
-									<div key={i} className={class_name}>
-										<Link to={`/${resource.name}`}>{resource.name}</Link>
-									</div>
-								)
 							})}
 						</div>
 					</div>
@@ -80,5 +82,6 @@ class Resources extends Component {
 export default Provide(Resources, [
 	'resources',
 	'resources_loading',
+	'edited_resource',
 	'params'
 ])
