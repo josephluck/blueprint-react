@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Provide from 'hoc/Provide';
 import {Link} from 'react-router';
+import ResourceUtils from '../../resource_utils.js';
 
 // Stores
 import ResourcesStore from 'stores/ResourcesStore';
@@ -17,23 +18,11 @@ class RightBar extends Component {
 	Render office tasks
 =============================================================================*/
 	render() {
-		console.log(this.props.edited_resource);
-		let get_code_example = [
-		  {
-		    "first_name": "Mozell",
-		    "last_name": "Don",
-		    "address_line_1": null,
-		    "address_line_2": "Darryl Motorway",
-		    "town": "Cambridgeshire",
-		    "county": "California",
-		    "postcode": "64983-3682",
-		    "country": "Mexico",
-		    "date_of_birth": "2015-07-04T10:17:54.320Z",
-		    "deleted": false,
-		    "favourite_programming_language": "python",
-		    "id": 1
-		  }
-		];
+		let get_code_example = {};
+
+		if (Object.keys(this.props.edited_resource.toJS()).length) {
+			get_code_example = ResourceUtils.generateResource(this.props.edited_resource.toJS(), this.props.resources.toJS());
+		}
 
 		return (
 			<div>
@@ -63,5 +52,6 @@ class RightBar extends Component {
 }
 
 export default Provide(RightBar, [
+	'resources',
 	'edited_resource'
 ])

@@ -18,14 +18,14 @@ class ResourceEdit extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			resource: props.resource,
+			resource: props.resource.toJS(),
 			faker_categories: FakerCategories,
 			faker_sub_categories: FakerSubCategories
 		};
 	}
 
 	componentWillReceiveProps(props) {
-		this.state.resource = props.resource.toJS();
+		// this.state.resource = props.resource.toJS();
 	}
 
 	shouldComponentUpdate(props) {

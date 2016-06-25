@@ -7,7 +7,11 @@ module.exports = {
 	takes a description that defines what the resource looks like
 	including it's model and associated description
 =============================================================================*/
-	generateResource: function(description) {
+	generateResource: function(description, resources) {
+		if (resources) {
+			_resources = resources;
+		}
+
 		if (description.type === 'array') {
 			var resource = [];
 			for (var i = 0, x = description.length; i < x; i++) {
@@ -123,28 +127,30 @@ module.exports = {
 			}
 		}
 
-		if (this.childResourceContainsRecursiveParent(property.child_resource_name, resource_description)) {
-			return "ERROR, " + property.child_resource_name + " is a recursive key";
-		} else {
-			// Refactor this line below so it doesn't generate the resource
-			// but is the prevously-generated resource.
-			var resource = this.generateResource(resource_description);
+		if (resource_description) {
+			if (this.childResourceContainsRecursiveParent(property.child_resource_name, resource_description)) {
+				return "ERROR, " + property.child_resource_name + " is a recursive key";
+			} else {
+				// Refactor this line below so it doesn't generate the resource
+				// but is the prevously-generated resource.
+				var resource = this.generateResource(resource_description);
 
-			if (property.child_resource_method === 'array') {
-				if (property.child_resource_limit) {
-					var limit = parseFloat(property.child_resource_limit);
-					if (limit > resource.length) {
-						return resource;
+				if (property.child_resource_method === 'array') {
+					if (property.child_resource_limit) {
+						var limit = parseFloat(property.child_resource_limit);
+						if (limit > resource.length) {
+							return resource;
+						} else {
+							return this.getRandomSample(resource, limit);
+						}
 					} else {
-						return this.getRandomSample(resource, limit);
+						return resource;
 					}
-				} else {
-					return resource;
+				} else if (property.child_resource_method === 'object') {
+					return resource[Math.floor((Math.random() * resource.length))];
+				} else if  (property.child_resource_method === 'id') {
+					return resource[Math.floor((Math.random() * resource.length))].id;
 				}
-			} else if (property.child_resource_method === 'object') {
-				return resource[Math.floor((Math.random() * resource.length))];
-			} else if  (property.child_resource_method === 'id') {
-				return resource[Math.floor((Math.random() * resource.length))].id;
 			}
 		}
 	},
