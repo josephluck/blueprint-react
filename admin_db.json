@@ -4,7 +4,7 @@
       "id": 1,
       "type": "array",
       "name": "users",
-      "length": 5,
+      "length": 1,
       "model": [
         {
           "type": "random",
@@ -93,29 +93,22 @@
     {
       "type": "array",
       "length": 2,
-      "name": "posts",
-      "model": [
-        {
-          "type": "random",
-          "params": {
-            "paragraphCount": "2",
-            "seperator": ""
-          },
-          "key": "content",
-          "faker_category": "lorem",
-          "faker_type": "paragraphs"
-        }
-      ],
-      "id": 2
-    },
-    {
-      "type": "array",
-      "length": 10,
       "name": "comments",
       "model": [
         {
-          "type": "random",
+          "type": "child_resource",
           "params": {},
+          "child_resource_method": "array",
+          "child_resource_limit": "5",
+          "key": "author",
+          "child_resource_name": "users",
+          "child_resource_type": "array"
+        },
+        {
+          "type": "random",
+          "params": {
+            "paragraphCount": "1"
+          },
           "key": "content",
           "faker_category": "lorem",
           "faker_type": "paragraphs"

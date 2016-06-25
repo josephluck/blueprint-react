@@ -61,10 +61,13 @@ class ResourceStore {
 				return model;
 			});
 
-			Store.get().resource.reset(resource);
-			Store.get().edited_resource.reset(resource);
-			Store.get().set({resource_saving: false});
+			Store.get().set({
+				resource_saving: false,
+				resource: resource,
+				edited_resource: resource
+			});
 			ResourcesStore.updateResource(resource);
+			browserHistory.push(`/${resource.name}`);
 		});
 	}
 

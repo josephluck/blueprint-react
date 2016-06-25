@@ -39,6 +39,16 @@ class ResourceEdit extends Component {
 		this.forceUpdate();
 	}
 
+	handleSelectedChildResource(model, resource_name) {
+		let resource = this.props.resources.find((resource) => {
+			return resource.name === resource_name
+		});
+
+		model.child_resource_name = resource.name;
+		model.child_resource_type = resource.type;
+		this.forceUpdate();
+	}
+
 	handleModelParamsChange(model, name, value) {
 		model.params[name] = value;
 		this.forceUpdate();
@@ -74,7 +84,7 @@ class ResourceEdit extends Component {
 				<div className="flex flex-vertical">
 					<div className="section-title flex flex-0">
 						<span className="flex-1">
-							{`${this.state.resource.name} resource description`}
+							{this.state.resource.name}
 						</span>
 						<a className="large-right-margin"
 							href=""
@@ -98,7 +108,7 @@ class ResourceEdit extends Component {
 							<div className="input-label">{"Name"}</div>
 							<input value={this.state.resource.name}
 								onChange={(e) => {
-									var value = e.target.value.replace(/\W+/g, "").replace(/ /g,"_");
+									var value = e.target.value.replace(/\W+/g, " ").replace(/ /g,"_");
 									this.saveValue('name', value);
 								}}>
 							</input>
@@ -146,12 +156,13 @@ class ResourceEdit extends Component {
 								var model = this.state.resource.model[key];
 
 								return (
-									<div key={i} className="flex model-input-group">
+									<div key={i}
+										className="flex model-input-group">
 										<div className="flex-1 large-right-margin">
 											<div className="input-label">{"Key name"}</div>
 											<input value={model.key}
 												onChange={(e) => {
-													var value = e.target.value.replace(/\W+/g, "").replace(/ /g,"_");
+													var value = e.target.value.replace(/\W+/g, " ").replace(/ /g,"_");
 													this.handleModelChange(model, 'key', value);
 												}} />
 										</div>
@@ -168,6 +179,11 @@ class ResourceEdit extends Component {
 											</div>
 											<select value={model.type}
 												onChange={(e) => {
+													if (e.target.value === 'resource') {
+														model.child_resource = {};
+													} else {
+														model.child_resource === undefined;
+													}
 													this.handleModelChange(model, 'type', e.target.value);
 												}}>
 												<option value={"random"}>
@@ -176,13 +192,61 @@ class ResourceEdit extends Component {
 												<option value={"predefined"}>
 													{"Pre-defined"}
 												</option>
-												<option value={"calculated"}>
-													{"Calculated"}
-												</option>
-												<option value={"anotherresource"}>
+												<option value={"child_resource"}>
 													{"From another resource"}
 												</option>
+												<option value={"object"}>
+													{"Object / array of objects"}
+												</option>
 											</select>
+
+											{model.type === 'child_resource' ?
+												<div>
+													<div className="input-label">{"Resource"}</div>
+													<select defaultValue={"pleasechoose"}
+														value={model.child_resource_name}
+														onChange={(e) => {
+															this.handleSelectedChildResource(model, e.target.value);
+														}}>
+														<option disabled value="pleasechoose">{"Please choose"}</option>
+														{this.props.resources.map((res, i) => {
+															return (
+																<option key={i}
+																	value={res.name}>
+																	{res.name}
+																</option>
+															)
+														})}
+													</select>
+
+													{model.child_resource_type === 'array' ?
+														<div>
+															<div className="input-label">{"Method"}</div>
+															<select defaultValue={"pleasechoose"}
+																value={model.child_resource_method}
+																onChange={(e) => {
+																	this.handleModelChange(model, 'child_resource_method', e.target.value);
+																}}>
+																<option value="object">{"Randomly selected object from array"}</option>
+																<option value="array">{"Array"}</option>
+															</select>
+														</div>
+														: null
+													}
+
+													{model.child_resource_method === 'array' ?
+														<div>
+															<div className="input-label">{"Limit"}</div>
+															<input value={model.child_resource_limit}
+																onChange={(e) => {
+																	this.handleModelChange(model, 'child_resource_limit', e.target.value);
+																}} />
+														</div>
+														: null
+													}
+												</div>
+												: null
+											}
 
 											{model.type === 'random' ?
 												<div>
@@ -619,5 +683,6 @@ class ResourceEdit extends Component {
 }
 
 export default Provide(ResourceEdit, [
+	'resources',
 	'resource'
 ])

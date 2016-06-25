@@ -90,10 +90,8 @@ var dataMiddlewares;
 	var generatePropertyValue = function(property) {
 		if (property.type === 'random') {
 			return generateRandomValue(property);
-		} else if (property.type === 'calculated') {
-			return generateCalculatedValue(property);
-		} else if (property.type === 'static') {
-			return property.value;
+		} else if (property.type === 'child_resource') {
+			return generateValueFromAnotherResource(property);
 		}
 	}
 
@@ -118,10 +116,11 @@ var dataMiddlewares;
 	}
 
 /*=============================================================================
-	Calculate a value based on other properties
+	Returns a random value given a properties description
+	Uses faker.js (see docs for more info)
 =============================================================================*/
-	var generateCalculatedValue = function(property) {
-		return property.value;
+	generateValueFromAnotherResource = function(property) {
+		console.log(property);
 	}
 
 /*=============================================================================
@@ -186,6 +185,4 @@ var dataMiddlewares;
 =============================================================================*/
 	startAdminServer();
 	startFrontEndServer();
-
-
 

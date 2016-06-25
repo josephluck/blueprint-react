@@ -34,11 +34,12 @@ class ResourcesStore {
 			payload: {
 				type: "array",
 				length: 5,
-				name: "REPLACE_ME",
+				name: "rew_resource",
 				model: []
 			}
 		}).then((resource) => {
-			browserHistory.push(`/resources/${resource.id}`);
+			Store.get().resources.push(resource);
+			browserHistory.push(`/${resource.name}`);
 		});
 	}
 

@@ -19,7 +19,7 @@ class Resources extends Component {
 				{this.props.resources.map((resource, i) => {
 					let class_name = "list-item";
 
-					if (resource.id == this.props.params.resourceId) {
+					if (resource.name == this.props.params.resource_name) {
 						class_name += " active";
 					}
 

@@ -31,6 +31,9 @@ class App extends Component {
 	  return (
 	  	<div className="app-container">
 	  		<div className="left-nav flex flex-vertical">
+	  			<div className="logo">
+	  				<span>{"B"}</span>
+	  			</div>
 		  		<ResourcesList></ResourcesList>
 		  	</div>
 		  	<div className="main-content flex flex-vertical">
