@@ -1,6 +1,10 @@
 // Declare variables here for global use
 var http = require('request');
 var jsonServer = require('json-server');
+var faker = require('faker');
+var webpack = require('webpack');
+var WebpackDevServer = require('webpack-dev-server');
+var config = require('./webpack.config');
 var adminServer;
 var adminRouter;
 var adminMiddlewares;
@@ -101,7 +105,6 @@ var _resources;
 	Returns a random value given a properties description
 	Uses faker.js (see docs for more info)
 =============================================================================*/
-	var faker = require('faker');
 	var generateRandomValue = function(property) {
 		var args;
 		if (property.params) {
@@ -118,8 +121,19 @@ var _resources;
 	}
 
 /*=============================================================================
-	Generate a key's value from another resource i.e. a post has an author
-	where posts and users are resources
+	Check whether a child resource has a model key that requests it's parent i.e:
+
+	users_model : [{
+		type: 'child_resource',
+		child_resource_name: 'comments'
+	}];
+	comments_model: [{
+		type: 'child_resource',
+		child_resource_name: 'users'
+	}];
+
+	The above will fail since it'll cause an infinite loop of generateResource
+	calls.
 =============================================================================*/
 	function childResourceContainsRecursiveParent(resource_name, child_resource) {
 		for (var i = 0, x = child_resource.model.length; i < x; i++) {
@@ -133,6 +147,9 @@ var _resources;
 		return false
 	}
 
+/*=============================================================================
+	Get a random sub-set of an array
+=============================================================================*/
 	function getRandomSample(array, count) {
     var indices = [];
     var result = new Array(count);
@@ -144,6 +161,10 @@ var _resources;
     return result;
 	}
 
+/*=============================================================================
+	Generate a key's value from another resource i.e. a post has an author
+	where posts and users are resources
+=============================================================================*/
 	generateValueFromAnotherResource = function(property) {
 		for (var i = 0, x = _resources.length; i < x; i++) {
 			if (_resources[i].name === property.child_resource_name) {
@@ -218,10 +239,6 @@ var _resources;
 	Start up the admin front-end for managing resources and settings
 =============================================================================*/
 	var startFrontEndServer = function() {
-		var webpack = require('webpack');
-		var WebpackDevServer = require('webpack-dev-server');
-		var config = require('./webpack.config');
-
 		new WebpackDevServer(webpack(config), {
 		  publicPath: config.output.publicPath,
 		  hot: true,
@@ -239,4 +256,3 @@ var _resources;
 =============================================================================*/
 	startAdminServer();
 	startFrontEndServer();
-
