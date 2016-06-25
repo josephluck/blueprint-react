@@ -17,6 +17,7 @@ class RightBar extends Component {
 	Render office tasks
 =============================================================================*/
 	render() {
+		console.log(this.props.edited_resource);
 		let get_code_example = [
 		  {
 		    "first_name": "Mozell",
@@ -38,11 +39,11 @@ class RightBar extends Component {
 			<div>
 				<div className="section-title flex">
 					<span className="flex-1">
-						{`GET /${this.props.resource.name}`}
+						{`GET /${this.props.edited_resource.name}`}
 					</span>
 				</div>
 				<div className="box">
-					<Highlight className='javascript'>
+					<Highlight className="javascript">
 					  {JSON.stringify(get_code_example, null, 2)}
 					</Highlight>
 				</div>
@@ -52,6 +53,5 @@ class RightBar extends Component {
 }
 
 export default Provide(RightBar, [
-	'resource',
-	'resource_loading'
+	'edited_resource'
 ])

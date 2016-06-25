@@ -85,6 +85,10 @@ class ResourceStore {
 			ResourcesStore.removeResource(resource.id);
 		});
 	}
+
+	updateCurrentlyEditingResource(resource) {
+		Store.get().edited_resource.reset(resource);
+	}
 }
 
 export default new ResourceStore();

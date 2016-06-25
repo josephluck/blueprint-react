@@ -12,7 +12,6 @@ import 'brace/theme/tomorrow';
 
 window.faker = Faker;
 
-// Stores
 import ResourceStore from 'stores/ResourceStore';
 
 class ResourceEdit extends Component {
@@ -29,14 +28,20 @@ class ResourceEdit extends Component {
 		this.state.resource = props.resource.toJS();
 	}
 
+	shouldComponentUpdate(props) {
+		return props.resource !== this.props.resource;
+	}
+
 	saveValue(name, value) {
 		this.state.resource[name] = value;
 		this.forceUpdate();
+		this.updateCurrentlyEditingResource();
 	}
 
 	handleModelChange(model, name, value) {
 		model[name] = value;
 		this.forceUpdate();
+		this.updateCurrentlyEditingResource();
 	}
 
 	handleSelectedChildResource(model, resource_name) {
@@ -47,11 +52,13 @@ class ResourceEdit extends Component {
 		model.child_resource_name = resource.name;
 		model.child_resource_type = resource.type;
 		this.forceUpdate();
+		this.updateCurrentlyEditingResource();
 	}
 
 	handleModelParamsChange(model, name, value) {
 		model.params[name] = value;
 		this.forceUpdate();
+		this.updateCurrentlyEditingResource();
 	}
 
 	addAnotherKey() {
@@ -60,11 +67,13 @@ class ResourceEdit extends Component {
 			params: {}
 		});
 		this.forceUpdate();
+		this.updateCurrentlyEditingResource();
 	}
 
 	removeModelKey(model, index) {
 		this.state.resource.model.splice(index, 1);
 		this.forceUpdate();
+		this.updateCurrentlyEditingResource();
 	}
 
 	saveResource() {
@@ -73,6 +82,10 @@ class ResourceEdit extends Component {
 
 	deleteResource() {
 		ResourceStore.deleteResource(this.state.resource);
+	}
+
+	updateCurrentlyEditingResource() {
+		ResourceStore.updateCurrentlyEditingResource(this.state.resource);
 	}
 
 /*=============================================================================
