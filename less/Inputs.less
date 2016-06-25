@@ -1,5 +1,7 @@
 .input-label {
-	padding: 0px 0px @padding/2 @padding/2;
+	padding: 0px 0px @padding/4 @padding/2;
+	opacity: 0.8;
+	font-size: @smallFontSize;
 }
 
 input,
@@ -9,8 +11,7 @@ textarea {
 	padding: @padding/2 @padding/2;
 	border-radius: 4px;
 	display: inline-block;
-	font-size: 1em;
-	font-family: 'Ubuntu', sans-serif;
+	font-family: @monospaceFontFamily;
 	color: @textColor;
 	font-size: @defaultFontSize;
 	line-height: 1.2em;
@@ -50,9 +51,7 @@ select {
 
 .model-input-group {
 	margin-bottom: @padding;
-	border-bottom: solid @borderWidth @borderColor;
 	&:last-child {
-		border-bottom: 0px;
 		margin-bottom: 0px;
 	}
 }
@@ -70,7 +69,7 @@ select {
 .ace_editor {
 	display: inline-block;
 	font-size: 1em;
-	font-family: 'Roboto Mono', sans-serif;
+	font-family: @monospaceFontFamily;
 	color: @textColor;
 	font-size: @defaultFontSize;
 	line-height: 1.2em;
@@ -80,15 +79,15 @@ select {
 
 .input-with-icon {
 	display: flex;
-	border: solid @borderWidth @lightBlue;
+	border: solid @borderWidth @borderColor;
 	padding: @padding/2 @padding/2;
 	border-radius: 4px;
 	align-items: center;
 	span {
 		position: relative;
 		top: 2px;
-		color: @blue;
-		font-size: 0.8em;
+		opacity: 0.8;
+		font-size: @smallFontSize;
 	}
 	input {
 		margin-left: @padding/2;

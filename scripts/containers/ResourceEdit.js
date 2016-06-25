@@ -167,8 +167,10 @@ class ResourceEdit extends Component {
 												}} />
 										</div>
 										<div className="flex-2 overflow-hidden">
-											<div className="input-label flex">
-												<span className="flex-1">{"Type"}</span>
+											<div className="flex">
+												<div className="input-label flex-1">
+													<span className="flex-1">{"Type"}</span>
+												</div>
 												<a href=""
 													onClick={(e) => {
 														e.preventDefault();
