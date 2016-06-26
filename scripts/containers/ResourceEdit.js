@@ -25,7 +25,10 @@ class ResourceEdit extends Component {
 	}
 
 	componentWillReceiveProps(props) {
-		// this.state.resource = props.resource.toJS();
+		if (props.resource !== this.props.resource) {
+			this.state.resource = props.resource.toJS();
+			this.forceUpdate();
+		}
 	}
 
 	shouldComponentUpdate(props) {

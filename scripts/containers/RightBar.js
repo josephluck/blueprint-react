@@ -12,6 +12,14 @@ import Highlight from 'react-highlight'
 class RightBar extends Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			open: false
+		}
+	}
+
+	toggleVisibility() {
+		this.state.open = !this.state.open;
+		this.forceUpdate();
 	}
 
 /*=============================================================================
@@ -24,24 +32,30 @@ class RightBar extends Component {
 			get_code_example = ResourceUtils.generateResource(this.props.edited_resource.toJS(), this.props.resources.toJS());
 		}
 
+		var icon_class = "";
+		var right_bar_class = "";
+		var box_class = "right-bar-content"
+
+		if (this.state.open === true) {
+			icon_class = "--rotated";
+			right_bar_class = "--open"
+			box_class = "--showing";
+		}
+
 		return (
-			<div>
-				<div className="section-title flex">
+			<div className={`right-bar flex flex-vertical ${right_bar_class}`}>
+				<div className="section-title flex flex-0">
 					<span className="flex-1">
+						<div className={`icon ${icon_class}`}
+							onClick={() => {
+								this.toggleVisibility();
+							}}>
+							<a className="ss-left"></a>
+						</div>
 						{`GET /${this.props.edited_resource.name}`}
 					</span>
 				</div>
-				<div className="box">
-					<Highlight className="javascript">
-					  {JSON.stringify(get_code_example, null, 2)}
-					</Highlight>
-				</div>
-				<div className="section-title with-top-border flex">
-					<span className="flex-1">
-						{`GET /${this.props.edited_resource.name}/1`}
-					</span>
-				</div>
-				<div className="box">
+				<div className={`box right-bar-content ${box_class}`}>
 					<Highlight className="javascript">
 					  {JSON.stringify(get_code_example, null, 2)}
 					</Highlight>

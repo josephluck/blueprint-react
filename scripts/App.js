@@ -42,9 +42,7 @@ class App extends Component {
 			  	: null
 			  }
 			  </div>
-			  <div className="right-bar flex flex-vertical">
-			  	<RightBar></RightBar>
-			  </div>
+			  <RightBar></RightBar>
 		  </div>
 		)
 	}
