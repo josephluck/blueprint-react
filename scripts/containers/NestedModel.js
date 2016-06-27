@@ -14,36 +14,46 @@ window.faker = Faker;
 
 import ResourceStore from 'stores/ResourceStore';
 
-class ResourceEdit extends Component {
+class NestedModel extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			resource: props.resource.toJS(),
+			child_models: [],
+			current_model: {},
 			faker_categories: FakerCategories,
 			faker_sub_categories: FakerSubCategories
 		};
 	}
 
-	componentWillReceiveProps(props) {
-		if (props.resource !== this.props.resource) {
-			this.state.resource = props.resource.toJS();
-			this.forceUpdate();
-		}
+	componentDidMount() {
+		this.updateChildResourcesFromProps(this.props.params.splat);
 	}
 
-	shouldComponentUpdate(props) {
-		return props.resource !== this.props.resource || props.params !== this.props.params;
+	componentWillReceiveProps(props) {
+		this.updateChildResourcesFromProps(props.params.splat);
+	}
+
+	updateChildResourcesFromProps(splat) {
+		let indicies = splat.split('/').map(Number);
+		let models = indicies.map((indicie, i) => {
+			return this.props.resource.model[indicie].toJS();
+		});
+
+		let current_model = models[models.length - 1];
+		this.setState({
+			child_models: models,
+			current_model: current_model
+		});
 	}
 
 	saveValue(name, value) {
 		this.state.resource[name] = value;
-		this.forceUpdate();
 		this.updateCurrentlyEditingResource();
 	}
 
 	handleModelChange(model, name, value) {
 		model[name] = value;
-		this.forceUpdate();
 		this.updateCurrentlyEditingResource();
 	}
 
@@ -54,41 +64,44 @@ class ResourceEdit extends Component {
 
 		model.child_resource_name = resource.name;
 		model.child_resource_type = resource.type;
-		this.forceUpdate();
 		this.updateCurrentlyEditingResource();
 	}
 
 	handleModelParamsChange(model, name, value) {
 		model.params[name] = value;
-		this.forceUpdate();
 		this.updateCurrentlyEditingResource();
 	}
 
 	addAnotherKey() {
-		this.state.resource.model.unshift({
+		this.state.current_model.model.unshift({
 			type: "predefined",
 			params: {}
 		});
-		this.forceUpdate();
 		this.updateCurrentlyEditingResource();
 	}
 
 	removeModelKey(model, index) {
-		this.state.resource.model.splice(index, 1);
-		this.forceUpdate();
+		this.state.current_model.model.splice(index, 1);
 		this.updateCurrentlyEditingResource();
 	}
 
-	saveResource() {
-		ResourceStore.saveResource(this.state.resource);
-	}
-
-	deleteResource() {
-		ResourceStore.deleteResource(this.state.resource);
-	}
-
 	updateCurrentlyEditingResource() {
+		var indicies = this.props.params.splat.split('/').map(Number);
+		var model_to_replace = this.state.resource.model;
+
+		for (var i = 0, x = indicies.length; i < x; i++) {
+			model_to_replace = model_to_replace[indicies[i]].model;
+		}
+
+		model_to_replace = this.state.current_model.model;
+
+		// this.state.resource is not correct -- it's not being updated by the code above
 		ResourceStore.updateCurrentlyEditingResource(this.state.resource);
+		this.forceUpdate();
+	}
+
+	persistEditedResourceToResource() {
+		ResourceStore.persistEditedResourceToResource(this.state.resource);
 	}
 
 /*=============================================================================
@@ -96,79 +109,30 @@ class ResourceEdit extends Component {
 =============================================================================*/
 	render() {
 		return (
-			<div className="flex">
-				<div className="flex flex-vertical">
-					<div className="section-title flex flex-0">
+			<div className="modal flex flex-vertical">
+				<div className="flex-1 overflow-auto">
+					<div className="section-title with-top-border flex">
 						<span className="flex-1">
-							{this.state.resource.name}
+							{`${this.state.resource.name} model description`}
 						</span>
-						<a className="large-right-margin"
-							href=""
+						<Link className="right-margin"
+							to={`/${this.props.resource.name}`}
 							onClick={(e) => {
-								e.preventDefault();
-								this.deleteResource();
+								this.persistEditedResourceToResource();
 							}}>
-							{"Delete"}
-						</a>
+							{"Save and close"}
+						</Link>
 						<a href=""
 							onClick={(e) => {
 								e.preventDefault();
-								this.saveResource();
+								this.addAnotherKey();
 							}}>
-							{"Save"}
+							{"Add another key"}
 						</a>
 					</div>
-
-					<div className="flex-1 overflow-auto">
+					{this.state.current_model.model ?
 						<div className="box without-bottom-padding">
-							<div className="input-label">{"Name"}</div>
-							<input value={this.state.resource.name}
-								onChange={(e) => {
-									var value = e.target.value.replace(/\W+/g, " ").replace(/ /g,"_");
-									this.saveValue('name', value);
-								}}>
-							</input>
-							<div className="input-label">{"Type"}</div>
-							<select value={this.state.resource.type}
-								onChange={(e) => {
-									this.saveValue('type', e.target.value);
-								}}>
-								<option value={"array"}>{"Array"}</option>
-								<option value={"singular"}>{"Signular"}</option>
-							</select>
-							{this.state.resource.type === 'array' ?
-								<div>
-									<div className="input-label">{"Length"}</div>
-									<input value={this.state.resource.length}
-										onChange={(e) => {
-											let value = 0;
-
-											if (!isNaN(parseFloat(e.target.value)) && isFinite(e.target.value)) {
-												value = parseFloat(e.target.value);
-											}
-											this.saveValue('length', value);
-										}}>
-									</input>
-								</div>
-								: null
-							}
-						</div>
-
-						<div className="section-title with-top-border flex">
-							<span className="flex-1">
-								{`${this.state.resource.name} model description`}
-							</span>
-							<a href=""
-								onClick={(e) => {
-									e.preventDefault();
-									this.addAnotherKey();
-								}}>
-								{"Add another key"}
-							</a>
-						</div>
-
-						<div className="box without-bottom-padding">
-							{this.state.resource.model.map((model, i) => {
+							{this.state.current_model.model.map((model, i) => {
 								return (
 									<div key={i}
 										className="flex model-input-group">
@@ -698,15 +662,15 @@ class ResourceEdit extends Component {
 								)
 							})}
 						</div>
-					</div>
+						: null
+					}
 				</div>
-				{this.props.children}
 			</div>
 		)
 	}
 }
 
-export default Provide(ResourceEdit, [
+export default Provide(NestedModel, [
 	'resources',
 	'resource'
 ])

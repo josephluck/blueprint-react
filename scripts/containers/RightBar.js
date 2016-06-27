@@ -22,8 +22,15 @@ class RightBar extends Component {
 		this.forceUpdate();
 	}
 
+	shouldComponentUpdate() {
+		return this.props.edited_resource !== this.props.resource && this.state.open === true
+	}
+
 /*=============================================================================
-	Render office tasks
+	Render right bar
+
+	NOTE: Might be worth refactoring this so it doesn't generate resource
+	on render -- check perf for large resources
 =============================================================================*/
 	render() {
 		let get_code_example = {};

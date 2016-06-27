@@ -7,28 +7,18 @@
       "length": 2,
       "model": [
         {
-          "type": "random",
-          "params": {},
-          "key": "first_name",
-          "faker_category": "name",
-          "faker_type": "firstName",
-          "gender": "male"
-        },
-        {
-          "type": "random",
-          "params": {},
-          "key": "last_name",
-          "faker_category": "name",
-          "faker_type": "lastName"
-        },
-        {
-          "type": "child_resource",
-          "params": {},
-          "key": "interests",
-          "child_resource_name": "interests",
-          "child_resource_type": "array",
-          "child_resource_method": "array",
-          "child_resource_limit": "2"
+          "type": "object",
+          "key": "object_example",
+          "model": [
+            {
+              "type": "random",
+              "params": {},
+              "key": "first_name",
+              "faker_category": "name",
+              "faker_type": "firstName",
+              "gender": "male"
+            }
+          ]
         }
       ]
     },

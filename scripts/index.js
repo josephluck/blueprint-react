@@ -7,12 +7,15 @@ import App from './App';
 import ResourcesList from 'containers/ResourcesList';
 import Resource from 'containers/Resource';
 import ResourceEdit from 'containers/ResourceEdit';
+import NestedModel from 'containers/NestedModel';
 
 render((
   <Router history={browserHistory}>
     <Route path="/" component={App}>
   		<Route component={Resource}>
-    		<Route path=":resource_name" component={ResourceEdit}></Route>
+    		<Route path=":resource_name" component={ResourceEdit}>
+    			<Route path="**" component={NestedModel}></Route>
+    		</Route>
     	</Route>
     </Route>
   </Router>

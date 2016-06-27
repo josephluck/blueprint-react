@@ -12,7 +12,8 @@ class ResourceStore {
 		Store.initialize({
 			resource: {},
 			edited_resource: {},
-			resource_loading: true
+			resource_loading: true,
+			child_models: []
 		});
 	}
 
@@ -87,7 +88,19 @@ class ResourceStore {
 	}
 
 	updateCurrentlyEditingResource(resource) {
+		resource.model = resource.model.map((model, value) => {
+			if (model.faker_type === 'arrayElement' || model.faker_type === 'objectElement') {
+				model.params.json = JSON.parse(model.params.json);
+			}
+
+			return model;
+		});
 		Store.get().edited_resource.reset(resource);
+	}
+
+	persistEditedResourceToResource(edited_resource) {
+		debugger
+		Store.get().resource.reset(edited_resource);
 	}
 }
 
