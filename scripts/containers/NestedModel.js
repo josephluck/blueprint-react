@@ -31,7 +31,9 @@ class NestedModel extends Component {
 	}
 
 	componentWillReceiveProps(props) {
+		this.state.resource = props.resource;
 		this.updateChildResourcesFromProps(props.params.splat);
+		this.forceUpdate();
 	}
 
 	updateChildResourcesFromProps(splat) {
@@ -87,16 +89,18 @@ class NestedModel extends Component {
 
 	updateCurrentlyEditingResource() {
 		var indicies = this.props.params.splat.split('/').map(Number);
-		var model_to_replace = this.state.resource.model;
 
-		for (var i = 0, x = indicies.length; i < x; i++) {
-			model_to_replace = model_to_replace[indicies[i]].model;
-		}
 
-		model_to_replace = this.state.current_model.model;
+		// var model_to_replace = this.state.resource;
+		// for (var i = 0, x = indicies.length; i < x; i++) {
+		// 	model_to_replace = model_to_replace.model[indicies[i]];
+		// }
+		// model_to_replace is not property refering to this.state.resource
 
-		// this.state.resource is not correct -- it's not being updated by the code above
+		// This'll only support one nested model
+		this.state.resource.model[indicies[0]] = this.state.current_model;
 		ResourceStore.updateCurrentlyEditingResource(this.state.resource);
+
 		this.forceUpdate();
 	}
 

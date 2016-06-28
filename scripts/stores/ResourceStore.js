@@ -99,7 +99,6 @@ class ResourceStore {
 	}
 
 	persistEditedResourceToResource(edited_resource) {
-		debugger
 		Store.get().resource.reset(edited_resource);
 	}
 }
