@@ -20,7 +20,9 @@ class NestedModel extends Component {
 		this.state = {
 			resource: props.resource.toJS(),
 			child_models: [],
-			current_model: {},
+			child_resource: {
+				resource: {}
+			},
 			faker_categories: FakerCategories,
 			faker_sub_categories: FakerSubCategories
 		};
@@ -42,10 +44,10 @@ class NestedModel extends Component {
 			return this.props.resource.model[indicie].toJS();
 		});
 
-		let current_model = models[models.length - 1];
+		let child_resource = models[models.length - 1];
 		this.setState({
 			child_models: models,
-			current_model: current_model
+			child_resource: child_resource
 		});
 	}
 
@@ -75,7 +77,7 @@ class NestedModel extends Component {
 	}
 
 	addAnotherKey() {
-		this.state.current_model.model.unshift({
+		this.state.child_resource.resource.model.unshift({
 			type: "predefined",
 			params: {}
 		});
@@ -83,7 +85,7 @@ class NestedModel extends Component {
 	}
 
 	removeModelKey(model, index) {
-		this.state.current_model.model.splice(index, 1);
+		this.state.child_resource.resource.model.splice(index, 1);
 		this.updateCurrentlyEditingResource();
 	}
 
@@ -98,7 +100,7 @@ class NestedModel extends Component {
 		// model_to_replace is not property refering to this.state.resource
 
 		// This'll only support one nested model
-		this.state.resource.model[indicies[0]] = this.state.current_model;
+		this.state.resource.model[indicies[0]] = this.state.child_resource;
 		ResourceStore.updateCurrentlyEditingResource(this.state.resource);
 
 		this.forceUpdate();
@@ -112,12 +114,13 @@ class NestedModel extends Component {
 	Render office tasks
 =============================================================================*/
 	render() {
+		console.log(this.state.child_resource);
 		return (
 			<div className="modal flex flex-vertical">
 				<div className="flex-1 overflow-auto">
 					<div className="section-title with-top-border flex">
 						<span className="flex-1">
-							{`${this.state.resource.name} model description`}
+							{`${this.state.child_resource.resource.name} model description`}
 						</span>
 						<Link className="right-margin"
 							to={`/${this.props.resource.name}`}
@@ -134,9 +137,9 @@ class NestedModel extends Component {
 							{"Add another key"}
 						</a>
 					</div>
-					{this.state.current_model.model ?
+					{this.state.child_resource.resource.model ?
 						<div className="box without-bottom-padding">
-							{this.state.current_model.model.map((model, i) => {
+							{this.state.child_resource.resource.model.map((model, i) => {
 								return (
 									<div key={i}
 										className="flex model-input-group">

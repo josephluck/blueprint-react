@@ -52,6 +52,9 @@ module.exports = {
 			return this.generateRandomValue(property);
 		} else if (property.type === 'child_resource') {
 			return this.generateValueFromAnotherResource(property);
+		} else if (property.type === 'object') {
+			console.log(property);
+			return this.generateResource(property.resource);
 		}
 	},
 

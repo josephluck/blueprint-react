@@ -203,9 +203,6 @@ class ResourceEdit extends Component {
 													}
 													this.handleModelChange(model, 'type', e.target.value);
 												}}>
-												<option value={"random"}>
-													{"Random"}
-												</option>
 												<option value={"predefined"}>
 													{"Pre-defined"}
 												</option>
@@ -214,6 +211,9 @@ class ResourceEdit extends Component {
 												</option>
 												<option value={"object"}>
 													{"Object / array of objects"}
+												</option>
+												<option value={"random"}>
+													{"Random"}
 												</option>
 											</select>
 
@@ -268,6 +268,13 @@ class ResourceEdit extends Component {
 														: null
 													}
 												</div>
+												: null
+											}
+
+											{model.type === 'object' ?
+												<Link to={`/${this.props.resource.name}/${i}`}>
+													{"Configure"}
+												</Link>
 												: null
 											}
 
