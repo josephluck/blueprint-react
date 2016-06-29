@@ -36,6 +36,19 @@ class ResourceEdit extends Component {
 		return props.resource !== this.props.resource || props.params !== this.props.params;
 	}
 
+	addAnotherKey() {
+		this.state.resource.model.unshift({
+			type: "predefined",
+			params: {}
+		});
+		this.forceUpdate();
+		this.updateCurrentlyEditingResource();
+	}
+
+	updateCurrentlyEditingResource() {
+		ResourceStore.updateCurrentlyEditingResource(this.state.resource);
+	}
+
 	saveResource() {
 		ResourceStore.saveResource(this.state.resource);
 	}

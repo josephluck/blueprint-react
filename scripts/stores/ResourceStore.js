@@ -68,7 +68,7 @@ class ResourceStore {
 				edited_resource: resource
 			});
 			ResourcesStore.updateResource(resource);
-			browserHistory.push(`/${resource.name}`);
+			browserHistory.push(`/${resource.id}`);
 		});
 	}
 

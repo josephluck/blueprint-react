@@ -68,15 +68,6 @@ class ModelForm extends Component {
 		this.updateCurrentlyEditingResource();
 	}
 
-	addAnotherKey() {
-		this.state.resource.model.unshift({
-			type: "predefined",
-			params: {}
-		});
-		this.forceUpdate();
-		this.updateCurrentlyEditingResource();
-	}
-
 	removeModelKey(model, index) {
 		this.state.resource.model.splice(index, 1);
 		this.forceUpdate();
@@ -118,16 +109,9 @@ class ModelForm extends Component {
 								</div>
 								<select value={model.type}
 									onChange={(e) => {
-										if (e.target.value === 'resource') {
-											model.child_resource = {};
-										} else {
-											model.child_resource === undefined;
-										}
 										this.handleModelChange(model, 'type', e.target.value);
+										this.handleModelTypeChanged(model, e.target.value);
 									}}>
-									<option value={"random"}>
-										{"Random"}
-									</option>
 									<option value={"predefined"}>
 										{"Pre-defined"}
 									</option>
@@ -136,6 +120,9 @@ class ModelForm extends Component {
 									</option>
 									<option value={"object"}>
 										{"Object / array of objects"}
+									</option>
+									<option value={"random"}>
+										{"Random"}
 									</option>
 								</select>
 
@@ -190,6 +177,13 @@ class ModelForm extends Component {
 											: null
 										}
 									</div>
+									: null
+								}
+
+								{model.type === 'object' ?
+									<Link to={`/${this.props.resource.id}/${i}`}>
+										{"Configure"}
+									</Link>
 									: null
 								}
 
