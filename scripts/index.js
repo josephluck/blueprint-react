@@ -13,7 +13,7 @@ render((
   <Router history={browserHistory}>
     <Route path="/" component={App}>
   		<Route component={Resource}>
-    		<Route path=":resource_name" component={ResourceEdit}>
+    		<Route path=":resourceId" component={ResourceEdit}>
     			<Route path="**" component={NestedModel}></Route>
     		</Route>
     	</Route>

@@ -120,9 +120,9 @@ class NestedModel extends Component {
 				<div className="flex-1 overflow-auto">
 					<div className="section-title with-top-border flex">
 						<span className="flex-1">
-							{`${this.state.child_resource.resource.name} model description`}
+							{`${this.state.child_resource.key} model description`}
 						</span>
-						<Link className="right-margin"
+						<Link className="large-right-margin"
 							to={`/${this.props.resource.name}`}
 							onClick={(e) => {
 								this.persistEditedResourceToResource();

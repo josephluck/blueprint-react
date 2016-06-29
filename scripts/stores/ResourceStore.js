@@ -18,10 +18,10 @@ class ResourceStore {
 	}
 
 	getResource({
-		resource_name
+		resourceId
 	}) {
 		let resource = Store.get().resources.find((resource, i) => {
-			return resource.name === resource_name
+			return resource.id === parseInt(resourceId, 10)
 		}).toJS();
 
 		resource.model = resource.model.map((model, value) => {

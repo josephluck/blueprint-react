@@ -45,7 +45,7 @@ class Resources extends Component {
 							{this.props.resources.filter((resource, i) => {
 								return resource.name.toLowerCase().includes(this.state.search.toLowerCase());
 							}).map((resource, i) => {
-								if (resource.name == this.props.params.resource_name) {
+								if (resource.id == this.props.params.resourceId) {
 									return (
 										<div key={i} className="list-item active">
 											<span>{this.props.edited_resource.name}</span>
@@ -54,7 +54,7 @@ class Resources extends Component {
 								} else {
 									return (
 										<div key={i} className="list-item">
-											<Link to={`/${resource.name}`}>{resource.name}</Link>
+											<Link to={`/${resource.id}`}>{resource.name}</Link>
 										</div>
 									)
 								}
