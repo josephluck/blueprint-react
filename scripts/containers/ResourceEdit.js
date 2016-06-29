@@ -47,6 +47,30 @@ class ResourceEdit extends Component {
 		this.updateCurrentlyEditingResource();
 	}
 
+	handleModelTypeChanged(model, type) {
+		if (type === 'resource') {
+			model.child_resource = {};
+		} else {
+			model.child_resource === undefined;
+		}
+		if (type === 'object') {
+			model.resource = {
+				type: "array",
+				length: 5,
+				model: [
+					{
+					  "type": "predefined",
+					  "key": "key_name"
+					}
+				]
+			}
+
+			ResourceStore.persistEditedResourceToResource(this.state.resource);
+		} else {
+			model.resource = undefined;
+		}
+	}
+
 	handleSelectedChildResource(model, resource_name) {
 		let resource = this.props.resources.find((resource) => {
 			return resource.name === resource_name
@@ -196,12 +220,8 @@ class ResourceEdit extends Component {
 											</div>
 											<select value={model.type}
 												onChange={(e) => {
-													if (e.target.value === 'resource') {
-														model.child_resource = {};
-													} else {
-														model.child_resource === undefined;
-													}
 													this.handleModelChange(model, 'type', e.target.value);
+													this.handleModelTypeChanged(model, e.target.value);
 												}}>
 												<option value={"predefined"}>
 													{"Pre-defined"}
@@ -272,7 +292,7 @@ class ResourceEdit extends Component {
 											}
 
 											{model.type === 'object' ?
-												<Link to={`/${this.props.resource.name}/${i}`}>
+												<Link to={`/${this.props.resource.id}/${i}`}>
 													{"Configure"}
 												</Link>
 												: null

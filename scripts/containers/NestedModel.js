@@ -114,7 +114,6 @@ class NestedModel extends Component {
 	Render office tasks
 =============================================================================*/
 	render() {
-		console.log(this.state.child_resource);
 		return (
 			<div className="modal flex flex-vertical">
 				<div className="flex-1 overflow-auto">
@@ -123,7 +122,7 @@ class NestedModel extends Component {
 							{`${this.state.child_resource.key} model description`}
 						</span>
 						<Link className="large-right-margin"
-							to={`/${this.props.resource.name}`}
+							to={`/${this.props.resource.id}`}
 							onClick={(e) => {
 								this.persistEditedResourceToResource();
 							}}>

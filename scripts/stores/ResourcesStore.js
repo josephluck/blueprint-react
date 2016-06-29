@@ -34,7 +34,7 @@ class ResourcesStore {
 			payload: {
 				type: "array",
 				length: 5,
-				name: "rew_resource",
+				name: "new_resource",
 				model: []
 			}
 		}).then((resource) => {
