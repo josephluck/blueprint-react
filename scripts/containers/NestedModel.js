@@ -51,61 +51,6 @@ class NestedModel extends Component {
 		});
 	}
 
-	saveValue(name, value) {
-		this.state.resource[name] = value;
-		this.updateCurrentlyEditingResource();
-	}
-
-	handleModelChange(model, name, value) {
-		model[name] = value;
-		this.updateCurrentlyEditingResource();
-	}
-
-	handleSelectedChildResource(model, resource_name) {
-		let resource = this.props.resources.find((resource) => {
-			return resource.name === resource_name
-		});
-
-		model.child_resource_name = resource.name;
-		model.child_resource_type = resource.type;
-		this.updateCurrentlyEditingResource();
-	}
-
-	handleModelParamsChange(model, name, value) {
-		model.params[name] = value;
-		this.updateCurrentlyEditingResource();
-	}
-
-	addAnotherKey() {
-		this.state.child_resource.resource.model.unshift({
-			type: "predefined",
-			params: {}
-		});
-		this.updateCurrentlyEditingResource();
-	}
-
-	removeModelKey(model, index) {
-		this.state.child_resource.resource.model.splice(index, 1);
-		this.updateCurrentlyEditingResource();
-	}
-
-	updateCurrentlyEditingResource() {
-		var indicies = this.props.params.splat.split('/').map(Number);
-
-
-		// var model_to_replace = this.state.resource;
-		// for (var i = 0, x = indicies.length; i < x; i++) {
-		// 	model_to_replace = model_to_replace.model[indicies[i]];
-		// }
-		// model_to_replace is not property refering to this.state.resource
-
-		// This'll only support one nested model
-		this.state.resource.model[indicies[0]] = this.state.child_resource;
-		ResourceStore.updateCurrentlyEditingResource(this.state.resource);
-
-		this.forceUpdate();
-	}
-
 	persistEditedResourceToResource() {
 		ResourceStore.persistEditedResourceToResource(this.state.resource);
 	}
