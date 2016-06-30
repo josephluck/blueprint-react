@@ -84,7 +84,7 @@ class ResourceEdit extends Component {
 							{"Save"}
 						</a>
 					</div>
-					<ModelForm resource={this.state.resource}></ModelForm>
+					<ModelForm resource={this.state.resource} nested={false}></ModelForm>
 				</div>
 				{this.props.children}
 			</div>

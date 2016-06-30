@@ -7,7 +7,7 @@ module.exports = {
 	takes a description that defines what the resource looks like
 	including it's model and associated description
 =============================================================================*/
-	generateResource: function(description, resources) {
+	generateResource: function(description, resources, isNestedResource) {
 		if (resources) {
 			_resources = resources;
 		}
@@ -17,7 +17,10 @@ module.exports = {
 			for (var i = 0, x = description.length; i < x; i++) {
 				var model = this.generateModel(description.model);
 
-				model['id'] = i + 1;
+				if (isNestedResource !== true) {
+					model['id'] = i + 1;
+				}
+
 				resource.push(model);
 			}
 
@@ -53,8 +56,7 @@ module.exports = {
 		} else if (property.type === 'child_resource') {
 			return this.generateValueFromAnotherResource(property);
 		} else if (property.type === 'object') {
-			console.log(property);
-			return this.generateResource(property.resource);
+			return this.generateResource(property.resource, null, true);
 		}
 	},
 

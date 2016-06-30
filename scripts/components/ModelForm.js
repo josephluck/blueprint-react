@@ -82,13 +82,18 @@ class ModelForm extends Component {
 		return (
 			<div className="flex-1 overflow-auto">
 				<div className="box without-bottom-padding">
-					<div className="input-label">{"Name"}</div>
-					<input value={this.props.resource.name}
-						onChange={(e) => {
-							var value = e.target.value.replace(/\W+/g, " ").replace(/ /g,"_");
-							this.saveValue('name', value);
-						}}>
-					</input>
+					{this.props.nested === false ?
+						<div>
+							<div className="input-label">{"Name"}</div>
+							<input value={this.props.resource.name}
+								onChange={(e) => {
+									var value = e.target.value.replace(/\W+/g, " ").replace(/ /g,"_");
+									this.saveValue('name', value);
+								}}>
+							</input>
+						</div>
+						: null
+					}
 					<div className="input-label">{"Type"}</div>
 					<select value={this.props.resource.type}
 						onChange={(e) => {
