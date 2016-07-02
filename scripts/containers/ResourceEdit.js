@@ -9,7 +9,7 @@ import brace from 'brace';
 import AceEditor from 'react-ace';
 import 'brace/mode/json';
 import 'brace/theme/tomorrow';
-import ModelForm from 'components/ModelForm';
+import ResourceForm from 'components/ResourceForm';
 
 window.faker = Faker;
 
@@ -34,15 +34,6 @@ class ResourceEdit extends Component {
 
 	shouldComponentUpdate(props) {
 		return props.resource !== this.props.resource || props.params !== this.props.params;
-	}
-
-	addAnotherKey() {
-		this.state.resource.model.unshift({
-			type: "predefined",
-			params: {}
-		});
-		this.forceUpdate();
-		this.updateCurrentlyEditingResource();
 	}
 
 	updateCurrentlyEditingResource() {
@@ -84,7 +75,9 @@ class ResourceEdit extends Component {
 							{"Save"}
 						</a>
 					</div>
-					<ModelForm resource={this.state.resource} nested={false}></ModelForm>
+					<ResourceForm resource={this.state.resource}
+						nested={false}
+					/>
 				</div>
 				{this.props.children}
 			</div>

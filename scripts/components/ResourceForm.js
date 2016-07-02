@@ -15,6 +15,26 @@ class ModelForm extends Component {
 		};
 	}
 
+	componentWillReceiveProps(props) {
+		this.state.resource = props.resource;
+		this.forceUpdate();
+	}
+
+	addAnotherKey() {
+		this.state.resource.model.unshift({
+			type: "predefined",
+			params: {}
+		});
+		this.forceUpdate();
+		this.updateCurrentlyEditingResource();
+	}
+
+	removeModelKey(model, index) {
+		this.state.resource.model.splice(index, 1);
+		this.forceUpdate();
+		this.updateCurrentlyEditingResource();
+	}
+
 	saveValue(name, value) {
 		this.state.resource[name] = value;
 		this.forceUpdate();
@@ -64,12 +84,6 @@ class ModelForm extends Component {
 
 	handleModelParamsChange(model, name, value) {
 		model.params[name] = value;
-		this.forceUpdate();
-		this.updateCurrentlyEditingResource();
-	}
-
-	removeModelKey(model, index) {
-		this.state.resource.model.splice(index, 1);
 		this.forceUpdate();
 		this.updateCurrentlyEditingResource();
 	}

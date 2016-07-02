@@ -23,17 +23,16 @@
               {
                 "type": "random",
                 "params": {},
-                "key": "last_nameeee",
+                "key": "first_name",
                 "faker_category": "name",
-                "faker_type": "lastName"
+                "faker_type": "firstName"
               },
               {
                 "type": "random",
                 "params": {},
-                "key": "first_nameeee",
+                "key": "last_nameeee",
                 "faker_category": "name",
-                "faker_type": "firstName",
-                "gender": "male"
+                "faker_type": "lastName"
               }
             ]
           }

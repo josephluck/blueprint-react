@@ -9,7 +9,7 @@ import brace from 'brace';
 import AceEditor from 'react-ace';
 import 'brace/mode/json';
 import 'brace/theme/tomorrow';
-import ModelForm from 'components/ModelForm';
+import ResourceForm from 'components/ResourceForm';
 
 window.faker = Faker;
 
@@ -53,15 +53,6 @@ class NestedModel extends Component {
 		});
 	}
 
-	addAnotherKey() {
-		this.state.child_resource.resource.model.unshift({
-			type: "predefined",
-			params: {}
-		});
-		this.forceUpdate();
-		this.updateCurrentlyEditingResource();
-	}
-
 	updateCurrentlyEditingResource() {
 		ResourceStore.updateCurrentlyEditingResource(this.state.resource);
 	}
@@ -76,31 +67,23 @@ class NestedModel extends Component {
 	render() {
 		return (
 			<div className="modal flex flex-vertical">
-				<div className="flex-1 overflow-auto">
-					<div className="section-title with-top-border flex">
-						<span className="flex-1">
-							{`${this.state.child_resource.key} model description`}
-						</span>
-						<Link className="large-right-margin"
-							to={`/${this.props.resource.id}`}
-							onClick={(e) => {
-								this.persistEditedResourceToResource();
-							}}>
-							{"Save and close"}
-						</Link>
-						<a href=""
-							onClick={(e) => {
-								e.preventDefault();
-								this.addAnotherKey();
-							}}>
-							{"Add another key"}
-						</a>
-					</div>
-					{this.state.child_resource.resource.model ?
-						<ModelForm resource={this.state.child_resource.resource}></ModelForm>
-						: null
-					}
+				<div className="section-title with-top-border flex flex-0">
+					<span className="flex-1">
+						{`${this.state.child_resource.key} model description`}
+					</span>
+					<Link to={`/${this.props.resource.id}`}
+						onClick={(e) => {
+							this.persistEditedResourceToResource();
+						}}>
+						{"Save and close"}
+					</Link>
 				</div>
+				{this.state.child_resource.resource.model ?
+					<div className="flex-1 overflow-auto">
+						<ResourceForm resource={this.state.child_resource.resource} />
+					</div>
+					: null
+				}
 			</div>
 		)
 	}

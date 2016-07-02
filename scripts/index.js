@@ -7,14 +7,14 @@ import App from './App';
 import ResourcesList from 'containers/ResourcesList';
 import Resource from 'containers/Resource';
 import ResourceEdit from 'containers/ResourceEdit';
-import NestedModel from 'containers/NestedModel';
+import NestedResource from 'containers/NestedResource';
 
 render((
   <Router history={browserHistory}>
     <Route path="/" component={App}>
   		<Route component={Resource}>
     		<Route path=":resourceId" component={ResourceEdit}>
-    			<Route path="**" component={NestedModel}></Route>
+    			<Route path="**" component={NestedResource}></Route>
     		</Route>
     	</Route>
     </Route>

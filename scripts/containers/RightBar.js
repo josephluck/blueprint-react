@@ -51,12 +51,12 @@ class RightBar extends Component {
 
 		return (
 			<div className={`right-bar flex flex-vertical ${right_bar_class}`}>
-				<div className="section-title flex flex-0">
+				<div className="section-title flex flex-0"
+					onClick={() => {
+						this.toggleVisibility();
+					}}>
 					<span className="flex-1">
-						<div className={`icon ${icon_class}`}
-							onClick={() => {
-								this.toggleVisibility();
-							}}>
+						<div className={`icon ${icon_class}`}>
 							<a className="ss-left"></a>
 						</div>
 						{`GET /${this.props.edited_resource.name}`}
