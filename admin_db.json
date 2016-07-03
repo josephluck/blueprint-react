@@ -3,13 +3,13 @@
     {
       "id": 1,
       "type": "array",
-      "name": "userssssss",
+      "name": "users",
       "length": 2,
       "model": [
         {
           "type": "random",
           "params": {},
-          "key": "name",
+          "key": "nameeeeeeee",
           "faker_category": "name",
           "faker_type": "lastName"
         },
@@ -23,7 +23,7 @@
               {
                 "type": "random",
                 "params": {},
-                "key": "first_name",
+                "key": "first_nameeee",
                 "faker_category": "name",
                 "faker_type": "firstName"
               },

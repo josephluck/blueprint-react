@@ -22,10 +22,6 @@ class RightBar extends Component {
 		this.forceUpdate();
 	}
 
-	shouldComponentUpdate() {
-		return this.props.edited_resource !== this.props.resource && this.state.open === true
-	}
-
 /*=============================================================================
 	Render right bar
 
@@ -35,8 +31,8 @@ class RightBar extends Component {
 	render() {
 		let get_code_example = {};
 
-		if (Object.keys(this.props.edited_resource.toJS()).length) {
-			get_code_example = ResourceUtils.generateResource(this.props.edited_resource.toJS(), this.props.resources.toJS());
+		if (Object.keys(this.props.resource.toJS()).length) {
+			get_code_example = ResourceUtils.generateResource(this.props.resource.toJS(), this.props.resources.toJS());
 		}
 
 		var icon_class = "";
@@ -59,7 +55,7 @@ class RightBar extends Component {
 						<div className={`icon ${icon_class}`}>
 							<a className="ss-left"></a>
 						</div>
-						{`GET /${this.props.edited_resource.name}`}
+						{`GET /${this.props.resource.name}`}
 					</span>
 				</div>
 				<div className={`box right-bar-content ${box_class}`}>
@@ -74,5 +70,5 @@ class RightBar extends Component {
 
 export default Provide(RightBar, [
 	'resources',
-	'edited_resource'
+	'resource'
 ])

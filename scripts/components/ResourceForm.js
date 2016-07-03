@@ -1,18 +1,24 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
-import ResourceStore from 'stores/ResourceStore';
+
 import FakerCategories from 'data/FakerCategories';
 import FakerSubCategories from 'data/FakerSubCategories';
 import Faker from 'faker';
+import brace from 'brace';
+import AceEditor from 'react-ace';
+import 'brace/mode/json';
+import 'brace/theme/tomorrow';
 
-class ModelForm extends Component {
+class ResourceForm extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			resource: props.resource,
-			faker_categories: FakerCategories,
-			faker_sub_categories: FakerSubCategories
+			resource: props.resource
 		};
+	}
+
+	shouldComponentUpdate(props) {
+		return this.props.resource !== props.resource
 	}
 
 	componentWillReceiveProps(props) {
@@ -25,36 +31,28 @@ class ModelForm extends Component {
 			type: "predefined",
 			params: {}
 		});
-		this.forceUpdate();
-		this.updateCurrentlyEditingResource();
 	}
 
 	removeModelKey(model, index) {
 		this.state.resource.model.splice(index, 1);
-		this.forceUpdate();
-		this.updateCurrentlyEditingResource();
 	}
 
 	saveValue(name, value) {
-		this.state.resource[name] = value;
-		this.forceUpdate();
-		this.updateCurrentlyEditingResource();
+		this.state.resource.set(name, value);
 	}
 
 	handleModelChange(model, name, value) {
-		model[name] = value;
-		this.forceUpdate();
-		this.updateCurrentlyEditingResource();
+		model.set(name, value);
 	}
 
 	handleModelTypeChanged(model, type) {
 		if (type === 'resource') {
-			model.child_resource = {};
+			model.set("child_resource", {});
 		} else {
-			model.child_resource === undefined;
+			model.set("child_resource", undefined);
 		}
 		if (type === 'object') {
-			model.resource = {
+			model.set("resource", {
 				type: "array",
 				length: 5,
 				model: [
@@ -63,33 +61,23 @@ class ModelForm extends Component {
 					  "key": "key_name"
 					}
 				]
-			}
-
-			ResourceStore.persistEditedResourceToResource(this.state.resource);
+			})
 		} else {
-			model.resource = undefined;
+			model.set("resource", undefined);
 		}
 	}
 
 	handleSelectedChildResource(model, resource_name) {
-		let resource = this.props.resources.find((resource) => {
+		let resource = this.state.resources.find((resource) => {
 			return resource.name === resource_name
 		});
 
-		model.child_resource_name = resource.name;
-		model.child_resource_type = resource.type;
-		this.forceUpdate();
-		this.updateCurrentlyEditingResource();
+		model.set("child_resource_name", resource.name);
+		model.set("child_resource_type", resource.type);
 	}
 
 	handleModelParamsChange(model, name, value) {
-		model.params[name] = value;
-		this.forceUpdate();
-		this.updateCurrentlyEditingResource();
-	}
-
-	updateCurrentlyEditingResource() {
-		ResourceStore.updateCurrentlyEditingResource(this.state.resource);
+		model.params.set(name, value);
 	}
 
 	render() {
@@ -99,7 +87,7 @@ class ModelForm extends Component {
 					{this.props.nested === false ?
 						<div>
 							<div className="input-label">{"Name"}</div>
-							<input value={this.props.resource.name}
+							<input defaultValue={this.state.resource.name}
 								onChange={(e) => {
 									var value = e.target.value.replace(/\W+/g, " ").replace(/ /g,"_");
 									this.saveValue('name', value);
@@ -109,23 +97,24 @@ class ModelForm extends Component {
 						: null
 					}
 					<div className="input-label">{"Type"}</div>
-					<select value={this.props.resource.type}
+					<select defaultValue={this.state.resource.type}
 						onChange={(e) => {
 							this.saveValue('type', e.target.value);
 						}}>
 						<option value={"array"}>{"Array"}</option>
 						<option value={"singular"}>{"Signular"}</option>
 					</select>
-					{this.props.resource.type === 'array' ?
+					{this.state.resource.type === 'array' ?
 						<div>
 							<div className="input-label">{"Length"}</div>
-							<input value={this.props.resource.length}
+							<input defaultValue={this.state.resource.length}
 								onChange={(e) => {
 									let value = 0;
 
 									if (!isNaN(parseFloat(e.target.value)) && isFinite(e.target.value)) {
 										value = parseFloat(e.target.value);
 									}
+
 									this.saveValue('length', value);
 								}}>
 							</input>
@@ -136,7 +125,7 @@ class ModelForm extends Component {
 
 				<div className="section-title with-top-border flex">
 					<span className="flex-1">
-						{`${this.props.resource.name} model description`}
+						{`${this.state.resource.name} model description`}
 					</span>
 					<a href=""
 						onClick={(e) => {
@@ -147,13 +136,13 @@ class ModelForm extends Component {
 					</a>
 				</div>
 				<div className="box without-bottom-padding">
-					{this.props.resource.model.map((model, i) => {
+					{this.state.resource.model.map((model, i) => {
 						return (
 							<div key={i}
 								className="flex model-input-group">
 								<div className="flex-1 large-right-margin">
 									<div className="input-label">{"Key name"}</div>
-									<input value={model.key}
+									<input defaultValue={model.key}
 										onChange={(e) => {
 											var value = e.target.value.replace(/\W+/g, " ").replace(/ /g,"_");
 											this.handleModelChange(model, 'key', value);
@@ -173,7 +162,7 @@ class ModelForm extends Component {
 											{"Remove key"}
 										</a>
 									</div>
-									<select value={model.type}
+									<select defaultValue={model.type}
 										onChange={(e) => {
 											this.handleModelChange(model, 'type', e.target.value);
 											this.handleModelTypeChanged(model, e.target.value);
@@ -196,16 +185,16 @@ class ModelForm extends Component {
 										<div>
 											<div className="input-label">{"Resource"}</div>
 											<select defaultValue={"pleasechoose"}
-												value={model.child_resource_name}
+												defaultValue={model.child_resource_name}
 												onChange={(e) => {
 													this.handleSelectedChildResource(model, e.target.value);
 												}}>
 												<option disabled value="pleasechoose">{"Please choose"}</option>
-												{this.props.resources.map((resource, i) => {
-													if (resource.id !== this.props.resource.id) {
+												{this.state.resources.map((resource, i) => {
+													if (resource.id !== this.state.resource.id) {
 														return (
 															<option key={i}
-																value={resource.name}>
+																defaultValue={resource.name}>
 																{resource.name}
 															</option>
 														)
@@ -219,7 +208,7 @@ class ModelForm extends Component {
 												<div>
 													<div className="input-label">{"Method"}</div>
 													<select defaultValue={"pleasechoose"}
-														value={model.child_resource_method}
+														defaultValue={model.child_resource_method}
 														onChange={(e) => {
 															this.handleModelChange(model, 'child_resource_method', e.target.value);
 														}}>
@@ -235,7 +224,7 @@ class ModelForm extends Component {
 											{model.child_resource_method === 'array' ?
 												<div>
 													<div className="input-label">{"Limit (leave blank for entire array)"}</div>
-													<input value={model.child_resource_limit}
+													<input defaultValue={model.child_resource_limit}
 														onChange={(e) => {
 															this.handleModelChange(model, 'child_resource_limit', e.target.value);
 														}} />
@@ -247,9 +236,11 @@ class ModelForm extends Component {
 									}
 
 									{model.type === 'object' ?
-										<Link to={`/${this.props.resource.id}/${i}`}>
-											{"Configure"}
-										</Link>
+										<div>
+											<Link to={`/${this.state.resource.id}/${i}`}>
+												{"Configure"}
+											</Link>
+										</div>
 										: null
 									}
 
@@ -257,15 +248,15 @@ class ModelForm extends Component {
 										<div>
 											<div className="input-label">{"Random category"}</div>
 											<select defaultValue={"pleasechoose"}
-												value={model.faker_category}
+												defaultValue={model.faker_category}
 												onChange={(e) => {
 													this.handleModelChange(model, 'faker_category', e.target.value);
 												}}>
 												<option disabled value="pleasechoose">{"Please choose"}</option>
-												{this.state.faker_categories.map((category, i) => {
+												{FakerCategories.map((category, i) => {
 													return (
 														<option key={i}
-															value={category.value}>
+															defaultValue={category.value}>
 															{category.name}
 														</option>
 													)
@@ -276,15 +267,15 @@ class ModelForm extends Component {
 												<div>
 													<div className="input-label">{"Random sub-category"}</div>
 													<select defaultValue={"pleasechoose"}
-														value={model.faker_type}
+														defaultValue={model.faker_type}
 														onChange={(e) => {
 															this.handleModelChange(model, 'faker_type', e.target.value);
 														}}>
 														<option disabled value="pleasechoose">{"Please choose"}</option>
-														{this.state.faker_sub_categories[model.faker_category].map((type, i) => {
+														{FakerSubCategories[model.faker_category].map((type, i) => {
 															return (
 																<option key={i}
-																	value={type.value}>
+																	defaultValue={type.value}>
 																	{type.name}
 																</option>
 															)
@@ -306,12 +297,12 @@ class ModelForm extends Component {
 															{model.faker_type === "department" ?
 																<div>
 																	<div className="input-label">{"Max value"}</div>
-																	<input value={model.params.max}
+																	<input defaultValue={model.params.max}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'max', e.target.value);
 																		}} />
 																	<div className="input-label">{"Fixed amount"}</div>
-																	<input value={model.params.fixedAmount}
+																	<input defaultValue={model.params.fixedAmount}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'fixedAmount', e.target.value);
 																		}} />
@@ -321,22 +312,22 @@ class ModelForm extends Component {
 															{model.faker_type === "price" ?
 																<div>
 																	<div className="input-label">{"Min value"}</div>
-																	<input value={model.params.min}
+																	<input defaultValue={model.params.min}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'min', e.target.value);
 																		}} />
 																	<div className="input-label">{"Max value"}</div>
-																	<input value={model.params.max}
+																	<input defaultValue={model.params.max}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'max', e.target.value);
 																		}} />
 																	<div className="input-label">{"Decimal places"}</div>
-																	<input value={model.params.dec}
+																	<input defaultValue={model.params.dec}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'dec', e.target.value);
 																		}} />
 																	<div className="input-label">{"Symbol"}</div>
-																	<input value={model.params.symbol}
+																	<input defaultValue={model.params.symbol}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'symbol', e.target.value);
 																		}} />
@@ -346,12 +337,12 @@ class ModelForm extends Component {
 															{model.faker_type === "number" ?
 																<div>
 																	<div className="input-label">{"Min value"}</div>
-																	<input value={model.params.min}
+																	<input defaultValue={model.params.min}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'min', e.target.value);
 																		}} />
 																	<div className="input-label">{"Max value"}</div>
-																	<input value={model.params.max}
+																	<input defaultValue={model.params.max}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'max', e.target.value);
 																		}} />
@@ -361,13 +352,13 @@ class ModelForm extends Component {
 															{model.faker_type === "between" ?
 																<div>
 																	<div className="input-label">{"From"}</div>
-																	<input value={model.params.from}
+																	<input defaultValue={model.params.from}
 																		type="date"
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'from', e.target.value);
 																		}} />
 																	<div className="input-label">{"To"}</div>
-																	<input value={model.params.to}
+																	<input defaultValue={model.params.to}
 																		type="date"
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'to', e.target.value);
@@ -378,13 +369,13 @@ class ModelForm extends Component {
 															{model.faker_type === "future" || model.faker_type === "past" ?
 																<div>
 																	<div className="input-label">{"From date"}</div>
-																	<input value={model.params.refDate}
+																	<input defaultValue={model.params.refDate}
 																		type="date"
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'refDate', e.target.value);
 																		}} />
 																	<div className="input-label">{"Number of years"}</div>
-																	<input value={model.params.years}
+																	<input defaultValue={model.params.years}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'years', e.target.value);
 																		}} />
@@ -394,7 +385,7 @@ class ModelForm extends Component {
 															{model.faker_type === "recent" ?
 																<div>
 																	<div className="input-label">{"Number of days"}</div>
-																	<input value={model.params.days}
+																	<input defaultValue={model.params.days}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'days', e.target.value);
 																		}} />
@@ -404,22 +395,22 @@ class ModelForm extends Component {
 															{model.faker_type === "amount" ?
 																<div>
 																	<div className="input-label">{"Min value"}</div>
-																	<input value={model.params.min}
+																	<input defaultValue={model.params.min}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'min', e.target.value);
 																		}} />
 																	<div className="input-label">{"Max value"}</div>
-																	<input value={model.params.max}
+																	<input defaultValue={model.params.max}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'max', e.target.value);
 																		}} />
 																	<div className="input-label">{"Decimal places"}</div>
-																	<input value={model.params.dec}
+																	<input defaultValue={model.params.dec}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'dec', e.target.value);
 																		}} />
 																	<div className="input-label">{"Symbol"}</div>
-																	<input value={model.params.symbol}
+																	<input defaultValue={model.params.symbol}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'symbol', e.target.value);
 																		}} />
@@ -429,7 +420,7 @@ class ModelForm extends Component {
 															{model.faker_type === "mask" ?
 																<div>
 																	<div className="input-label">{"Length of number"}</div>
-																	<input value={model.params.length}
+																	<input defaultValue={model.params.length}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'length', e.target.value);
 																		}} />
@@ -455,12 +446,12 @@ class ModelForm extends Component {
 															{model.faker_category === "image" && model.faker_type !== "avatar" ?
 																<div>
 																	<div className="input-label">{"Width"}</div>
-																	<input value={model.params.width}
+																	<input defaultValue={model.params.width}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'width', e.target.value);
 																		}} />
 																	<div className="input-label">{"Height"}</div>
-																	<input value={model.params.height}
+																	<input defaultValue={model.params.height}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'height', e.target.value);
 																		}} />
@@ -470,17 +461,17 @@ class ModelForm extends Component {
 															{model.faker_type === "email" ?
 																<div>
 																	<div className="input-label">{"First name"}</div>
-																	<input value={model.params.firstName}
+																	<input defaultValue={model.params.firstName}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'firstName', e.target.value);
 																		}} />
 																	<div className="input-label">{"Last name"}</div>
-																	<input value={model.params.lastName}
+																	<input defaultValue={model.params.lastName}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'lastName', e.target.value);
 																		}} />
 																	<div className="input-label">{"Provider"}</div>
-																	<input value={model.params.provider}
+																	<input defaultValue={model.params.provider}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'provider', e.target.value);
 																		}} />
@@ -490,12 +481,12 @@ class ModelForm extends Component {
 															{model.faker_type === "exampleEmail" ?
 																<div>
 																	<div className="input-label">{"First name"}</div>
-																	<input value={model.params.firstName}
+																	<input defaultValue={model.params.firstName}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'firstName', e.target.value);
 																		}} />
 																	<div className="input-label">{"Last name"}</div>
-																	<input value={model.params.lastName}
+																	<input defaultValue={model.params.lastName}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'lastName', e.target.value);
 																		}} />
@@ -505,7 +496,7 @@ class ModelForm extends Component {
 															{model.faker_type === "password" ?
 																<div>
 																	<div className="input-label">{"Length of password"}</div>
-																	<input value={model.params.length}
+																	<input defaultValue={model.params.length}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'length', e.target.value);
 																		}} />
@@ -523,12 +514,12 @@ class ModelForm extends Component {
 															{model.faker_type === "userName" ?
 																<div>
 																	<div className="input-label">{"First name"}</div>
-																	<input value={model.params.firstName}
+																	<input defaultValue={model.params.firstName}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'firstName', e.target.value);
 																		}} />
 																	<div className="input-label">{"Last name"}</div>
-																	<input value={model.params.lastName}
+																	<input defaultValue={model.params.lastName}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'lastName', e.target.value);
 																		}} />
@@ -538,7 +529,7 @@ class ModelForm extends Component {
 															{model.faker_type === "lines" ?
 																<div>
 																	<div className="input-label">{"Number of lines"}</div>
-																	<input value={model.params.lines}
+																	<input defaultValue={model.params.lines}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'lines', e.target.value);
 																		}} />
@@ -548,12 +539,12 @@ class ModelForm extends Component {
 															{model.faker_type === "paragraphs" ?
 																<div>
 																	<div className="input-label">{"Number of paragraphs"}</div>
-																	<input value={model.params.paragraphCount}
+																	<input defaultValue={model.params.paragraphCount}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'paragraphCount', e.target.value);
 																		}} />
 																	<div className="input-label">{"Separator"}</div>
-																	<input value={model.params.seperator}
+																	<input defaultValue={model.params.seperator}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'seperator', e.target.value);
 																		}} />
@@ -563,7 +554,7 @@ class ModelForm extends Component {
 															{model.faker_type === "sentence" ?
 																<div>
 																	<div className="input-label">{"Number of words"}</div>
-																	<input value={model.params.wordCount}
+																	<input defaultValue={model.params.wordCount}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'wordCount', e.target.value);
 																		}} />
@@ -573,12 +564,12 @@ class ModelForm extends Component {
 															{model.faker_type === "sentences" ?
 																<div>
 																	<div className="input-label">{"Number of sentences"}</div>
-																	<input value={model.params.sentenceCount}
+																	<input defaultValue={model.params.sentenceCount}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'sentenceCount', e.target.value);
 																		}} />
 																	<div className="input-label">{"Separator"}</div>
-																	<input value={model.params.seperator}
+																	<input defaultValue={model.params.seperator}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'seperator', e.target.value);
 																		}} />
@@ -588,7 +579,7 @@ class ModelForm extends Component {
 															{model.faker_type === "text" ?
 																<div>
 																	<div className="input-label">{"Number of times"}</div>
-																	<input value={model.params.times}
+																	<input defaultValue={model.params.times}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'times', e.target.value);
 																		}} />
@@ -598,7 +589,7 @@ class ModelForm extends Component {
 															{model.faker_type === "words" ?
 																<div>
 																	<div className="input-label">{"Number of words"}</div>
-																	<input value={model.params.words}
+																	<input defaultValue={model.params.words}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'words', e.target.value);
 																		}} />
@@ -608,9 +599,9 @@ class ModelForm extends Component {
 															{model.faker_type === "firstName" || model.faker_type === 'lastName' || model.faker_type === 'prefix' ?
 																<div>
 																	<div className="input-label">{"Gender"}</div>
-																	<select value={model.gender}
+																	<select defaultValue={model.gender}
 																		onChange={(e) => {
-																			this.handleModelChange(model, 'gender', e.target.value);
+																			this.handleModelParamsChange(model, 'gender', e.target.value);
 																		}}>
 																		<option value={""}>
 																			{"Either"}
@@ -648,7 +639,7 @@ class ModelForm extends Component {
 																	    onChange={(value) => {
 																	    	this.handleModelParamsChange(model, 'json', value);
 																	    }}
-																	    value={model.params.json}
+																	    defaultValue={model.params.json}
 																	    name={`model-${i}`}
 																	  />
 																	</div>
@@ -658,7 +649,7 @@ class ModelForm extends Component {
 															{model.faker_type === "objectElement" ?
 																<div>
 																	<div className="input-label">{"Object"}</div>
-																	<textarea value={model.params.json}
+																	<textarea defaultValue={model.params.json}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'json', e.target.value);
 																		}}>
@@ -685,4 +676,4 @@ class ModelForm extends Component {
 	}
 }
 
-export default ModelForm
+export default ResourceForm

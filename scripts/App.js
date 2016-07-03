@@ -34,7 +34,7 @@ class App extends Component {
 	  			<div className="logo">
 	  				<span>{"B"}</span>
 	  			</div>
-		  		<ResourcesList></ResourcesList>
+		  		<ResourcesList />
 		  	</div>
 		  	<div className="main-content flex flex-vertical">
 		  	{Store.get().resources.length > 0 ?
@@ -42,7 +42,7 @@ class App extends Component {
 			  	: null
 			  }
 			  </div>
-			  <RightBar></RightBar>
+			  <RightBar />
 		  </div>
 		)
 	}

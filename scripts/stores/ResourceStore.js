@@ -11,9 +11,7 @@ class ResourceStore {
 	constructor() {
 		Store.initialize({
 			resource: {},
-			edited_resource: {},
-			resource_loading: true,
-			child_models: []
+			resource_loading: true
 		});
 	}
 
@@ -33,12 +31,12 @@ class ResourceStore {
 		});
 
 		Store.get().resource.reset(resource);
-		Store.get().edited_resource.reset(resource);
 	}
 
 	saveResource(resource) {
 		Store.get().set({resource_saving: true});
 
+		resource = resource.toJS();
 		resource.model = resource.model.map((model, value) => {
 			if (model.faker_type === 'arrayElement' || model.faker_type === 'objectElement') {
 				model.params.json = JSON.parse(model.params.json);
@@ -64,11 +62,9 @@ class ResourceStore {
 
 			Store.get().set({
 				resource_saving: false,
-				resource: resource,
-				edited_resource: resource
+				resource: resource
 			});
 			ResourcesStore.updateResource(resource);
-			browserHistory.push(`/${resource.id}`);
 		});
 	}
 
@@ -85,21 +81,6 @@ class ResourceStore {
 			Store.get().set({resource_saving: false});
 			ResourcesStore.removeResource(resource.id);
 		});
-	}
-
-	updateCurrentlyEditingResource(resource) {
-		resource.model = resource.model.map((model, value) => {
-			if (model.faker_type === 'arrayElement' || model.faker_type === 'objectElement') {
-				model.params.json = JSON.parse(model.params.json);
-			}
-
-			return model;
-		});
-		Store.get().edited_resource.reset(resource);
-	}
-
-	persistEditedResourceToResource(edited_resource) {
-		Store.get().resource.reset(edited_resource);
 	}
 }
 
