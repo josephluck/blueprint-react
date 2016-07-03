@@ -42,8 +42,11 @@ html {
 	border-left: solid @borderWidth @borderColor;
 	transition: all 0.3s ease-in-out;
 	transform: translateX(400 - 43px);
+	z-index: 10;
+	box-shadow: 0px 0px 0px @borderWidth transparent;
 	&.--open {
 		transform: translateX(0);
+		box-shadow: 0px 0px 0px @borderWidth fade(@borderColor, 50%);
 	}
 	.icon {
 		display: inline-block;

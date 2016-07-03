@@ -35,11 +35,11 @@ class ResourcesStore {
 				type: "array",
 				length: 5,
 				name: "new_resource",
-				model: []
+				model: [{}]
 			}
 		}).then((resource) => {
 			Store.get().resources.push(resource);
-			browserHistory.push(`/${resource.name}`);
+			browserHistory.push(`/${resource.id}`);
 		});
 	}
 

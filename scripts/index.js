@@ -14,7 +14,9 @@ render((
     <Route path="/" component={App}>
   		<Route component={Resource}>
     		<Route path=":resourceId" component={ResourceEdit}>
-    			<Route path="**" component={NestedResource}></Route>
+    			<Route component={NestedResource}>
+    				<Route path="**" component={NestedResource}></Route>
+    			</Route>
     		</Route>
     	</Route>
     </Route>

@@ -56,7 +56,11 @@ module.exports = {
 		} else if (property.type === 'child_resource') {
 			return this.generateValueFromAnotherResource(property);
 		} else if (property.type === 'object') {
-			return this.generateResource(property.resource, null, true);
+			if (property.resource && property.resource.type) {
+				return this.generateResource(property.resource, null, true);
+			} else {
+				return null
+			}
 		}
 	},
 

@@ -1,89 +1,74 @@
 {
   "resources": [
     {
-      "id": 1,
-      "type": "array",
-      "name": "users",
-      "length": 2,
-      "model": [
-        {
-          "type": "random",
-          "params": {},
-          "key": "nameeeeeeee",
-          "faker_category": "name",
-          "faker_type": "lastName"
-        },
-        {
-          "type": "object",
-          "key": "object_example",
-          "resource": {
-            "type": "array",
-            "length": 3,
-            "model": [
-              {
-                "type": "random",
-                "params": {},
-                "key": "first_nameeee",
-                "faker_category": "name",
-                "faker_type": "firstName"
-              },
-              {
-                "type": "random",
-                "params": {},
-                "key": "last_nameeee",
-                "faker_category": "name",
-                "faker_type": "lastName"
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "type": "array",
-      "length": 1,
-      "name": "comments",
-      "model": [
-        {
-          "type": "child_resource",
-          "params": {},
-          "child_resource_method": "id",
-          "child_resource_limit": "6",
-          "key": "author",
-          "child_resource_name": "users",
-          "child_resource_type": "array"
-        }
-      ],
-      "id": 3
-    },
-    {
       "type": "array",
       "length": 5,
-      "name": "interests",
+      "name": "users",
       "model": [
         {
+          "uuid": "237195d5-d123-41d0-a43b-b18f9979d516",
+          "type": "object",
+          "params": {},
+          "faker_type": "",
+          "faker_category": "",
+          "resource": {
+            "type": "array",
+            "length": 5,
+            "model": [
+              {
+                "uuid": "e7bb9bd4-617d-4f0a-9dcf-3d838a52421f",
+                "type": "random",
+                "params": {
+                  "width": "100",
+                  "height": "100"
+                },
+                "faker_type": "city",
+                "faker_category": "image",
+                "resource": {},
+                "key": "city_image"
+              },
+              {
+                "uuid": "693491d8-baad-4f3f-9f14-c066c06d0a92",
+                "type": "random",
+                "params": {
+                  "paragraphCount": "2",
+                  "times": "1"
+                },
+                "faker_type": "text",
+                "faker_category": "lorem",
+                "resource": {},
+                "key": "text"
+              }
+            ]
+          },
+          "key": "nested_model"
+        },
+        {
+          "uuid": "08ac28f7-20ef-4202-a302-8c7d7defbecb",
           "type": "random",
           "params": {
             "json": [
-              "Cycling",
+              "Watches",
               "Reading",
-              "Design",
-              "Walking",
-              "Politics",
-              "Football",
-              "Rubgy",
-              "Cooking",
-              "Music",
-              "Technology",
-              "Games"
+              "Cycling",
+              "Sports"
             ]
           },
-          "key": "name",
+          "faker_type": "arrayElement",
           "faker_category": "random",
-          "faker_type": "arrayElement"
+          "resource": {},
+          "key": "interest"
+        },
+        {
+          "uuid": "fd996d09-c368-4401-a55d-371237db3126",
+          "type": "random",
+          "params": {},
+          "key": "first_name",
+          "faker_category": "name",
+          "faker_type": "firstName"
         }
       ],
-      "id": 4
+      "id": 1
     }
   ]
 }

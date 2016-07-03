@@ -43,6 +43,7 @@ class NestedModel extends Component {
 					</div>
 					: null
 				}
+				{this.props.children}
 			</div>
 		)
 	}
