@@ -34,7 +34,6 @@ class ResourceEdit extends Component {
 	render() {
 		return (
 			<div className="flex flex-vertical">
-				{this.props.children}
 				<div className="section-title flex flex-0">
 					<span className="flex-1">
 						{this.props.resource.name}
@@ -60,6 +59,7 @@ class ResourceEdit extends Component {
 					resources={this.props.resources}
 					nested={false}
 				/>
+				{this.props.children}
 			</div>
 		)
 	}

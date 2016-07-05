@@ -6,7 +6,7 @@
       "name": "users",
       "model": [
         {
-          "uuid": "237195d5-d123-41d0-a43b-b18f9979d516",
+          "uuid": "afecff8a-59d5-42f4-a623-a782d2fd02ac",
           "type": "object",
           "params": {},
           "faker_type": "",
@@ -16,56 +16,30 @@
             "length": 5,
             "model": [
               {
-                "uuid": "e7bb9bd4-617d-4f0a-9dcf-3d838a52421f",
-                "type": "random",
-                "params": {
-                  "width": "100",
-                  "height": "100"
-                },
-                "faker_type": "city",
-                "faker_category": "image",
-                "resource": {},
-                "key": "city_image"
-              },
-              {
-                "uuid": "693491d8-baad-4f3f-9f14-c066c06d0a92",
-                "type": "random",
-                "params": {
-                  "paragraphCount": "2",
-                  "times": "1"
-                },
-                "faker_type": "text",
-                "faker_category": "lorem",
-                "resource": {},
-                "key": "text"
+                "uuid": "b980aea6-1784-4454-94a1-d742c0fb0fce",
+                "type": "object",
+                "key": "nested_2",
+                "params": {},
+                "faker_type": "",
+                "faker_category": "",
+                "resource": {
+                  "type": "array",
+                  "length": 5,
+                  "model": [
+                    {
+                      "uuid": "afecff8a-59d5-42f4-a623-a782d2fd02ac",
+                      "type": "object",
+                      "key": "key_name",
+                      "params": {},
+                      "faker_type": "",
+                      "faker_category": ""
+                    }
+                  ]
+                }
               }
             ]
           },
-          "key": "nested_model"
-        },
-        {
-          "uuid": "08ac28f7-20ef-4202-a302-8c7d7defbecb",
-          "type": "random",
-          "params": {
-            "json": [
-              "Watches",
-              "Reading",
-              "Cycling",
-              "Sports"
-            ]
-          },
-          "faker_type": "arrayElement",
-          "faker_category": "random",
-          "resource": {},
-          "key": "interest"
-        },
-        {
-          "uuid": "fd996d09-c368-4401-a55d-371237db3126",
-          "type": "random",
-          "params": {},
-          "key": "first_name",
-          "faker_category": "name",
-          "faker_type": "firstName"
+          "key": "nested_1"
         }
       ],
       "id": 1

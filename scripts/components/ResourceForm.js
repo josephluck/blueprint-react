@@ -22,8 +22,10 @@ class ResourceForm extends Component {
 	}
 
 	componentWillReceiveProps(props) {
-		this.state.resource = props.resource;
-		this.forceUpdate();
+		if (this.props.resource !== props.resource) {
+			this.state.resource = props.resource;
+			this.forceUpdate();
+		}
 	}
 
 	addAnotherKey() {
@@ -146,7 +148,7 @@ class ResourceForm extends Component {
 
 				<div className="section-title with-top-border flex">
 					<span className="flex-1">
-						{`${this.state.resource.name} model description`}
+						{`${this.state.resource.name || ""} model description`}
 					</span>
 					<a href=""
 						onClick={(e) => {
@@ -257,11 +259,13 @@ class ResourceForm extends Component {
 									}
 
 									{model.type === 'object' ?
-										<div>
-											<Link to={`/${this.state.resource.id}/${i}`}>
-												{"Configure"}
-											</Link>
-										</div>
+										<a onClick={(e) => {
+											e.preventDefault();
+											debugger
+											// Use browser history to push current ${i} in to URL
+										}}>
+											{"Configure"}
+										</a>
 										: null
 									}
 
@@ -694,6 +698,7 @@ class ResourceForm extends Component {
 				</div>
 			</div>
 		)
+		return null
 	}
 }
 

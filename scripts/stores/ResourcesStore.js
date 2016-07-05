@@ -35,7 +35,13 @@ class ResourcesStore {
 				type: "array",
 				length: 5,
 				name: "new_resource",
-				model: [{}]
+				model: [{
+					type: "predefined",
+					params: {},
+					faker_type: "",
+					faker_category: "",
+					resource: {}
+				}]
 			}
 		}).then((resource) => {
 			Store.get().resources.push(resource);

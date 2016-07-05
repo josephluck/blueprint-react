@@ -7,6 +7,7 @@ import App from './App';
 import ResourcesList from 'containers/ResourcesList';
 import Resource from 'containers/Resource';
 import ResourceEdit from 'containers/ResourceEdit';
+import NestedResourceNavigation from 'containers/NestedResourceNavigation';
 import NestedResource from 'containers/NestedResource';
 
 render((
@@ -14,9 +15,7 @@ render((
     <Route path="/" component={App}>
   		<Route component={Resource}>
     		<Route path=":resourceId" component={ResourceEdit}>
-    			<Route component={NestedResource}>
-    				<Route path="**" component={NestedResource}></Route>
-    			</Route>
+    			<Route path="**" component={NestedResourceNavigation}></Route>
     		</Route>
     	</Route>
     </Route>

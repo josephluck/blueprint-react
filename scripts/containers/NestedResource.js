@@ -15,6 +15,7 @@ class NestedModel extends Component {
 
 	componentWillReceiveProps(props) {
 		this.state.nested_resource = this.updateNestedResource(props);
+		console.log('Yeah')
 	}
 
 	updateNestedResource(props) {
@@ -39,11 +40,12 @@ class NestedModel extends Component {
 						<ResourceForm
 							resource={this.state.nested_resource.resource}
 							resources={this.props.resources}
+							resource_id={this.props.resource.id}
+							current_splat={this.props.params.splat.split('/').map(Number)}
 							nested={true} />
 					</div>
 					: null
 				}
-				{this.props.children}
 			</div>
 		)
 	}

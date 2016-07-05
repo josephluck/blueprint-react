@@ -5,11 +5,7 @@ import Freezer from 'freezer-js';
 	State for sub-stores are handled in their constructors.
 	This is for encapsulation and in order to handle computed derived state.
 =============================================================================*/
-var Store = new Freezer({
-	params: {}
-}, {
-	live: true
-});
+var Store = new Freezer({}, {});
 
 /*=============================================================================
 	An intialize method that lets a sub-store initialize some state.
@@ -103,17 +99,17 @@ Store.on('setStoreState', (state) => {
 	It should push things about the user agent including browser, version,
 	screen size etc.
 =============================================================================*/
-window.application_errors = [];
+// window.application_errors = [];
 
-window.onerror = function(message, url, line, column) {
-	window.application_errors.push({
-		error_date: new Date().toISOString(),
-		error_message: message,
-		error_occured_at_url: url,
-		error_occured_at_line: line,
-		error_occured_at_column: column,
-		application_state_at_time_of_error: Store.get().toJS()
-	});
-}
+// window.onerror = function(message, url, line, column) {
+// 	window.application_errors.push({
+// 		error_date: new Date().toISOString(),
+// 		error_message: message,
+// 		error_occured_at_url: url,
+// 		error_occured_at_line: line,
+// 		error_occured_at_column: column,
+// 		application_state_at_time_of_error: Store.get().toJS()
+// 	});
+// }
 
 export default Store;
