@@ -57,7 +57,8 @@ class NestedResourceNavigation extends Component {
 						{this.state.nested_resources.map((resource, i) => {
 							console.log(resource);
 							if (i !== this.state.nested_resources.length - 1) {
-								let path = window.location.pathname.split('/').slice(2, i + 3);
+								let path = window.location.pathname.split('/').slice(2, i + 3).join('/');
+								console.log(path);
 								return (
 									<span>
 										<Link to={`/${this.props.resource.id}/${path}`}>
