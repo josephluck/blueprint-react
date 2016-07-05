@@ -61,8 +61,10 @@ class NestedResourceNavigation extends Component {
 			<div className="modal flex flex-vertical">
 				<div className="section-title with-top-border flex flex-0">
 					<span className="flex-1">
-						<h1>{"Render"}</h1>
 					</span>
+					<Link to={`/${this.props.resource.id}`}>
+						{"Save and close"}
+					</Link>
 				</div>
 				<div className="flex-1 overflow-auto">
 					{this.state.test ?

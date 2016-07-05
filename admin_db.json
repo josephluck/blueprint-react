@@ -8,6 +8,7 @@
         {
           "uuid": "afecff8a-59d5-42f4-a623-a782d2fd02ac",
           "type": "object",
+          "key": "nested_1",
           "params": {},
           "faker_type": "",
           "faker_category": "",
@@ -38,8 +39,7 @@
                 }
               }
             ]
-          },
-          "key": "nested_1"
+          }
         }
       ],
       "id": 1

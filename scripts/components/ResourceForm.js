@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router';
+import {Link, browserHistory} from 'react-router';
 
 import FakerCategories from 'data/FakerCategories';
 import FakerSubCategories from 'data/FakerSubCategories';
@@ -261,8 +261,8 @@ class ResourceForm extends Component {
 									{model.type === 'object' ?
 										<a onClick={(e) => {
 											e.preventDefault();
-											debugger
 											// Use browser history to push current ${i} in to URL
+											browserHistory.push(`${window.location.pathname}/${i}`);
 										}}>
 											{"Configure"}
 										</a>
