@@ -6,7 +6,6 @@ import ResourceForm from 'components/ResourceForm';
 
 class NestedResourceNavigation extends Component {
 	constructor(props) {
-		console.log("Constructed")
 		super(props);
 		this.state = {
 			test: "Yeah",
@@ -24,13 +23,11 @@ class NestedResourceNavigation extends Component {
 	}
 
 	componentWillReceiveProps(props) {
-		console.log("Fired componentWillReceiveProps")
 		this.state.nested_resources = this.updateNestedResources(props);
 		this.state.current_nested_resource = this.updateNestedResource(props);
 	}
 
 	updateNestedResources(props) {
-		console.log("Fired updateNestedResources");
 		let indicies = props.params.splat.split('/').map(Number);
 		let nested_resources = [];
 
@@ -43,24 +40,38 @@ class NestedResourceNavigation extends Component {
 			nested_resources.push(model_to_push);
 		}
 
-		console.log(nested_resources)
-
 		return nested_resources;
 	}
 
 	updateNestedResource(props) {
-		console.log("Fired updateNestedResource");
 		let indicies = props.params.splat.split('/').map(Number);
 		let last_resource = this.state.nested_resources[indicies.length - 1];
 		return last_resource;
 	}
 
 	render() {
-		console.log("Rendering")
 		return (
 			<div className="modal flex flex-vertical">
 				<div className="section-title with-top-border flex flex-0">
 					<span className="flex-1">
+						{this.state.nested_resources.map((resource, i) => {
+							console.log(resource);
+							if (i !== this.state.nested_resources.length - 1) {
+								let path = window.location.pathname.split('/').slice(2, i + 3);
+								return (
+									<span>
+										<Link to={`/${this.props.resource.id}/${path}`}>
+											{resource.key}
+										</Link>
+										{" / "}
+									</span>
+								)
+							} else {
+								return (
+									<span>{resource.key}</span>
+								)
+							}
+						})}
 					</span>
 					<Link to={`/${this.props.resource.id}`}>
 						{"Save and close"}
