@@ -30,15 +30,17 @@ class ResourceForm extends Component {
 
 	addAnotherKey() {
 		this.state.resource.model.unshift({
-			uuid: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-		    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-		    return v.toString(16);
-			}),
-			type: "predefined",
-			params: {},
-			faker_type: "",
-			faker_category: "",
-			resource: {}
+	  	uuid: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+	      var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+	      return v.toString(16);
+	  	}),
+	  	type: "predefined",
+	  	faker_type: "",
+	  	faker_category: "",
+	  	params: {},
+	  	resource: {},
+			predefined_type: "string",
+			predefined_value: ""
 		});
 		this.forceUpdate();
 	}
@@ -75,10 +77,12 @@ class ResourceForm extends Component {
 				      return v.toString(16);
 				  	}),
 				  	type: "predefined",
-				  	params: {},
 				  	faker_type: "",
 				  	faker_category: "",
-				  	resource: {}
+				  	params: {},
+				  	resource: {},
+						predefined_type: "string",
+						predefined_value: ""
 					}
 				]
 			});
@@ -86,6 +90,12 @@ class ResourceForm extends Component {
 			model.set("resource", undefined);
 		}
 		this.forceUpdate();
+	}
+
+	handleModelPredefinedTypeChange(model, type) {
+		model.reset({
+			predefined_value: ""
+		});
 	}
 
 	handleSelectedChildResource(model, resource_name) {
@@ -206,11 +216,68 @@ class ResourceForm extends Component {
 
 									{model.type === 'predefined' ?
 										<div>
-											<div className="input-label">{"Value"}</div>
-											<input value={model.predefined_value}
+											<div className="input-label">{"Type"}</div>
+											<select value={model.predefined_type}
 												onChange={(e) => {
-													this.handleModelChange(model, 'predefined_value', e.target.value);
-												}} />
+													this.handleModelChange(model, 'predefined_type', e.target.value);
+													this.handleModelPredefinedTypeChange(model, e.target.value);
+												}}>
+												<option value="string">{"String"}</option>
+												<option value="number">{"Number"}</option>
+												<option value="boolean">{"Boolean"}</option>
+												<option value="date">{"Date"}</option>
+											</select>
+
+											{model.predefined_type === 'string' ?
+												<div>
+													<div className="input-label">{"Value"}</div>
+													<input value={model.predefined_value}
+														onChange={(e) => {
+															this.handleModelChange(model, 'predefined_value', e.target.value);
+														}} />
+												</div>
+												:
+												<div>
+													{model.predefined_type === 'number' ?
+														<div>
+															<div className="input-label">{"Value"}</div>
+															<input value={model.predefined_value}
+																type="number"
+																onChange={(e) => {
+																	this.handleModelChange(model, 'predefined_value', e.target.value);
+																}} />
+														</div>
+														:
+														<div>
+															{model.predefined_type === 'boolean' ?
+																<div>
+																	<div className="input-label">{"Value"}</div>
+																	<input value={model.predefined_value}
+																		type="checkbox"
+																		onChange={(e) => {
+																			this.handleModelChange(model, 'predefined_value', e.target.value);
+																		}} />
+																	{"True / false"}
+																</div>
+																:
+																<div>
+																	{model.predefined_type === 'date' ?
+																		<div>
+																			<div className="input-label">{"Value"}</div>
+																			<input value={model.predefined_value}
+																				type="date"
+																				onChange={(e) => {
+																					this.handleModelChange(model, 'predefined_value', e.target.value);
+																				}} />
+																		</div>
+																		: null
+																	}
+																</div>
+															}
+														</div>
+													}
+												</div>
+											}
 										</div>
 										: null
 									}

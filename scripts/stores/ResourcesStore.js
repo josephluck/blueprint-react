@@ -35,13 +35,21 @@ class ResourcesStore {
 				type: "array",
 				length: 5,
 				name: "new_resource",
-				model: [{
-					type: "predefined",
-					params: {},
-					faker_type: "",
-					faker_category: "",
-					resource: {}
-				}]
+				model: [
+					{
+						uuid: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+					    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+					    return v.toString(16);
+						}),
+						type: "predefined",
+						faker_type: "",
+						faker_category: "",
+						params: {},
+						resource: {},
+						predefined_type: "string",
+						predefined_value: ""
+					}
+				]
 			}
 		}).then((resource) => {
 			Store.get().resources.push(resource);

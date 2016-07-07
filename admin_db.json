@@ -63,7 +63,8 @@
             ]
           },
           "key": "nested_1",
-          "predefined_value": "Yeah this is a value"
+          "predefined_value": "Yeah this is a value",
+          "predefined_type": "string"
         }
       ],
       "id": 1
