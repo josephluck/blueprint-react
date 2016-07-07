@@ -60,6 +60,8 @@ module.exports = {
 			} else {
 				return null
 			}
+		} else if (property.type === 'predefined') {
+			return property.predefined_value;
 		}
 	},
 

@@ -204,6 +204,17 @@ class ResourceForm extends Component {
 										</option>
 									</select>
 
+									{model.type === 'predefined' ?
+										<div>
+											<div className="input-label">{"Value"}</div>
+											<input value={model.predefined_value}
+												onChange={(e) => {
+													this.handleModelChange(model, 'predefined_value', e.target.value);
+												}} />
+										</div>
+										: null
+									}
+
 									{model.type === 'child_resource' ?
 										<div>
 											<div className="input-label">{"Resource"}</div>

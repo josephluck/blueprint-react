@@ -11,8 +11,6 @@ import 'brace/mode/json';
 import 'brace/theme/tomorrow';
 import ResourceForm from 'components/ResourceForm';
 
-window.faker = Faker;
-
 import ResourceStore from 'stores/ResourceStore';
 
 class ResourceEdit extends Component {

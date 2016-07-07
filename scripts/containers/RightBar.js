@@ -58,7 +58,7 @@ class RightBar extends Component {
 						{`GET /${this.props.resource.name}`}
 					</span>
 				</div>
-				<div className={`box right-bar-content ${box_class}`}>
+				<div className={`box flex-1 overflow-auto right-bar-content ${box_class}`}>
 					<Highlight className="javascript">
 					  {JSON.stringify(get_code_example, null, 2)}
 					</Highlight>

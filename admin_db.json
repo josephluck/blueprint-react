@@ -1,13 +1,13 @@
 {
   "resources": [
     {
-      "type": "singular",
+      "type": "array",
       "length": 5,
       "name": "users",
       "model": [
         {
           "uuid": "afecff8a-59d5-42f4-a623-a782d2fd02ac",
-          "type": "object",
+          "type": "predefined",
           "params": {},
           "faker_type": "",
           "faker_category": "",
@@ -62,7 +62,8 @@
               }
             ]
           },
-          "key": "nested_1"
+          "key": "nested_1",
+          "predefined_value": "Yeah this is a value"
         }
       ],
       "id": 1
