@@ -1,7 +1,7 @@
 {
   "resources": [
     {
-      "type": "array",
+      "type": "singular",
       "length": 5,
       "name": "users",
       "model": [

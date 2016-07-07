@@ -42,6 +42,7 @@ class App extends Component {
 			  	: null
 			  }
 			  </div>
+			  <RightBar />
 		  </div>
 		)
 	}

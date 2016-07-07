@@ -26,8 +26,7 @@ module.exports = {
 
 			return resource;
 		} else {
-			// This resource isn't a collection, it's a single object, or another type.
-			// Handle use cases
+			return this.generateModel(description.model);
 		}
 	},
 
