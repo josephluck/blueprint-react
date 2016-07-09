@@ -107,6 +107,11 @@ class ResourceForm extends Component {
 		});
 	}
 
+	// Consider storing this in faker subcategories json instead of here
+	// that way the params could be mapped over as an object in this component
+	// based on the subcategory which will make this component more dynamically
+	// generated and not hard-coded and would provide a great foundation for
+	// including more random generation libraries
 	resetRandomParams(model, faker_category) {
 		let params = {};
 		if (faker_category === "state") {
@@ -777,17 +782,20 @@ class ResourceForm extends Component {
 																	<div className="input-label">{"Min value"}</div>
 																	<input value={model.faker_params.min}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'min', e.target.value);
+																			let value = parseFloat(e.target.value) || 0;
+																			this.handleModelParamsChange(model, 'min', value);
 																		}} />
 																	<div className="input-label">{"Max value"}</div>
 																	<input value={model.faker_params.max}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'max', e.target.value);
+																			let value = parseFloat(e.target.value) || 0;
+																			this.handleModelParamsChange(model, 'max', value);
 																		}} />
 																	<div className="input-label">{"Decimal places"}</div>
 																	<input value={model.faker_params.dec}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'dec', e.target.value);
+																			let value = parseFloat(e.target.value) || 0;
+																			this.handleModelParamsChange(model, 'dec', value);
 																		}} />
 																	<div className="input-label">{"Symbol"}</div>
 																	<input value={model.faker_params.symbol}
@@ -802,24 +810,25 @@ class ResourceForm extends Component {
 																	<div className="input-label">{"Length of number"}</div>
 																	<input value={model.faker_params.length}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'length', e.target.value);
+																			let value = parseFloat(e.target.value) || 0;
+																			this.handleModelParamsChange(model, 'length', value);
 																		}} />
-																	<div className="checkbox-wrap">
-																		<input type="checkbox"
-																			checked={model.faker_params.parens === true}
-																			onChange={(e) => {
-																				this.handleModelParamsChange(model, 'parens', e.target.checked);
-																			}} />
-																		<span className="checkbox-label">{"Wrap in parenthesis?"}</span>
-																	</div>
-																	<div className="checkbox-wrap">
-																		<input type="checkbox"
-																			checked={model.faker_params.ellipsis === true}
-																			onChange={(e) => {
-																				this.handleModelParamsChange(model, 'ellipsis', e.target.checked);
-																			}} />
-																		<span className="checkbox-label">{"Include an ellipsis?"}</span>
-																	</div>
+																	<div className="input-label">{"Wrap in parenthesis?"}</div>
+																	<select value={model.faker_params.parens}
+																		onChange={(e) => {
+																			this.handleModelParamsChange(model, 'parens', eval(e.target.value));
+																		}}>
+																		<option value={false}>{"No"}</option>
+																		<option value={true}>{"Yes"}</option>
+																	</select>
+																	<div className="input-label">{"Include an ellipsis?"}</div>
+																	<select value={model.faker_params.ellipsis}
+																		onChange={(e) => {
+																			this.handleModelParamsChange(model, 'ellipsis', eval(e.target.value));
+																		}}>
+																		<option value={false}>{"No"}</option>
+																		<option value={true}>{"Yes"}</option>
+																	</select>
 																</div>
 																: null
 															}
@@ -828,12 +837,14 @@ class ResourceForm extends Component {
 																	<div className="input-label">{"Width"}</div>
 																	<input value={model.faker_params.width}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'width', e.target.value);
+																			let value = parseFloat(e.target.value) || 0;
+																			this.handleModelParamsChange(model, 'width', value);
 																		}} />
 																	<div className="input-label">{"Height"}</div>
 																	<input value={model.faker_params.height}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'height', e.target.value);
+																			let value = parseFloat(e.target.value) || 0;
+																			this.handleModelParamsChange(model, 'height', value);
 																		}} />
 																</div>
 																: null
