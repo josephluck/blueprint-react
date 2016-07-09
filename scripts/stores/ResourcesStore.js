@@ -35,6 +35,12 @@ class ResourcesStore {
 				type: "array",
 				length: 5,
 				name: "new_resource",
+				supported_methods: {
+					get: true,
+					post: true,
+					put: true,
+					delete: true
+				},
 				model: [
 					{
 						uuid: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
@@ -47,7 +53,8 @@ class ResourcesStore {
 						params: {},
 						resource: {},
 						predefined_type: "string",
-						predefined_value: ""
+						predefined_value: "",
+						required: true
 					}
 				]
 			}

@@ -179,5 +179,11 @@ module.exports = {
 		}
 
 		return database;
+	},
+
+
+	validateRequest: function(resource, request) {
+		console.log(resource.model);
+		console.log(request);
 	}
 }

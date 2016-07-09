@@ -1,6 +1,7 @@
 // Declare variables here for global use
 var http = require('request');
 var jsonServer = require('json-server');
+var bodyParser = require('body-parser');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var config = require('./webpack.config');
@@ -67,6 +68,7 @@ var _resources;
 		  dataRouter = jsonServer.router(resourceUtils.generateDatabase(resources));
 		  dataMiddlewares = jsonServer.defaults();
 
+		  dataServer.use(bodyParser.json());
 		  dataServer.use(dataMiddlewares);
 
 		  dataServer.use((req, res, next) => {
@@ -79,17 +81,27 @@ var _resources;
 		  		return resource.name === requestedResourceName;
 		  	});
 
-		  	if (req.method === 'GET' && requestedResourceDescription.supported_methods.get) {
-		  		next();
-		  	} else if (req.method === 'POST' && requestedResourceDescription.supported_methods.post) {
-		  		next();
-		  	} else if (req.method === 'PUT' && requestedResourceDescription.supported_methods.put) {
-		  		next();
-		  	} else if (req.method === 'DELETE' && requestedResourceDescription.supported_methods.delete) {
-		  		next();
-		  	} else {
-		  		res.status(405).send(`Method isn't supported for this resource`);
-		  	}
+		  	if (requestedResourceDescription) {
+			  	if (req.method === 'GET' && requestedResourceDescription.supported_methods.get) {
+			  		next();
+			  	} else if (req.method === 'POST' && requestedResourceDescription.supported_methods.post) {
+			  		validationErrors = resourceUtils.validateRequest(requestedResourceDescription, req.body);
+			  		if (validationErrors) {
+			  			res.status(400).send(validationErrors)
+			  		} else {
+			  			next();
+			  		}
+			  	} else if (req.method === 'PUT' && requestedResourceDescription.supported_methods.put) {
+			  		next();
+			  	} else if (req.method === 'DELETE' && requestedResourceDescription.supported_methods.delete) {
+			  		next();
+			  	} else {
+			  		res.status(405).send(`Method isn't supported for this resource`);
+			  	}
+				} else {
+					// The resource doesn't exist but JSON server will handle the response for us
+					next();
+				}
 		  });
 
 		  dataServer.use(dataRouter);

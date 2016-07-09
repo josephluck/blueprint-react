@@ -39,7 +39,8 @@ class ResourceForm extends Component {
 	  	params: {},
 	  	resource: {},
 			predefined_type: "string",
-			predefined_value: ""
+			predefined_value: "",
+			required: false
 		});
 	}
 
@@ -81,7 +82,8 @@ class ResourceForm extends Component {
 				  	params: {},
 				  	resource: {},
 						predefined_type: "string",
-						predefined_value: ""
+						predefined_value: "",
+						required: false
 					}
 				]
 			});
@@ -216,6 +218,15 @@ class ResourceForm extends Component {
 											var value = e.target.value.replace(/\W+/g, " ").replace(/ /g,"_");
 											this.handleModelChange(model, 'key', value);
 										}} />
+									<div className="input-label">{"Required?"}</div>
+									<label className="checkbox-wrap">
+										<input type="checkbox"
+											checked={model.required === true}
+											onClick={(e) => {
+												this.handleModelChange(model, 'required', !model.required);
+											}} />
+										{"Yes / no"}
+									</label>
 								</div>
 								<div className="flex-2 overflow-hidden">
 									<div className="flex">

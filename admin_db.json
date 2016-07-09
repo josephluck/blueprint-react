@@ -2,99 +2,62 @@
   "resources": [
     {
       "type": "array",
-      "length": 5,
-      "name": "users",
+      "length": 1,
+      "name": "validation_example",
       "supported_methods": {
         "get": true,
-        "post": false,
-        "put": false,
-        "delete": false
+        "post": true,
+        "put": true,
+        "delete": true
       },
       "model": [
         {
-          "uuid": "8d2b9eb3-ee10-41ac-a776-ca427e87377e",
+          "uuid": "8b24b7a7-1b35-4479-919c-3d6cdc54f906",
           "type": "predefined",
-          "faker_type": "amount",
-          "faker_category": "finance",
-          "params": {
-            "symbol": ""
-          },
+          "faker_type": "",
+          "faker_category": "",
+          "params": {},
           "resource": {},
           "predefined_type": "boolean",
-          "predefined_value": false,
-          "key": "amounftfiwewe"
+          "predefined_value": true,
+          "key": "boolean",
+          "required": true
         },
         {
-          "uuid": "f1bf7138-411e-422e-beb2-42392a1ba353",
+          "uuid": "560466a8-4100-4904-a0e8-e08f6b01bc09",
+          "type": "predefined",
+          "faker_type": "",
+          "faker_category": "",
+          "params": {},
+          "resource": {},
+          "predefined_type": "number",
+          "predefined_value": "1337",
+          "key": "number",
+          "required": false
+        },
+        {
+          "uuid": "4137cd0a-c09f-46bf-9d1b-020e786e6f4a",
+          "type": "predefined",
+          "faker_type": "",
+          "faker_category": "",
+          "params": {},
+          "resource": {},
+          "predefined_type": "string",
+          "predefined_value": "Super cool, yeah!",
+          "key": "string",
+          "required": false
+        },
+        {
+          "uuid": "7a937c77-cc66-4301-92e1-fee4a07790db",
           "type": "predefined",
           "faker_type": "",
           "faker_category": "",
           "params": {},
           "resource": {},
           "predefined_type": "date",
-          "predefined_value": "2016-07-14",
-          "key": "date"
-        },
-        {
-          "uuid": "afecff8a-59d5-42f4-a623-a782d2fd02ac",
-          "type": "predefined",
-          "params": {},
-          "faker_type": "",
-          "faker_category": "",
-          "resource": {
-            "type": "array",
-            "length": 5,
-            "model": [
-              {
-                "uuid": "b980aea6-1784-4454-94a1-d742c0fb0fce",
-                "type": "object",
-                "key": "nested_2_edited",
-                "params": {},
-                "faker_type": "",
-                "faker_category": "",
-                "resource": {
-                  "type": "array",
-                  "length": 2,
-                  "model": [
-                    {
-                      "uuid": "e6eda2c7-3f09-4b0e-ad77-9d9b526e1a52",
-                      "type": "object",
-                      "params": {},
-                      "faker_type": "",
-                      "faker_category": "",
-                      "resource": {
-                        "type": "array",
-                        "length": 2,
-                        "model": [
-                          {
-                            "uuid": "9e91c406-6f7e-41c4-bd7c-a9b87726f04c",
-                            "type": "random",
-                            "params": {},
-                            "faker_type": "title",
-                            "faker_category": "name",
-                            "resource": {},
-                            "key": "title"
-                          }
-                        ]
-                      },
-                      "key": "nested_child_3"
-                    },
-                    {
-                      "uuid": "afecff8a-59d5-42f4-a623-a782d2fd02ac",
-                      "type": "random",
-                      "key": "key_name",
-                      "params": {},
-                      "faker_type": "lastName",
-                      "faker_category": "name"
-                    }
-                  ]
-                }
-              }
-            ]
-          },
-          "key": "string",
-          "predefined_value": "Yeah this is a value",
-          "predefined_type": "string"
+          "predefined_value": "2016-07-09",
+          "key": "date",
+          "required": false
         }
       ],
       "id": 1
