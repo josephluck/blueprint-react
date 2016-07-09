@@ -299,6 +299,10 @@ module.exports = {
 				}
 			} else if (parameter.faker_subcategory === "email") {
 				config.email = true;
+			} else if (parameter.faker_subcategory === "url") {
+				config.url = true
+			} else if (parameter.faker_subcategory === "arrayElement") {
+				config.inclusion = parameter.faker_params.json;
 			}
 		}
 

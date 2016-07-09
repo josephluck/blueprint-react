@@ -889,16 +889,17 @@ class ResourceForm extends Component {
 																	<div className="input-label">{"Length of password"}</div>
 																	<input value={model.faker_params.length}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'length', e.target.value);
+																			let value = parseInt(e.target.value) || 0;
+																			this.handleModelParamsChange(model, 'length', value);
 																		}} />
-																	<div className="checkbox-wrap">
-																		<input type="checkbox"
-																			checked={model.faker_params.memorable === true}
-																			onChange={(e) => {
-																				this.handleModelParamsChange(model, 'memorable', e.target.checked);
-																			}} />
-																		<span className="checkbox-label">{"Memorable password?"}</span>
-																	</div>
+																	<div className="input-label">{"Memorable password?"}</div>
+																	<select value={model.faker_params.memorable}
+																		onChange={(e) => {
+																			this.handleModelParamsChange(model, 'memorable', eval(e.target.value));
+																		}}>
+																		<option value={false}>{"No"}</option>
+																		<option value={true}>{"Yes"}</option>
+																	</select>
 																</div>
 																: null
 															}
