@@ -55,6 +55,10 @@ class ResourceForm extends Component {
 		this.forceUpdate();
 	}
 
+	setResourceCRUD(name) {
+		this.state.resource.supported_methods.set(name, !this.state.resource.supported_methods[name]);
+	}
+
 	handleModelChange(model, name, value) {
 		model.set(name, value);
 		this.forceUpdate();
@@ -117,7 +121,7 @@ class ResourceForm extends Component {
 		return (
 			<div className="flex-1 overflow-auto">
 				<div className="flex box without-bottom-padding">
-					<div className="flex-1 large-right-margin">
+					<div className="flex-1">
 						{this.props.nested === false ?
 							<div>
 								<div className="input-label">{"Name"}</div>
@@ -156,25 +160,44 @@ class ResourceForm extends Component {
 							: null
 						}
 					</div>
-					<div className="flex-2">
-						<div className="input-label">{"Supported methods"}</div>
-						<label className="checkbox-wrap">
-							<input type="checkbox" />
-							{"GET"}
-						</label>
-						<label className="checkbox-wrap">
-							<input type="checkbox" />
-							{"POST"}
-						</label>
-						<label className="checkbox-wrap">
-							<input type="checkbox" />
-							{"PUT"}
-						</label>
-						<label className="checkbox-wrap">
-							<input type="checkbox" />
-							{"DELETE"}
-						</label>
-					</div>
+					{!this.props.nested ?
+						<div className="flex-2 large-left-margin">
+							<div className="input-label">{"Supported methods"}</div>
+							<label className="checkbox-wrap">
+								<input type="checkbox"
+									checked={this.state.resource.supported_methods.get === true}
+									onClick={(e) => {
+										this.setResourceCRUD('get');
+									}} />
+								{"GET"}
+							</label>
+							<label className="checkbox-wrap">
+								<input type="checkbox"
+									checked={this.state.resource.supported_methods.post === true}
+									onClick={(e) => {
+										this.setResourceCRUD('post');
+									}} />
+								{"POST"}
+							</label>
+							<label className="checkbox-wrap">
+								<input type="checkbox"
+									checked={this.state.resource.supported_methods.put === true}
+									onClick={(e) => {
+										this.setResourceCRUD('put');
+									}} />
+								{"PUT"}
+							</label>
+							<label className="checkbox-wrap">
+								<input type="checkbox"
+									checked={this.state.resource.supported_methods.delete === true}
+									onClick={(e) => {
+										this.setResourceCRUD('delete');
+									}} />
+								{"DELETE"}
+							</label>
+						</div>
+						: null
+					}
 				</div>
 
 				<div className="section-title with-top-border flex">

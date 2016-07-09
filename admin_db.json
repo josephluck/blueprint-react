@@ -4,6 +4,12 @@
       "type": "array",
       "length": 5,
       "name": "users",
+      "supported_methods": {
+        "get": true,
+        "post": false,
+        "put": false,
+        "delete": false
+      },
       "model": [
         {
           "uuid": "8d2b9eb3-ee10-41ac-a776-ca427e87377e",
