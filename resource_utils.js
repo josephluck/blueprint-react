@@ -274,14 +274,14 @@ module.exports = {
 						config.datetime.earliest = faker_params.refDate;
 					}
 					if (faker_params.years) {
-						config.datetime.latest = moment(faker_params.refDate).add(faker_params.years, 'years').format();
+						config.datetime.latest = moment(faker_params.refDate).add(faker_params.years, 'years').format('YYYY-MM-DD');
 					}
 				} else if (date_type === "past") {
 					if (faker_params.refDate) {
 						config.datetime.latest = faker_params.refDate;
 					}
 					if (faker_params.years) {
-						config.datetime.earliest = moment(faker_params.refDate).subtract(faker_params.years, 'years').format();
+						config.datetime.earliest = moment(faker_params.refDate).subtract(faker_params.years, 'years').format('YYYY-MM-DD');
 					}
 				} else if (date_type === "month") {
 					if (parameter.faker_type === "month") {

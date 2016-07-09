@@ -14,7 +14,7 @@
         {
           "uuid": "3cc9bb8b-5d65-4ac7-b781-0815fa0c59b2",
           "type": "random",
-          "faker_type": "future",
+          "faker_type": "past",
           "faker_category": "date",
           "faker_params": {
             "years": 1,
@@ -24,7 +24,7 @@
           "predefined_type": "string",
           "predefined_value": "",
           "required": false,
-          "key": "future"
+          "key": "past"
         },
         {
           "uuid": "bfd26762-3159-4a8c-a505-cdf100ad7922",
