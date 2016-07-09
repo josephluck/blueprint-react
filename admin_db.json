@@ -12,6 +12,18 @@
       },
       "model": [
         {
+          "uuid": "0fc53d9e-78d7-41c5-bc3f-050ffae8e174",
+          "type": "random",
+          "faker_type": "color",
+          "faker_category": "internet",
+          "params": {},
+          "resource": {},
+          "predefined_type": "string",
+          "predefined_value": "",
+          "required": false,
+          "key": "colour"
+        },
+        {
           "uuid": "8b24b7a7-1b35-4479-919c-3d6cdc54f906",
           "type": "predefined",
           "faker_type": "",
