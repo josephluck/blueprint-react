@@ -1,6 +1,7 @@
 import Store from 'stores/Store';
 import Api from 'utils/Api';
 import {browserHistory} from 'react-router';
+import ResourceUtils from '../../resource_utils.js';
 
 import ResourcesStore from 'stores/ResourcesStore';
 
@@ -44,6 +45,8 @@ class ResourceStore {
 
 			return model;
 		});
+
+		resource.validation_config = ResourceUtils.generateValidationConfigForResource(resource);
 
 		Api.put({
 			url: {

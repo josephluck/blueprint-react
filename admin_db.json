@@ -42,7 +42,21 @@
           "key": "between"
         }
       ],
-      "id": 1
+      "id": 1,
+      "validation_config": {
+        "past": {
+          "datetime": {
+            "latest": "2016-07-09",
+            "earliest": "2015-07-09"
+          }
+        },
+        "between": {
+          "datetime": {
+            "earliest": "2016-07-01",
+            "latest": "2016-07-09"
+          }
+        }
+      }
     }
   ]
 }

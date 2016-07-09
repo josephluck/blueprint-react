@@ -202,13 +202,19 @@ module.exports = {
 		return database;
 	},
 
-
 /*=============================================================================
 	Validates a POST or PUT request against the model description if the key
 	is a required parameter.
 =============================================================================*/
 	validateRequest: function(resource, request) {
-		var validator = {};
+		return validate(request, resource.validation_config);
+	},
+
+/*=============================================================================
+	Generate validation config (for validate.js) for a resource
+=============================================================================*/
+	generateValidationConfigForResource: function(resource) {
+		var validation_config = {};
 
 		// Generate a validate.js configuraton from the model description
 		resource.model.map((parameter) => {
@@ -217,14 +223,11 @@ module.exports = {
 			} else if (parameter.type === "object") {
 				// Handle a nested object / array and validate it
 			} else {
-				// Refactor this so the requirements get set in admin_db.json
-				// and pulled in rather than created on the fly
-				validator[parameter.key] = this.getSingleRequestParameterValidationRequirements(parameter);
+				validation_config[parameter.key] = this.getSingleRequestParameterValidationRequirements(parameter);
 			}
 		});
 
-		// Run the request against validate.js
-		return validate(request, validator);
+		return validation_config;
 	},
 
 /*=============================================================================
