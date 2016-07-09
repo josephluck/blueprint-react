@@ -219,6 +219,8 @@ module.exports = {
 			} else if (parameter.type === "object") {
 				// Handle a nested object / array and validate it
 			} else {
+				// Refactor this so the requirements get set in admin_db.json
+				// and pulled in rather than created on the fly
 				validator[parameter.key] = this.getSingleRequestParameterValidationRequirements(parameter);
 			}
 		});
@@ -227,6 +229,9 @@ module.exports = {
 		return validate(request, validator);
 	},
 
+/*=============================================================================
+	Generate the validate.js requirements for a single model.
+=============================================================================*/
 	getSingleRequestParameterValidationRequirements: function(parameter) {
 		var config = {};
 		var required_type;
@@ -242,6 +247,7 @@ module.exports = {
 			var is_date = moment(example_value).isValid();
 			var is_number = !isNaN(example_value);
 			var is_boolean = typeof(example_value) === "boolean";
+			var is_string = typeof(example_value) === "string";
 
 			if (is_date) {
 				required_type = "date";
@@ -252,22 +258,41 @@ module.exports = {
 			} else {
 				required_type = "string";
 			}
-		}
 
-		if (required_type === "date") {
-			config.datetime = {}
-
-			var date_type = parameter.faker_type; // Get the params from the model for min max etc
-
-			if (date_type === "between") {
-				if (parameter.faker_params.from) {
-					config.datetime.earliest = parameter.faker_params.from
+			// Date validation (range)
+			if (parameter.faker_category === "date") {
+				config.datetime = {}
+				var date_type = parameter.faker_type; // Get the params from the model for min max etc
+				var faker_params = parameter.faker_params;
+				if (date_type === "between") {
+					if (faker_params.from) {
+						config.datetime.earliest = faker_params.from;
+					}
+					if (faker_params.to) {
+						config.datetime.latest = faker_params.to;
+					}
+				} else if (date_type === "future") {
+					if (faker_params.refDate) {
+						config.datetime.earliest = faker_params.refDate;
+					}
+					if (faker_params.years) {
+						config.datetime.latest = moment(faker_params.refDate).year(faker_params.years);
+					}
+				} else if (date_type === "past") {
+					if (faker_params.refDate) {
+						config.datetime.latest = faker_params.refDate;
+					}
+					if (faker_params.years) {
+						config.datetime.earliest = moment(faker_params.refDate).year(0 - faker_params.years);
+					}
+				} else if (date_type === "month") {
+					if (parameter.faker_type === "month") {
+						config.inclusion = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "November", "December"];
+					}
+				} else {
+					// Else it's just a random date, no min or max needed
+					config.datetime = true;
 				}
-				if (parameter.faker_params.to) {
-					config.datetime.latest = parameter.faker_params.to
-				}
-			} else if (date_type === "future") {
-
 			}
 		}
 

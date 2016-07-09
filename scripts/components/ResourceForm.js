@@ -98,7 +98,7 @@ class ResourceForm extends Component {
 	}
 
 	resetRandomParams(model) {
-		model.params.reset({});
+		model.faker_params.reset({});
 	}
 
 	handleModelPredefinedTypeChange(model, type) {
@@ -425,8 +425,8 @@ class ResourceForm extends Component {
 													<select value={"pleasechoose"}
 														value={model.faker_type}
 														onChange={(e) => {
-															this.resetRandomParams(model);
 															this.handleModelChange(model, 'faker_type', e.target.value);
+															this.resetRandomParams(model);
 														}}>
 														<option disabled value="pleasechoose">{"Please choose"}</option>
 														{FakerSubCategories[model.faker_category].map((type, i) => {
