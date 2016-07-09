@@ -6,6 +6,30 @@
       "name": "users",
       "model": [
         {
+          "uuid": "8d2b9eb3-ee10-41ac-a776-ca427e87377e",
+          "type": "random",
+          "faker_type": "amount",
+          "faker_category": "finance",
+          "params": {
+            "symbol": ""
+          },
+          "resource": {},
+          "predefined_type": "string",
+          "predefined_value": "",
+          "key": "amount"
+        },
+        {
+          "uuid": "f1bf7138-411e-422e-beb2-42392a1ba353",
+          "type": "predefined",
+          "faker_type": "",
+          "faker_category": "",
+          "params": {},
+          "resource": {},
+          "predefined_type": "date",
+          "predefined_value": "2016-07-14",
+          "key": "date"
+        },
+        {
           "uuid": "afecff8a-59d5-42f4-a623-a782d2fd02ac",
           "type": "predefined",
           "params": {},
@@ -62,7 +86,7 @@
               }
             ]
           },
-          "key": "nested_1",
+          "key": "string",
           "predefined_value": "Yeah this is a value",
           "predefined_type": "string"
         }
