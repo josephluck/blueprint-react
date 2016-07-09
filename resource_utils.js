@@ -86,7 +86,7 @@ module.exports = {
 =============================================================================*/
 	generateRandomValue: function(property) {
 		if (property.faker_category && property.faker_type) {
-			var args;
+			var args = [];
 			if (property.faker_params) {
 				var keys = Object.keys(property.faker_params);
 				args = keys.map(function(key, i) {
@@ -262,10 +262,10 @@ module.exports = {
 
 			// Date validation (range)
 			if (parameter.faker_category === "date") {
-				config.datetime = {}
 				var date_type = parameter.faker_type; // Get the params from the model for min max etc
 				var faker_params = parameter.faker_params;
 				if (date_type === "between") {
+					config.datetime = {}
 					if (faker_params.from) {
 						config.datetime.earliest = faker_params.from;
 					}
@@ -273,6 +273,7 @@ module.exports = {
 						config.datetime.latest = faker_params.to;
 					}
 				} else if (date_type === "future") {
+					config.datetime = {}
 					if (faker_params.refDate) {
 						config.datetime.earliest = faker_params.refDate;
 					}
@@ -280,6 +281,7 @@ module.exports = {
 						config.datetime.latest = moment(faker_params.refDate).add(faker_params.years, 'years').format('YYYY-MM-DD');
 					}
 				} else if (date_type === "past") {
+					config.datetime = {}
 					if (faker_params.refDate) {
 						config.datetime.latest = faker_params.refDate;
 					}

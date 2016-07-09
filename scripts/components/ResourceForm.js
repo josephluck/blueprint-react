@@ -99,8 +99,230 @@ class ResourceForm extends Component {
 		}
 	}
 
-	resetRandomParams(model) {
-		model.faker_params.reset({});
+	resetRandomParams(model, faker_category) {
+		let params = {};
+		if (faker_category === "state") {
+			params = {
+				useAbbr: undefined
+			};
+		} else if (faker_category === "streetAddress") {
+			params = {
+				useFullAddress: undefined
+			}
+		} else if (faker_category === "zipCode") {
+			params = {
+				format: undefined
+			}
+		} else if (faker_category === "department") {
+			params = {
+				max: undefined,
+				fixedAmount: undefined
+			}
+		} else if (faker_category === "price") {
+			params = {
+				min: undefined,
+				max: undefined,
+				dec: undefined,
+				symbol: undefined
+			}
+		} else if (faker_category === "companyName") {
+			params = {
+				format: undefined
+			}
+		} else if (faker_category === "between") {
+			params = {
+				from: undefined,
+				to: undefined
+			}
+		} else if (faker_category === "future") {
+			params = {
+				years: undefined,
+				refDate: undefined
+			}
+		} else if (faker_category === "month") {
+			params = {
+				options: undefined
+			}
+		} else if (faker_category === "past") {
+			params = {
+				years: undefined,
+				refDate: undefined
+			}
+		} else if (faker_category === "recent") {
+			params = {
+				days: undefined
+			}
+		} else if (faker_category === "weekday") {
+			params = {
+				options: undefined
+			}
+		} else if (faker_category === "account") {
+			params = {
+				length: undefined
+			}
+		} else if (faker_category === "amount") {
+			params = {
+				min: undefined,
+				max: undefined,
+				dec: undefined,
+				symbol: undefined
+			}
+		} else if (faker_category === "mask") {
+			params = {
+				length: undefined,
+				parens: undefined,
+				elipsis: undefined
+			}
+		} else if (faker_category === "abstract" ||
+			faker_category === "animals" ||
+			faker_category === "business" ||
+			faker_category === "cats" ||
+			faker_category === "city" ||
+			faker_category === "fashion" ||
+			faker_category === "food" ||
+			faker_category === "image" ||
+			faker_category === "nature" ||
+			faker_category === "nightlife" ||
+			faker_category === "people" ||
+			faker_category === "sports" ||
+			faker_category === "technics" ||
+			faker_category === "transport") {
+			params = {
+				width: undefined,
+				height: undefined
+			}
+		} else if (faker_category === "color") {
+			params = {
+				baseRed255: undefined,
+				baseGreen255: undefined,
+				baseBlue255: undefined
+			}
+		} else if (faker_category === "email") {
+			params = {
+				firstName: undefined,
+				lastName: undefined,
+				provider: undefined
+			}
+		} else if (faker_category === "exampleEmail") {
+			params = {
+				firstName: undefined,
+				lastName: undefined
+			}
+		} else if (faker_category === "password") {
+			params = {
+				len: undefined,
+				memorable: undefined,
+				pattern: undefined,
+				prefix: undefined
+			}
+		} else if (faker_category === "userName") {
+			params = {
+				firstName: undefined,
+				lastName: undefined
+			}
+		} else if (faker_category === "lines") {
+			params = {
+				lineCount: undefined
+			}
+		} else if (faker_category === "paragraph") {
+			params = {
+				sentenceCount: undefined
+			}
+		} else if (faker_category === "paragraphs") {
+			params = {
+				paragraphCount: undefined,
+				separatora: undefined
+			}
+		} else if (faker_category === "sentence") {
+			params = {
+				wordCount: undefined,
+				range: undefined
+			}
+		} else if (faker_category === "sentences") {
+			params = {
+				sentenceCount: undefined,
+				separatora: undefined
+			}
+		} else if (faker_category === "text") {
+			params = {
+				times: undefined
+			}
+		} else if (faker_category === "word") {
+			params = {
+				num: undefined
+			}
+		} else if (faker_category === "words") {
+			params = {
+				num: undefined
+			}
+		} else if (faker_category === "findName") {
+			params = {
+				firstName: undefined,
+				lastName: undefined,
+				gender: undefined
+			}
+		} else if (faker_category === "firstName") {
+			params = {
+				gender: undefined
+			}
+		} else if (faker_category === "lastName") {
+			params = {
+				gender: undefined
+			}
+		} else if (faker_category === "prefix") {
+			params = {
+				gender: undefined
+			}
+		} else if (faker_category === "phoneFormatsArrayIndex") {
+			params = {
+				phoneFormatsArrayIndex: undefined
+			}
+		} else if (faker_category === "phoneNumber") {
+			params = {
+				format: undefined
+			}
+		} else if (faker_category === "arrayElement") {
+			params = {
+				array: undefined
+			}
+		} else if (faker_category === "number") {
+			params = {
+				options: undefined
+			}
+		} else if (faker_category === "objectElement") {
+			params = {
+				object: undefined,
+				field: undefined
+			}
+		} else if (faker_category === "word") {
+			params = {
+				type: undefined
+			}
+		} else if (faker_category === "words") {
+			params = {
+				count: undefined
+			}
+		} else if (faker_category === "commonFileExt") {
+			params = {
+				type: undefined
+			}
+		} else if (faker_category === "commonFileName") {
+			params = {
+				ext: undefined,
+				type: undefined
+			}
+		} else if (faker_category === "fileExt") {
+			params = {
+				mimeType: undefined
+			}
+		} else if (faker_category === "fileName") {
+			params = {
+				ext: undefined,
+				type: undefined
+			}
+		}
+
+		model.faker_params.reset(params);
 	}
 
 	handleModelPredefinedTypeChange(model, type) {
@@ -428,7 +650,7 @@ class ResourceForm extends Component {
 														value={model.faker_type}
 														onChange={(e) => {
 															this.handleModelChange(model, 'faker_type', e.target.value);
-															this.resetRandomParams(model);
+															this.resetRandomParams(model, e.target.value);
 														}}>
 														<option disabled value="pleasechoose">{"Please choose"}</option>
 														{FakerSubCategories[model.faker_category].map((type, i) => {
@@ -452,21 +674,6 @@ class ResourceForm extends Component {
 																		<option value={false}>{"No"}</option>
 																		<option value={true}>{"Yes"}</option>
 																	</select>
-																</div>
-																: null
-															}
-															{model.faker_type === "department" ?
-																<div>
-																	<div className="input-label">{"Max value"}</div>
-																	<input value={model.faker_params.max}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'max', e.target.value);
-																		}} />
-																	<div className="input-label">{"Fixed amount"}</div>
-																	<input value={model.faker_params.fixedAmount}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'fixedAmount', e.target.value);
-																		}} />
 																</div>
 																: null
 															}

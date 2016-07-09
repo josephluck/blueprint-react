@@ -12,50 +12,23 @@
       },
       "model": [
         {
-          "uuid": "3cc9bb8b-5d65-4ac7-b781-0815fa0c59b2",
+          "uuid": "1186cedc-8b44-4412-a1dd-bcf4ac53e0af",
           "type": "random",
-          "faker_type": "past",
-          "faker_category": "date",
+          "faker_type": "price",
+          "faker_category": "commerce",
           "faker_params": {
-            "years": 1,
-            "refDate": "2016-07-09"
+            "symbol": "£"
           },
           "resource": {},
           "predefined_type": "string",
           "predefined_value": "",
           "required": false,
-          "key": "past"
-        },
-        {
-          "uuid": "bfd26762-3159-4a8c-a505-cdf100ad7922",
-          "type": "random",
-          "faker_type": "between",
-          "faker_category": "date",
-          "faker_params": {
-            "from": "2016-07-01",
-            "to": "2016-07-09"
-          },
-          "resource": {},
-          "predefined_type": "string",
-          "predefined_value": "",
-          "required": false,
-          "key": "between"
+          "key": "price"
         }
       ],
       "id": 1,
       "validation_config": {
-        "past": {
-          "datetime": {
-            "latest": "2016-07-09",
-            "earliest": "2015-07-09"
-          }
-        },
-        "between": {
-          "datetime": {
-            "earliest": "2016-07-01",
-            "latest": "2016-07-09"
-          }
-        }
+        "price": {}
       }
     }
   ]
