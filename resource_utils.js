@@ -16,6 +16,13 @@ validate.extend(validate.validators.datetime, {
   }
 });
 
+validate.validators.email = function(value, options, key, attributes) {
+	var valid_email_address = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value);
+	if (!valid_email_address) {
+		return "is not a valid email address";
+	}
+}
+
 module.exports = {
 /*=============================================================================
 	Generate a full resource (array of models)
@@ -290,6 +297,8 @@ module.exports = {
 					// Else it's just a random date, no min or max needed
 					config.datetime = true;
 				}
+			} else if (parameter.faker_subcategory === "email") {
+				config.email = true;
 			}
 		}
 

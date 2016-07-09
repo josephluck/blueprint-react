@@ -28,6 +28,13 @@ class Resources extends Component {
 					<span className="flex-1">
 						{"Resources"}
 					</span>
+					<a href=""
+						onClick={(e) => {
+							e.preventDefault();
+							ResourcesStore.createNewResource();
+						}}>
+						{"New"}
+					</a>
 				</div>
 				<div className="flex flex-vertical">
 					<div className="flex flex-vertical">
@@ -68,9 +75,8 @@ class Resources extends Component {
 							className="button flex-1"
 							onClick={(e) => {
 								e.preventDefault();
-								ResourcesStore.createNewResource();
 							}}>
-							{"New resource"}
+							{"Generate API docs"}
 						</a>
 					</div>
 				</div>

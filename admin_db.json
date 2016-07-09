@@ -14,24 +14,25 @@
         {
           "uuid": "aa3411a0-14af-42ff-a4f4-ec07f8905a3b",
           "type": "random",
-          "faker_type": "account",
-          "faker_category": "finance",
+          "faker_category": "internet",
           "faker_params": {
-            "length": 10,
-            "parens": true,
-            "ellipsis": true
+            "firstName": "",
+            "lastName": "",
+            "provider": "commusoft.co.uk"
           },
           "resource": {},
           "predefined_type": "string",
           "predefined_value": "",
           "required": false,
           "key": "account_number",
-          "faker_subcategory": "mask"
+          "faker_subcategory": "email"
         }
       ],
       "id": 1,
       "validation_config": {
-        "account_number": {}
+        "account_number": {
+          "email": true
+        }
       }
     }
   ]
