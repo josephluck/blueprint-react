@@ -41,6 +41,7 @@ class ResourcesStore {
 			payload: {
 				type: "array",
 				length: 5,
+				"documentation_description": "",
 				name: "new_resource",
 				supported_methods: {
 					get: true,
@@ -54,6 +55,7 @@ class ResourcesStore {
 					    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
 					    return v.toString(16);
 						}),
+						documentation_description: "",
 						type: "predefined",
 						faker_subcategory: "",
 						faker_category: "",

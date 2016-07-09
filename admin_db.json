@@ -3,7 +3,7 @@
     {
       "type": "array",
       "length": 5,
-      "name": "validation_example",
+      "name": "users",
       "supported_methods": {
         "get": true,
         "post": true,
@@ -14,20 +14,23 @@
         {
           "uuid": "aa3411a0-14af-42ff-a4f4-ec07f8905a3b",
           "type": "random",
-          "faker_category": "random",
+          "faker_category": "name",
           "faker_params": {},
           "resource": {},
           "predefined_type": "string",
           "predefined_value": "",
-          "required": false,
-          "key": "account_number",
-          "faker_subcategory": "number"
+          "required": true,
+          "key": "first_name",
+          "faker_subcategory": "firstName"
         }
       ],
       "id": 1,
       "validation_config": {
-        "account_number": {}
-      }
+        "first_name": {
+          "presence": true
+        }
+      },
+      "documentation_description": "A list of users"
     }
   ]
 }

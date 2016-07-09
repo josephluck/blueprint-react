@@ -18,6 +18,18 @@ class RightBar extends Component {
 		ResourcesStore.toggleRightBar();
 	}
 
+	truncateArrayOfRecords(records) {
+		return records.slice(0, 2);
+	}
+
+	getSingleRecordFromResponse(model) {
+		if (this.props.resource.type === "array") {
+			return model[0];
+		} else {
+			return model;
+		}
+	}
+
 /*=============================================================================
 	Render right bar
 
@@ -25,10 +37,10 @@ class RightBar extends Component {
 	on render -- check perf for large resources
 =============================================================================*/
 	render() {
-		let get_code_example = {};
+		let example_response = {};
 
 		if (Object.keys(this.props.resource.toJS()).length) {
-			get_code_example = ResourceUtils.generateResource(this.props.resource.toJS(), this.props.resources.toJS());
+			example_response = ResourceUtils.generateResource(this.props.resource.toJS(), this.props.resources.toJS());
 		}
 
 		var right_bar_class = "";
@@ -59,15 +71,64 @@ class RightBar extends Component {
 					</a>
 				</div>
 				<div className={`flex-1 overflow-auto`}>
+					<div className="box with-bottom-border">
+						{this.props.resource.documentation_description}
+					</div>
 					{this.props.resource.supported_methods.get ?
 						<div>
 							<div className="section-title">
-								{"GET"}
+								{`Get a list of ${this.props.resource.name}`}
 							</div>
-							<div className="box with-bottom-border">
-								<Highlight className="javascript">
-								  {JSON.stringify(get_code_example, null, 2)}
-								</Highlight>
+							<div className="box flex with-bottom-border">
+								<div className="flex-1">
+									<div className="input-label">
+										{"Method"}
+									</div>
+									<code className="large-bottom-margin">
+										{"GET"}
+									</code>
+									<div className="input-label">
+										{"Request URL"}
+									</div>
+									<code className="large-bottom-margin">
+										{`/${this.props.resource.name}`}
+									</code>
+								</div>
+								<div className="flex-1">
+									<div className="input-label">
+										{"Example response"}
+									</div>
+									<Highlight className="javascript">
+									  {JSON.stringify(this.truncateArrayOfRecords(example_response), null, 2)}
+									</Highlight>
+								</div>
+							</div>
+							<div className="section-title">
+								{`Get a single ${this.props.resource.name}`}
+							</div>
+							<div className="box flex with-bottom-border">
+								<div className="flex-1">
+									<div className="input-label">
+										{"Method"}
+									</div>
+									<code className="large-bottom-margin">
+										{"GET"}
+									</code>
+									<div className="input-label">
+										{"Request URL"}
+									</div>
+									<code className="large-bottom-margin">
+										{`/${this.props.resource.name}/:id`}
+									</code>
+								</div>
+								<div className="flex-1">
+									<div className="input-label">
+										{"Example response"}
+									</div>
+									<Highlight className="javascript">
+									  {JSON.stringify(this.getSingleRecordFromResponse(example_response), null, 2)}
+									</Highlight>
+								</div>
 							</div>
 						</div>
 						: null
@@ -75,12 +136,58 @@ class RightBar extends Component {
 					{this.props.resource.supported_methods.post ?
 						<div>
 							<div className="section-title">
-								{"POST"}
+								{`Create a ${this.props.resource.name}`}
 							</div>
-							<div className="box with-bottom-border">
-								<Highlight className="javascript">
-								  {JSON.stringify(get_code_example, null, 2)}
-								</Highlight>
+							<div className="box flex with-bottom-border">
+								<div className="flex-1">
+									<div className="input-label">
+										{"Method"}
+									</div>
+									<code className="large-bottom-margin">
+										{"POST"}
+									</code>
+									<div className="input-label">
+										{"Request URL"}
+									</div>
+									<code className="large-bottom-margin">
+										{`/${this.props.resource.name}`}
+									</code>
+
+									<div className="input-label">
+										{"Arguments"}
+									</div>
+									{this.props.resource.model.map((model, i) => {
+										return (
+											<div className="large-bottom-margin flex">
+												<code key={i}
+													className="flex-1">
+													{model.key}
+												</code>
+												<p className="flex-1">
+													{model.documentation_description}
+												</p>
+											</div>
+										)
+									})}
+								</div>
+								<div className="flex-1">
+									<div className="input-label">
+										{"Example request"}
+									</div>
+									<div className="large-bottom-margin">
+										<Highlight className="javascript">
+										  {JSON.stringify(this.getSingleRecordFromResponse(example_response), null, 2)}
+										</Highlight>
+									</div>
+									<div className="input-label">
+										{"Example response"}
+									</div>
+									<div className="large-bottom-margin">
+										<Highlight className="javascript">
+										  {JSON.stringify(this.getSingleRecordFromResponse(example_response), null, 2)}
+										</Highlight>
+									</div>
+								</div>
 							</div>
 						</div>
 						: null
@@ -92,7 +199,7 @@ class RightBar extends Component {
 							</div>
 							<div className="box with-bottom-border">
 								<Highlight className="javascript">
-								  {JSON.stringify(get_code_example, null, 2)}
+								  {JSON.stringify(example_response, null, 2)}
 								</Highlight>
 							</div>
 						</div>
@@ -105,7 +212,7 @@ class RightBar extends Component {
 							</div>
 							<div className="box with-bottom-border">
 								<Highlight className="javascript">
-								  {JSON.stringify(get_code_example, null, 2)}
+								  {JSON.stringify(example_response, null, 2)}
 								</Highlight>
 							</div>
 						</div>

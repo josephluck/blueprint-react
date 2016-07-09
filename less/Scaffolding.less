@@ -77,8 +77,11 @@ html {
 
 code {
 	font-family: @monospaceFontFamily;
-	padding: 0px !important;
-	background: transparent !important;
+	padding: @padding/2 !important;
+  background: rgba(0, 0, 0, 0.03) !important;
+  border: solid @borderWidth @borderColor;
+  border-radius: @borderRadius;
+  display: inline-block;
 }
 
 pre {

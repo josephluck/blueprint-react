@@ -438,7 +438,11 @@ class ResourceForm extends Component {
 								</label>
 							</div>
 							<div className="input-label flex-0">{"Documentation description"}</div>
-							<textarea className="flex-1">
+							<textarea className="flex-1"
+								value={this.state.resource.documentation_description}
+								onChange={(e) => {
+									this.saveValue('documentation_description', e.target.value);
+								}}>
 							</textarea>
 						</div>
 						: null
@@ -1060,7 +1064,11 @@ class ResourceForm extends Component {
 										<option value={true}>{"Yes"}</option>
 									</select>
 									<div className="input-label flex-0">{"Documentation description"}</div>
-									<textarea className="flex-1">
+									<textarea className="flex-1"
+										value={model.documentation_description}
+										onChange={(e) => {
+											this.handleModelChange(model, 'documentation_description', e.target.value);
+										}}>
 									</textarea>
 								</div>
 							</div>
