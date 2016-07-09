@@ -12,14 +12,10 @@ import Highlight from 'react-highlight'
 class RightBar extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			open: false
-		}
 	}
 
-	toggleVisibility() {
-		this.state.open = !this.state.open;
-		this.forceUpdate();
+	toggleRightBar() {
+		ResourcesStore.toggleRightBar();
 	}
 
 /*=============================================================================
@@ -35,30 +31,39 @@ class RightBar extends Component {
 			get_code_example = ResourceUtils.generateResource(this.props.resource.toJS(), this.props.resources.toJS());
 		}
 
-		var icon_class = "";
 		var right_bar_class = "";
 		var box_class = "right-bar-content"
 
-		if (this.state.open === true) {
-			icon_class = "--rotated";
+		if (this.props.right_bar_open === true) {
 			right_bar_class = "--open"
 			box_class = "--showing";
 		}
 
 		return (
 			<div className={`right-bar flex flex-vertical ${right_bar_class}`}>
-				<div className="section-title flex flex-0"
-					onClick={() => {
-						this.toggleVisibility();
-					}}>
+				<div className="section-title flex flex-0">
 					<span className="flex-1">
-						<div className={`icon ${icon_class}`}>
-							<a className="ss-left"></a>
-						</div>
-						{`GET /${this.props.resource.name}`}
+						{`Documentation examples for ${this.props.resource.name}`}
 					</span>
+					<a href=""
+						onClick={(e) => {
+							e.preventDefault();
+						}}>
+						{"Open full documentation"}
+					</a>
+					<a className="large-left-margin"
+						href=""
+						onClick={(e) => {
+							e.preventDefault();
+							this.toggleRightBar();
+						}}>
+						{"Close examples"}
+					</a>
 				</div>
 				<div className={`box flex-1 overflow-auto right-bar-content ${box_class}`}>
+					<div className="section-title">
+						{`GET /${this.props.resource.name}`}
+					</div>
 					<Highlight className="javascript">
 					  {JSON.stringify(get_code_example, null, 2)}
 					</Highlight>
@@ -70,5 +75,6 @@ class RightBar extends Component {
 
 export default Provide(RightBar, [
 	'resources',
-	'resource'
+	'resource',
+	'right_bar_open'
 ])

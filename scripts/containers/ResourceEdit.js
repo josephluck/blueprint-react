@@ -11,6 +11,7 @@ import 'brace/mode/json';
 import 'brace/theme/tomorrow';
 import ResourceForm from 'components/ResourceForm';
 
+import ResourcesStore from 'stores/ResourcesStore';
 import ResourceStore from 'stores/ResourceStore';
 
 class ResourceEdit extends Component {
@@ -26,6 +27,10 @@ class ResourceEdit extends Component {
 		ResourceStore.deleteResource(this.props.resource);
 	}
 
+	toggleRightBar() {
+		ResourcesStore.toggleRightBar();
+	}
+
 /*=============================================================================
 	Render office tasks
 =============================================================================*/
@@ -36,6 +41,14 @@ class ResourceEdit extends Component {
 					<span className="flex-1">
 						{this.props.resource.name}
 					</span>
+					<a className="large-right-margin"
+						href=""
+						onClick={(e) => {
+							e.preventDefault();
+							this.toggleRightBar();
+						}}>
+						{"Open examples"}
+					</a>
 					<a className="large-right-margin"
 						href=""
 						onClick={(e) => {

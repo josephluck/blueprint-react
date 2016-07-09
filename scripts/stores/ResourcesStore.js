@@ -9,7 +9,14 @@ class ResourcesStore {
 	constructor() {
 		Store.initialize({
 			resources: [],
-			resources_loading: true
+			resources_loading: true,
+			right_bar_open: false
+		});
+	}
+
+	toggleRightBar() {
+		Store.get().set({
+			right_bar_open: !Store.get().right_bar_open
 		});
 	}
 

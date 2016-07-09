@@ -155,40 +155,45 @@ class ResourceForm extends Component {
 						}
 					</div>
 					{!this.props.nested ?
-						<div className="flex-2 large-left-margin">
-							<div className="input-label">{"Supported methods"}</div>
-							<label className="checkbox-wrap">
-								<input type="checkbox"
-									checked={this.state.resource.supported_methods.get === true}
-									onClick={(e) => {
-										this.setResourceCRUD('get');
-									}} />
-								{"GET"}
-							</label>
-							<label className="checkbox-wrap">
-								<input type="checkbox"
-									checked={this.state.resource.supported_methods.post === true}
-									onClick={(e) => {
-										this.setResourceCRUD('post');
-									}} />
-								{"POST"}
-							</label>
-							<label className="checkbox-wrap">
-								<input type="checkbox"
-									checked={this.state.resource.supported_methods.put === true}
-									onClick={(e) => {
-										this.setResourceCRUD('put');
-									}} />
-								{"PUT"}
-							</label>
-							<label className="checkbox-wrap">
-								<input type="checkbox"
-									checked={this.state.resource.supported_methods.delete === true}
-									onClick={(e) => {
-										this.setResourceCRUD('delete');
-									}} />
-								{"DELETE"}
-							</label>
+						<div className="flex-1 flex flex-vertical large-left-margin">
+							<div className="flex-0 input-label">{"Supported methods"}</div>
+							<div className="flex-0 flex">
+								<label className="flex-1 checkbox-wrap">
+									<input type="checkbox"
+										checked={this.state.resource.supported_methods.get === true}
+										onClick={(e) => {
+											this.setResourceCRUD('get');
+										}} />
+									{"GET"}
+								</label>
+								<label className="flex-1 checkbox-wrap">
+									<input type="checkbox"
+										checked={this.state.resource.supported_methods.post === true}
+										onClick={(e) => {
+											this.setResourceCRUD('post');
+										}} />
+									{"POST"}
+								</label>
+								<label className="flex-1 checkbox-wrap">
+									<input type="checkbox"
+										checked={this.state.resource.supported_methods.put === true}
+										onClick={(e) => {
+											this.setResourceCRUD('put');
+										}} />
+									{"PUT"}
+								</label>
+								<label className="flex-1 checkbox-wrap">
+									<input type="checkbox"
+										checked={this.state.resource.supported_methods.delete === true}
+										onClick={(e) => {
+											this.setResourceCRUD('delete');
+										}} />
+									{"DELETE"}
+								</label>
+							</div>
+							<div className="input-label flex-0">{"Documentation description"}</div>
+							<textarea className="flex-1">
+							</textarea>
 						</div>
 						: null
 					}
@@ -206,33 +211,14 @@ class ResourceForm extends Component {
 						{"Add another key"}
 					</a>
 				</div>
-				<div className="box without-bottom-padding">
-					{this.state.resource.model.map((model, i) => {
-						return (
+				{this.state.resource.model.map((model, i) => {
+					return (
+						<div className="box without-bottom-padding with-bottom-border">
 							<div key={model.id || model.uuid}
 								className="flex model-input-group">
 								<div className="flex-1 large-right-margin">
-									<div className="input-label">{"Key name"}</div>
-									<input value={model.key}
-										onChange={(e) => {
-											var value = e.target.value.replace(/\W+/g, " ").replace(/ /g,"_");
-											this.handleModelChange(model, 'key', value);
-										}} />
-									<div className="input-label">{"Required?"}</div>
-									<label className="checkbox-wrap">
-										<input type="checkbox"
-											checked={model.required === true}
-											onClick={(e) => {
-												this.handleModelChange(model, 'required', !model.required);
-											}} />
-										{"Yes / no"}
-									</label>
-								</div>
-								<div className="flex-2 overflow-hidden">
-									<div className="flex">
-										<div className="input-label flex-1">
-											<span className="flex-1">{"Type"}</span>
-										</div>
+									<div className="input-label flex">
+										<span className="flex-1">{"Key name"}</span>
 										<a href=""
 											className="--small"
 											onClick={(e) => {
@@ -241,6 +227,16 @@ class ResourceForm extends Component {
 											}}>
 											{"Remove key"}
 										</a>
+									</div>
+									<input value={model.key}
+										onChange={(e) => {
+											var value = e.target.value.replace(/\W+/g, " ").replace(/ /g,"_");
+											this.handleModelChange(model, 'key', value);
+										}} />
+								</div>
+								<div className="flex-1 overflow-hidden large-right-margin">
+									<div className="input-label flex-1">
+										<span className="flex-1">{"Type"}</span>
 									</div>
 									<select value={model.type}
 										onChange={(e) => {
@@ -299,14 +295,13 @@ class ResourceForm extends Component {
 															{model.predefined_type === 'boolean' ?
 																<div>
 																	<div className="input-label">{"Value"}</div>
-																	<label className="checkbox-wrap">
-																		<input checked={model.predefined_value === true}
-																			type="checkbox"
-																			onChange={(e) => {
-																				this.handleModelChange(model, 'predefined_value', !model.predefined_value);
-																			}} />
-																		{"True / false"}
-																	</label>
+																	<select value={model.predefined_value}
+																		onChange={(e) => {
+																			this.handleModelChange(model, 'predefined_value', eval(e.target.value));
+																		}}>
+																		<option value={false}>{"False"}</option>
+																		<option value={true}>{"True"}</option>
+																	</select>
 																</div>
 																:
 																<div>
@@ -819,10 +814,24 @@ class ResourceForm extends Component {
 										: null
 									}
 								</div>
+								<div className="flex-1 flex flex-vertical">
+									<div className="flex-0 input-label">{"Required?"}</div>
+									<label className="checkbox-wrap flex-0">
+										<input type="checkbox"
+											checked={model.required === true}
+											onClick={(e) => {
+												this.handleModelChange(model, 'required', !model.required);
+											}} />
+										{"Yes / no"}
+									</label>
+									<div className="input-label flex-0">{"Documentation description"}</div>
+									<textarea className="flex-1">
+									</textarea>
+								</div>
 							</div>
-						)
-					})}
-				</div>
+						</div>
+					)
+				})}
 			</div>
 		)
 		return null
