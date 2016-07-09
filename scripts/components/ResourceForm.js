@@ -24,7 +24,6 @@ class ResourceForm extends Component {
 	componentWillReceiveProps(props) {
 		if (this.props.resource !== props.resource) {
 			this.state.resource = props.resource;
-			this.forceUpdate();
 		}
 	}
 
@@ -42,17 +41,14 @@ class ResourceForm extends Component {
 			predefined_type: "string",
 			predefined_value: ""
 		});
-		this.forceUpdate();
 	}
 
 	removeModelKey(model, index) {
 		this.state.resource.model.splice(index, 1);
-		this.forceUpdate();
 	}
 
 	saveValue(name, value) {
 		this.state.resource.set(name, value);
-		this.forceUpdate();
 	}
 
 	setResourceCRUD(name) {
@@ -61,7 +57,6 @@ class ResourceForm extends Component {
 
 	handleModelChange(model, name, value) {
 		model.set(name, value);
-		this.forceUpdate();
 	}
 
 	handleModelTypeChanged(model, type) {
@@ -93,7 +88,6 @@ class ResourceForm extends Component {
 		} else {
 			model.set("resource", undefined);
 		}
-		this.forceUpdate();
 	}
 
 	handleModelPredefinedTypeChange(model, type) {
@@ -109,12 +103,10 @@ class ResourceForm extends Component {
 
 		model.set("child_resource_name", resource.name);
 		model.set("child_resource_type", resource.type);
-		this.forceUpdate();
 	}
 
 	handleModelParamsChange(model, name, value) {
 		model.params.set(name, value);
-		this.forceUpdate();
 	}
 
 	render() {
@@ -297,10 +289,10 @@ class ResourceForm extends Component {
 																<div>
 																	<div className="input-label">{"Value"}</div>
 																	<label className="checkbox-wrap">
-																		<input value={model.predefined_value}
+																		<input checked={model.predefined_value === true}
 																			type="checkbox"
 																			onChange={(e) => {
-																				this.handleModelChange(model, 'predefined_value', e.target.value);
+																				this.handleModelChange(model, 'predefined_value', !model.predefined_value);
 																			}} />
 																		{"True / false"}
 																	</label>
