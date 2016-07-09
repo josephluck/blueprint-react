@@ -32,11 +32,9 @@ class RightBar extends Component {
 		}
 
 		var right_bar_class = "";
-		var box_class = "right-bar-content"
 
 		if (this.props.right_bar_open === true) {
 			right_bar_class = "--open"
-			box_class = "--showing";
 		}
 
 		return (
@@ -60,13 +58,59 @@ class RightBar extends Component {
 						{"Close examples"}
 					</a>
 				</div>
-				<div className={`box flex-1 overflow-auto right-bar-content ${box_class}`}>
-					<div className="section-title">
-						{`GET /${this.props.resource.name}`}
-					</div>
-					<Highlight className="javascript">
-					  {JSON.stringify(get_code_example, null, 2)}
-					</Highlight>
+				<div className={`flex-1 overflow-auto`}>
+					{this.props.resource.supported_methods.get ?
+						<div>
+							<div className="section-title">
+								{"GET"}
+							</div>
+							<div className="box with-bottom-border">
+								<Highlight className="javascript">
+								  {JSON.stringify(get_code_example, null, 2)}
+								</Highlight>
+							</div>
+						</div>
+						: null
+					}
+					{this.props.resource.supported_methods.post ?
+						<div>
+							<div className="section-title">
+								{"POST"}
+							</div>
+							<div className="box with-bottom-border">
+								<Highlight className="javascript">
+								  {JSON.stringify(get_code_example, null, 2)}
+								</Highlight>
+							</div>
+						</div>
+						: null
+					}
+					{this.props.resource.supported_methods.put ?
+						<div>
+							<div className="section-title">
+								{"PUT"}
+							</div>
+							<div className="box with-bottom-border">
+								<Highlight className="javascript">
+								  {JSON.stringify(get_code_example, null, 2)}
+								</Highlight>
+							</div>
+						</div>
+						: null
+					}
+					{this.props.resource.supported_methods.delete ?
+						<div>
+							<div className="section-title">
+								{"DELETE"}
+							</div>
+							<div className="box with-bottom-border">
+								<Highlight className="javascript">
+								  {JSON.stringify(get_code_example, null, 2)}
+								</Highlight>
+							</div>
+						</div>
+						: null
+					}
 				</div>
 			</div>
 		)

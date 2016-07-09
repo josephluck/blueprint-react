@@ -25,13 +25,15 @@ class App extends Component {
 	  			</div>
 		  		<ResourcesList />
 		  	</div>
-		  	<div className="main-content flex flex-vertical">
 		  	{Store.get().resources.length > 0 ?
-			  	<div className="flex">{this.props.children}</div>
-			  	: null
-			  }
-			  </div>
-			  <RightBar />
+		  		<div className="flex flex-1">
+				  	<div className="main-content flex flex-vertical">
+					  	<div className="flex">{this.props.children}</div>
+					  </div>
+					  <RightBar />
+					</div>
+			 	: null
+			 }
 		  </div>
 		)
 	}

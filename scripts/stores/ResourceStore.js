@@ -11,8 +11,7 @@ class ResourceStore {
 =============================================================================*/
 	constructor() {
 		Store.initialize({
-			resource: {},
-			resource_loading: true
+			resource: {}
 		});
 	}
 
