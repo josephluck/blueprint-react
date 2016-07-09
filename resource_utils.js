@@ -4,7 +4,7 @@ var moment = require('moment');
 var _resources = [];
 
 /*=============================================================================
-	Set some optiosn for date validation
+	Set some options for date validation
 =============================================================================*/
 validate.extend(validate.validators.datetime, {
   parse: function(value, options) {
@@ -16,10 +16,12 @@ validate.extend(validate.validators.datetime, {
   }
 });
 
-validate.validators.email = function(value, options, key, attributes) {
-	var valid_email_address = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value);
-	if (!valid_email_address) {
-		return "is not a valid email address";
+/*=============================================================================
+	Add new validators
+=============================================================================*/
+validate.validators.boolean = function(value, options, key, attributes) {
+	if (value !== false && value !== true) {
+		return "must be true or false";
 	}
 }
 
@@ -301,8 +303,12 @@ module.exports = {
 				config.email = true;
 			} else if (parameter.faker_subcategory === "url") {
 				config.url = true
-			} else if (parameter.faker_subcategory === "arrayElement") {
+			} else if (is_string && parameter.faker_subcategory === "arrayElement") {
+				// We have to check if array is an array of strings since validate.js doesn't support
+				// nested objects. TODO: write a validator that supports deepEqual of nested objects.
 				config.inclusion = parameter.faker_params.json;
+			} else if (is_boolean) {
+				config.boolean = true;
 			}
 		}
 
