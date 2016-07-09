@@ -183,19 +183,29 @@ module.exports = {
 	},
 
 
+/*=============================================================================
+	Validates a POST or PUT request against the model description if the key
+	is a required parameter.
+=============================================================================*/
 	validateRequest: function(resource, request) {
 		var validator = {};
 
 		// Generate a validate.js configuraton from the model description
-		resource.model.map((model) => {
-			if (model.required) {
-				validator[model.key] = {
-					presence: true
-				}
+		resource.model.map((parameter) => {
+			if (parameter.required) {
+				validator[parameter.key] = getValidationConfigFromParameter(parameter);
 			}
 		});
 
 		// Run the request against validate.js
 		return validate(request, validator);
+	},
+
+	getValidationConfigFromParameter: function(parameter) {
+		var config = {
+			presence: true
+		};
+
+		return config;
 	}
 }
