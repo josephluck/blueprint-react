@@ -57,7 +57,7 @@ class ResourcesStore {
 						type: "predefined",
 						faker_type: "",
 						faker_category: "",
-						params: {},
+						faker_params: {},
 						resource: {},
 						predefined_type: "string",
 						predefined_value: "",

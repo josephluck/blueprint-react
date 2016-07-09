@@ -9,11 +9,16 @@ import AceEditor from 'react-ace';
 import 'brace/mode/json';
 import 'brace/theme/tomorrow';
 
+import validate from 'validate.js';
+window.faker = Faker;
+window.validate = validate;
+
 class ResourceForm extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			resource: props.resource
+			resource: props.resource,
+			resources: props.resources
 		};
 	}
 
@@ -36,7 +41,7 @@ class ResourceForm extends Component {
 	  	type: "predefined",
 	  	faker_type: "",
 	  	faker_category: "",
-	  	params: {},
+	  	faker_params: {},
 	  	resource: {},
 			predefined_type: "string",
 			predefined_value: "",
@@ -79,7 +84,7 @@ class ResourceForm extends Component {
 				  	type: "predefined",
 				  	faker_type: "",
 				  	faker_category: "",
-				  	params: {},
+				  	faker_params: {},
 				  	resource: {},
 						predefined_type: "string",
 						predefined_value: "",
@@ -90,6 +95,10 @@ class ResourceForm extends Component {
 		} else {
 			model.set("resource", undefined);
 		}
+	}
+
+	resetRandomParams(model) {
+		model.params.reset({});
 	}
 
 	handleModelPredefinedTypeChange(model, type) {
@@ -108,7 +117,7 @@ class ResourceForm extends Component {
 	}
 
 	handleModelParamsChange(model, name, value) {
-		model.params.set(name, value);
+		model.faker_params.set(name, value);
 	}
 
 	render() {
@@ -416,6 +425,7 @@ class ResourceForm extends Component {
 													<select value={"pleasechoose"}
 														value={model.faker_type}
 														onChange={(e) => {
+															this.resetRandomParams(model);
 															this.handleModelChange(model, 'faker_type', e.target.value);
 														}}>
 														<option disabled value="pleasechoose">{"Please choose"}</option>
@@ -431,25 +441,27 @@ class ResourceForm extends Component {
 													{model.faker_type ?
 														<div>
 															{model.faker_type === "streetAddress" ?
-																<label className="checkbox-wrap">
-																	<input type="checkbox"
-																		checked={model.params.useFullAddress === true}
+																<div>
+																	<div className="input-label">{"Use full address"}</div>
+																	<select value={model.faker_params.useFullAddress}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'useFullAddress', e.target.checked);
-																		}} />
-																	{"Use full address?"} {model.params.useFullAddress}
-																</label>
+																			this.handleModelParamsChange(model, 'useFullAddress', eval(e.target.value));
+																		}}>
+																		<option value={false}>{"No"}</option>
+																		<option value={true}>{"Yes"}</option>
+																	</select>
+																</div>
 																: null
 															}
 															{model.faker_type === "department" ?
 																<div>
 																	<div className="input-label">{"Max value"}</div>
-																	<input value={model.params.max}
+																	<input value={model.faker_params.max}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'max', e.target.value);
 																		}} />
 																	<div className="input-label">{"Fixed amount"}</div>
-																	<input value={model.params.fixedAmount}
+																	<input value={model.faker_params.fixedAmount}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'fixedAmount', e.target.value);
 																		}} />
@@ -459,22 +471,22 @@ class ResourceForm extends Component {
 															{model.faker_type === "price" ?
 																<div>
 																	<div className="input-label">{"Min value"}</div>
-																	<input value={model.params.min}
+																	<input value={model.faker_params.min}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'min', e.target.value);
 																		}} />
 																	<div className="input-label">{"Max value"}</div>
-																	<input value={model.params.max}
+																	<input value={model.faker_params.max}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'max', e.target.value);
 																		}} />
 																	<div className="input-label">{"Decimal places"}</div>
-																	<input value={model.params.dec}
+																	<input value={model.faker_params.dec}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'dec', e.target.value);
 																		}} />
 																	<div className="input-label">{"Symbol"}</div>
-																	<input value={model.params.symbol}
+																	<input value={model.faker_params.symbol}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'symbol', e.target.value);
 																		}} />
@@ -484,12 +496,12 @@ class ResourceForm extends Component {
 															{model.faker_type === "number" ?
 																<div>
 																	<div className="input-label">{"Min value"}</div>
-																	<input value={model.params.min}
+																	<input value={model.faker_params.min}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'min', e.target.value);
 																		}} />
 																	<div className="input-label">{"Max value"}</div>
-																	<input value={model.params.max}
+																	<input value={model.faker_params.max}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'max', e.target.value);
 																		}} />
@@ -499,13 +511,13 @@ class ResourceForm extends Component {
 															{model.faker_type === "between" ?
 																<div>
 																	<div className="input-label">{"From"}</div>
-																	<input value={model.params.from}
+																	<input value={model.faker_params.from}
 																		type="date"
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'from', e.target.value);
 																		}} />
 																	<div className="input-label">{"To"}</div>
-																	<input value={model.params.to}
+																	<input value={model.faker_params.to}
 																		type="date"
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'to', e.target.value);
@@ -515,16 +527,17 @@ class ResourceForm extends Component {
 															}
 															{model.faker_type === "future" || model.faker_type === "past" ?
 																<div>
+																	<div className="input-label">{"Number of years"}</div>
+																	<input value={model.faker_params.years}
+																		onChange={(e) => {
+																			let value = parseInt(e.target.value) || 0;
+																			this.handleModelParamsChange(model, 'years', value);
+																		}} />
 																	<div className="input-label">{"From date"}</div>
-																	<input value={model.params.refDate}
+																	<input value={model.faker_params.refDate}
 																		type="date"
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'refDate', e.target.value);
-																		}} />
-																	<div className="input-label">{"Number of years"}</div>
-																	<input value={model.params.years}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'years', e.target.value);
 																		}} />
 																</div>
 																: null
@@ -532,9 +545,10 @@ class ResourceForm extends Component {
 															{model.faker_type === "recent" ?
 																<div>
 																	<div className="input-label">{"Number of days"}</div>
-																	<input value={model.params.days}
+																	<input value={model.faker_params.days}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'days', e.target.value);
+																			let value = parseInt(e.target.value) || 0;
+																			this.handleModelParamsChange(model, 'days', value);
 																		}} />
 																</div>
 																: null
@@ -542,22 +556,22 @@ class ResourceForm extends Component {
 															{model.faker_type === "amount" ?
 																<div>
 																	<div className="input-label">{"Min value"}</div>
-																	<input value={model.params.min}
+																	<input value={model.faker_params.min}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'min', e.target.value);
 																		}} />
 																	<div className="input-label">{"Max value"}</div>
-																	<input value={model.params.max}
+																	<input value={model.faker_params.max}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'max', e.target.value);
 																		}} />
 																	<div className="input-label">{"Decimal places"}</div>
-																	<input value={model.params.dec}
+																	<input value={model.faker_params.dec}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'dec', e.target.value);
 																		}} />
 																	<div className="input-label">{"Symbol"}</div>
-																	<input value={model.params.symbol}
+																	<input value={model.faker_params.symbol}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'symbol', e.target.value);
 																		}} />
@@ -567,13 +581,13 @@ class ResourceForm extends Component {
 															{model.faker_type === "mask" ?
 																<div>
 																	<div className="input-label">{"Length of number"}</div>
-																	<input value={model.params.length}
+																	<input value={model.faker_params.length}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'length', e.target.value);
 																		}} />
 																	<div className="checkbox-wrap">
 																		<input type="checkbox"
-																			checked={model.params.parens === true}
+																			checked={model.faker_params.parens === true}
 																			onChange={(e) => {
 																				this.handleModelParamsChange(model, 'parens', e.target.checked);
 																			}} />
@@ -581,7 +595,7 @@ class ResourceForm extends Component {
 																	</div>
 																	<div className="checkbox-wrap">
 																		<input type="checkbox"
-																			checked={model.params.ellipsis === true}
+																			checked={model.faker_params.ellipsis === true}
 																			onChange={(e) => {
 																				this.handleModelParamsChange(model, 'ellipsis', e.target.checked);
 																			}} />
@@ -593,12 +607,12 @@ class ResourceForm extends Component {
 															{model.faker_category === "image" && model.faker_type !== "avatar" ?
 																<div>
 																	<div className="input-label">{"Width"}</div>
-																	<input value={model.params.width}
+																	<input value={model.faker_params.width}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'width', e.target.value);
 																		}} />
 																	<div className="input-label">{"Height"}</div>
-																	<input value={model.params.height}
+																	<input value={model.faker_params.height}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'height', e.target.value);
 																		}} />
@@ -608,17 +622,17 @@ class ResourceForm extends Component {
 															{model.faker_type === "email" ?
 																<div>
 																	<div className="input-label">{"First name"}</div>
-																	<input value={model.params.firstName}
+																	<input value={model.faker_params.firstName}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'firstName', e.target.value);
 																		}} />
 																	<div className="input-label">{"Last name"}</div>
-																	<input value={model.params.lastName}
+																	<input value={model.faker_params.lastName}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'lastName', e.target.value);
 																		}} />
 																	<div className="input-label">{"Provider"}</div>
-																	<input value={model.params.provider}
+																	<input value={model.faker_params.provider}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'provider', e.target.value);
 																		}} />
@@ -628,12 +642,12 @@ class ResourceForm extends Component {
 															{model.faker_type === "exampleEmail" ?
 																<div>
 																	<div className="input-label">{"First name"}</div>
-																	<input value={model.params.firstName}
+																	<input value={model.faker_params.firstName}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'firstName', e.target.value);
 																		}} />
 																	<div className="input-label">{"Last name"}</div>
-																	<input value={model.params.lastName}
+																	<input value={model.faker_params.lastName}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'lastName', e.target.value);
 																		}} />
@@ -643,13 +657,13 @@ class ResourceForm extends Component {
 															{model.faker_type === "password" ?
 																<div>
 																	<div className="input-label">{"Length of password"}</div>
-																	<input value={model.params.length}
+																	<input value={model.faker_params.length}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'length', e.target.value);
 																		}} />
 																	<div className="checkbox-wrap">
 																		<input type="checkbox"
-																			checked={model.params.memorable === true}
+																			checked={model.faker_params.memorable === true}
 																			onChange={(e) => {
 																				this.handleModelParamsChange(model, 'memorable', e.target.checked);
 																			}} />
@@ -661,12 +675,12 @@ class ResourceForm extends Component {
 															{model.faker_type === "userName" ?
 																<div>
 																	<div className="input-label">{"First name"}</div>
-																	<input value={model.params.firstName}
+																	<input value={model.faker_params.firstName}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'firstName', e.target.value);
 																		}} />
 																	<div className="input-label">{"Last name"}</div>
-																	<input value={model.params.lastName}
+																	<input value={model.faker_params.lastName}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'lastName', e.target.value);
 																		}} />
@@ -676,9 +690,10 @@ class ResourceForm extends Component {
 															{model.faker_type === "lines" ?
 																<div>
 																	<div className="input-label">{"Number of lines"}</div>
-																	<input value={model.params.lines}
+																	<input value={model.faker_params.lines}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'lines', e.target.value);
+																			let value = parseInt(e.target.value) || 0;
+																			this.handleModelParamsChange(model, 'lines', value);
 																		}} />
 																</div>
 																: null
@@ -686,12 +701,13 @@ class ResourceForm extends Component {
 															{model.faker_type === "paragraphs" ?
 																<div>
 																	<div className="input-label">{"Number of paragraphs"}</div>
-																	<input value={model.params.paragraphCount}
+																	<input value={model.faker_params.paragraphCount}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'paragraphCount', e.target.value);
+																			let value = parseInt(e.target.value) || 0;
+																			this.handleModelParamsChange(model, 'paragraphCount', value);
 																		}} />
 																	<div className="input-label">{"Separator"}</div>
-																	<input value={model.params.seperator}
+																	<input value={model.faker_params.seperator}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'seperator', e.target.value);
 																		}} />
@@ -701,9 +717,10 @@ class ResourceForm extends Component {
 															{model.faker_type === "sentence" ?
 																<div>
 																	<div className="input-label">{"Number of words"}</div>
-																	<input value={model.params.wordCount}
+																	<input value={model.faker_params.wordCount}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'wordCount', e.target.value);
+																			let value = parseInt(e.target.value) || 0;
+																			this.handleModelParamsChange(model, 'wordCount', value);
 																		}} />
 																</div>
 																: null
@@ -711,12 +728,13 @@ class ResourceForm extends Component {
 															{model.faker_type === "sentences" ?
 																<div>
 																	<div className="input-label">{"Number of sentences"}</div>
-																	<input value={model.params.sentenceCount}
+																	<input value={model.faker_params.sentenceCount}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'sentenceCount', e.target.value);
+																			let value = parseInt(e.target.value) || 0;
+																			this.handleModelParamsChange(model, 'sentenceCount', value);
 																		}} />
 																	<div className="input-label">{"Separator"}</div>
-																	<input value={model.params.seperator}
+																	<input value={model.faker_params.seperator}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'seperator', e.target.value);
 																		}} />
@@ -726,9 +744,10 @@ class ResourceForm extends Component {
 															{model.faker_type === "text" ?
 																<div>
 																	<div className="input-label">{"Number of times"}</div>
-																	<input value={model.params.times}
+																	<input value={model.faker_params.times}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'times', e.target.value);
+																			let value = parseInt(e.target.value) || 0;
+																			this.handleModelParamsChange(model, 'times', value);
 																		}} />
 																</div>
 																: null
@@ -736,9 +755,10 @@ class ResourceForm extends Component {
 															{model.faker_type === "words" ?
 																<div>
 																	<div className="input-label">{"Number of words"}</div>
-																	<input value={model.params.words}
+																	<input value={model.faker_params.words}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'words', e.target.value);
+																			let value = parseInt(e.target.value) || 0;
+																			this.handleModelParamsChange(model, 'words', value);
 																		}} />
 																</div>
 																: null
@@ -786,7 +806,7 @@ class ResourceForm extends Component {
 																	    onChange={(value) => {
 																	    	this.handleModelParamsChange(model, 'json', value);
 																	    }}
-																	    value={model.params.json}
+																	    value={model.faker_params.json}
 																	    name={`model-${i}`}
 																	  />
 																	</div>
@@ -796,7 +816,7 @@ class ResourceForm extends Component {
 															{model.faker_type === "objectElement" ?
 																<div>
 																	<div className="input-label">{"Object"}</div>
-																	<textarea value={model.params.json}
+																	<textarea value={model.faker_params.json}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'json', e.target.value);
 																		}}>

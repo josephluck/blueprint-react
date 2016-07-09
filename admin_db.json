@@ -2,7 +2,7 @@
   "resources": [
     {
       "type": "array",
-      "length": 1,
+      "length": 4,
       "name": "validation_example",
       "supported_methods": {
         "get": true,
@@ -16,11 +16,11 @@
           "type": "random",
           "faker_type": "color",
           "faker_category": "internet",
-          "params": {},
+          "faker_params": {},
           "resource": {},
           "predefined_type": "string",
           "predefined_value": "",
-          "required": false,
+          "required": true,
           "key": "colour"
         },
         {
@@ -28,7 +28,7 @@
           "type": "predefined",
           "faker_type": "",
           "faker_category": "",
-          "params": {},
+          "faker_params": {},
           "resource": {},
           "predefined_type": "boolean",
           "predefined_value": true,
@@ -40,19 +40,19 @@
           "type": "predefined",
           "faker_type": "",
           "faker_category": "",
-          "params": {},
+          "faker_params": {},
           "resource": {},
           "predefined_type": "number",
           "predefined_value": "1337",
           "key": "number",
-          "required": false
+          "required": true
         },
         {
           "uuid": "4137cd0a-c09f-46bf-9d1b-020e786e6f4a",
           "type": "predefined",
           "faker_type": "",
           "faker_category": "",
-          "params": {},
+          "faker_params": {},
           "resource": {},
           "predefined_type": "string",
           "predefined_value": "Super cool, yeah!",
@@ -61,10 +61,13 @@
         },
         {
           "uuid": "7a937c77-cc66-4301-92e1-fee4a07790db",
-          "type": "predefined",
-          "faker_type": "",
-          "faker_category": "",
-          "params": {},
+          "type": "random",
+          "faker_type": "future",
+          "faker_category": "date",
+          "faker_params": {
+            "refDate": "2016-07-09",
+            "years": 5
+          },
           "resource": {},
           "predefined_type": "date",
           "predefined_value": "2016-07-09",

@@ -1,4 +1,4 @@
-export default {
+var categories = {
 	"address": [
 		{
 			"name": "City prefix",
@@ -550,3 +550,5 @@ export default {
 	],
 	"system": []
 }
+
+export default categories;

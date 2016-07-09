@@ -1,7 +1,20 @@
 var faker = require('faker');
 var validate = require('validate.js');
-var faker_sub_categories = require('./scripts/data/FakerSubCategories');
+var moment = require('moment');
 var _resources = [];
+
+/*=============================================================================
+	Set some optiosn for date validation
+=============================================================================*/
+validate.extend(validate.validators.datetime, {
+  parse: function(value, options) {
+    return +moment.utc(value);
+  },
+  format: function(value, options) {
+    var format = options.dateOnly ? "YYYY-MM-DD" : "YYYY-MM-DD hh:mm:ss";
+    return moment.utc(value).format(format);
+  }
+});
 
 module.exports = {
 /*=============================================================================
@@ -72,14 +85,22 @@ module.exports = {
 	Uses faker.js (see docs for more info)
 =============================================================================*/
 	generateRandomValue: function(property) {
-		var args;
-		if (property.params) {
-			var keys = Object.keys(property.params);
-			args = keys.map(function(key, i) {
-				return property.params[key];
-			});
-		}
 		if (property.faker_category && property.faker_type) {
+			var args;
+			if (property.faker_params) {
+				var keys = Object.keys(property.faker_params);
+				args = keys.map(function(key, i) {
+					return property.faker_params[key];
+				});
+
+				// Move faker arguments in to the order it's expecting. For instance
+				// if the type is future date, faker expects the arguments to be
+				// years, refDate whereas this isn't the order stored in the faker_params
+				// object in the model...
+				if (property.faker_type === 'future' || property.faker_type === 'past') {
+					args.reverse();
+				}
+			}
 			return faker[property.faker_category][property.faker_type].apply(null, args);
 		} else {
 			return null;
@@ -193,8 +214,12 @@ module.exports = {
 
 		// Generate a validate.js configuraton from the model description
 		resource.model.map((parameter) => {
-			if (parameter.required) {
-				validator[parameter.key] = getValidationConfigFromParameter(parameter);
+			if (parameter.type === "child_resource") {
+				// Handle a nested resource and validate it
+			} else if (parameter.type === "object") {
+				// Handle a nested object / array and validate it
+			} else {
+				validator[parameter.key] = this.getSingleRequestParameterValidationRequirements(parameter);
 			}
 		});
 
@@ -202,13 +227,48 @@ module.exports = {
 		return validate(request, validator);
 	},
 
-	getValidationConfigFromParameter: function(parameter) {
-		var config = {
-			presence: true
-		};
+	getSingleRequestParameterValidationRequirements: function(parameter) {
+		var config = {};
+		var required_type;
 
-		if (parameter.type === "random") {
+		if (parameter.required) {
+			config.presence = true;
+		}
 
+		if (parameter.type === "predefined") {
+			required_type = parameter.predefined_type;
+		} else if (parameter.type === "random") {
+			var example_value = this.generateRandomValue(parameter); // Generate a random value from the resource description and grab it's type
+			var is_date = moment(example_value).isValid();
+			var is_number = !isNaN(example_value);
+			var is_boolean = typeof(example_value) === "boolean";
+
+			if (is_date) {
+				required_type = "date";
+			} else if (is_number) {
+				required_type = "number";
+			} else if (is_boolean) {
+				required_type = "boolean";
+			} else {
+				required_type = "string";
+			}
+		}
+
+		if (required_type === "date") {
+			config.datetime = {}
+
+			var date_type = parameter.faker_type; // Get the params from the model for min max etc
+
+			if (date_type === "between") {
+				if (parameter.faker_params.from) {
+					config.datetime.earliest = parameter.faker_params.from
+				}
+				if (parameter.faker_params.to) {
+					config.datetime.latest = parameter.faker_params.to
+				}
+			} else if (date_type === "future") {
+
+			}
 		}
 
 		return config;
