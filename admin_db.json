@@ -12,23 +12,21 @@
       },
       "model": [
         {
-          "uuid": "1186cedc-8b44-4412-a1dd-bcf4ac53e0af",
+          "uuid": "aa3411a0-14af-42ff-a4f4-ec07f8905a3b",
           "type": "random",
-          "faker_type": "price",
-          "faker_category": "commerce",
-          "faker_params": {
-            "symbol": "£"
-          },
+          "faker_subcategory": "account",
+          "faker_category": "finance",
+          "faker_params": {},
           "resource": {},
           "predefined_type": "string",
           "predefined_value": "",
           "required": false,
-          "key": "price"
+          "key": "account_number"
         }
       ],
       "id": 1,
       "validation_config": {
-        "price": {}
+        "account_number": {}
       }
     }
   ]

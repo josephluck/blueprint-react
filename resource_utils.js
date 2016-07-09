@@ -85,21 +85,15 @@ module.exports = {
 	Uses faker.js (see docs for more info)
 =============================================================================*/
 	generateRandomValue: function(property) {
-		if (property.faker_category && property.faker_type) {
+		if (property.faker_category && property.faker_subcategory) {
 			var args = [];
 			if (property.faker_params) {
 				var keys = Object.keys(property.faker_params);
 				args = keys.map(function(key, i) {
 					return property.faker_params[key];
 				});
-
-				// Move faker arguments in to the order it's expecting. For instance
-				// if the type is future date, faker expects the arguments to be
-				// years, refDate whereas this isn't the order stored in the faker_params
-				// object in the model...
-
 			}
-			return faker[property.faker_category][property.faker_type].apply(null, args);
+			return faker[property.faker_category][property.faker_subcategory].apply(null, args);
 		} else {
 			return null;
 		}
@@ -262,7 +256,7 @@ module.exports = {
 
 			// Date validation (range)
 			if (parameter.faker_category === "date") {
-				var date_type = parameter.faker_type; // Get the params from the model for min max etc
+				var date_type = parameter.faker_subcategory; // Get the params from the model for min max etc
 				var faker_params = parameter.faker_params;
 				if (date_type === "between") {
 					config.datetime = {}
@@ -289,7 +283,7 @@ module.exports = {
 						config.datetime.earliest = moment(faker_params.refDate).subtract(faker_params.years, 'years').format('YYYY-MM-DD');
 					}
 				} else if (date_type === "month") {
-					if (parameter.faker_type === "month") {
+					if (parameter.faker_subcategory === "month") {
 						config.inclusion = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "November", "December"];
 					}
 				} else {

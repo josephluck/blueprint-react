@@ -55,7 +55,7 @@ class ResourcesStore {
 					    return v.toString(16);
 						}),
 						type: "predefined",
-						faker_type: "",
+						faker_subcategory: "",
 						faker_category: "",
 						faker_params: {},
 						resource: {},

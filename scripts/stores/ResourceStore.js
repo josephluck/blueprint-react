@@ -24,7 +24,7 @@ class ResourceStore {
 		}).toJS();
 
 		resource.model = resource.model.map((model, value) => {
-			if (model.faker_type === 'arrayElement' || model.faker_type === 'objectElement') {
+			if (model.faker_subcategory === 'arrayElement' || model.faker_subcategory === 'objectElement') {
 				model.faker_params.json = JSON.stringify(model.faker_params.json, null, 2);
 			}
 
@@ -39,7 +39,7 @@ class ResourceStore {
 
 		resource = resource.toJS();
 		resource.model = resource.model.map((model, value) => {
-			if (model.faker_type === 'arrayElement' || model.faker_type === 'objectElement') {
+			if (model.faker_subcategory === 'arrayElement' || model.faker_subcategory === 'objectElement') {
 				model.faker_params.json = JSON.parse(model.faker_params.json);
 			}
 
@@ -56,7 +56,7 @@ class ResourceStore {
 			payload: resource
 		}).then((resource) => {
 			resource.model = resource.model.map((model, value) => {
-				if (model.faker_type === 'arrayElement' || model.faker_type === 'objectElement') {
+				if (model.faker_subcategory === 'arrayElement' || model.faker_subcategory === 'objectElement') {
 					model.faker_params.json = JSON.stringify(model.faker_params.json, null, 2);
 				}
 

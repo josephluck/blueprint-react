@@ -41,7 +41,7 @@ class ResourceForm extends Component {
 	      return v.toString(16);
 	  	}),
 	  	type: "predefined",
-	  	faker_type: "",
+	  	faker_subcategory: "",
 	  	faker_category: "",
 	  	faker_params: {},
 	  	resource: {},
@@ -84,7 +84,7 @@ class ResourceForm extends Component {
 				      return v.toString(16);
 				  	}),
 				  	type: "predefined",
-				  	faker_type: "",
+				  	faker_subcategory: "",
 				  	faker_category: "",
 				  	faker_params: {},
 				  	resource: {},
@@ -97,6 +97,14 @@ class ResourceForm extends Component {
 		} else {
 			model.set("resource", undefined);
 		}
+	}
+
+	handleRandomCategoryChanged(model, value) {
+		model.set({
+			faker_category: value,
+			faker_subcategory: "",
+			faker_params: {}
+		});
 	}
 
 	resetRandomParams(model, faker_category) {
@@ -453,7 +461,6 @@ class ResourceForm extends Component {
 									<div className="input-label flex">
 										<span className="flex-1">{"Key name"}</span>
 										<a href=""
-											className="--small"
 											onClick={(e) => {
 												e.preventDefault();
 												this.removeModelKey(model, i);
@@ -630,7 +637,7 @@ class ResourceForm extends Component {
 											<select value={"pleasechoose"}
 												value={model.faker_category}
 												onChange={(e) => {
-													this.handleModelChange(model, 'faker_category', e.target.value);
+													this.handleRandomCategoryChanged(model, e.target.value);
 												}}>
 												<option disabled value="pleasechoose">{"Please choose"}</option>
 												{FakerCategories.map((category, i) => {
@@ -647,9 +654,9 @@ class ResourceForm extends Component {
 												<div>
 													<div className="input-label">{"Random sub-category"}</div>
 													<select value={"pleasechoose"}
-														value={model.faker_type}
+														value={model.faker_subcategory}
 														onChange={(e) => {
-															this.handleModelChange(model, 'faker_type', e.target.value);
+															this.handleModelChange(model, 'faker_subcategory', e.target.value);
 															this.resetRandomParams(model, e.target.value);
 														}}>
 														<option disabled value="pleasechoose">{"Please choose"}</option>
@@ -662,9 +669,9 @@ class ResourceForm extends Component {
 															)
 														})}
 													</select>
-													{model.faker_type ?
+													{model.faker_subcategory ?
 														<div>
-															{model.faker_type === "streetAddress" ?
+															{model.faker_subcategory === "streetAddress" ?
 																<div>
 																	<div className="input-label">{"Use full address"}</div>
 																	<select value={model.faker_params.useFullAddress}
@@ -677,22 +684,25 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "price" ?
+															{model.faker_subcategory === "price" ?
 																<div>
 																	<div className="input-label">{"Min value"}</div>
 																	<input value={model.faker_params.min}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'min', e.target.value);
+																			let value = parseFloat(e.target.value) || 0;
+																			this.handleModelParamsChange(model, 'min', value);
 																		}} />
 																	<div className="input-label">{"Max value"}</div>
 																	<input value={model.faker_params.max}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'max', e.target.value);
+																			let value = parseFloat(e.target.value) || 0;
+																			this.handleModelParamsChange(model, 'max', value);
 																		}} />
 																	<div className="input-label">{"Decimal places"}</div>
 																	<input value={model.faker_params.dec}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'dec', e.target.value);
+																			let value = parseFloat(e.target.value) || 0;
+																			this.handleModelParamsChange(model, 'dec', value);
 																		}} />
 																	<div className="input-label">{"Symbol"}</div>
 																	<input value={model.faker_params.symbol}
@@ -702,7 +712,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "number" ?
+															{model.faker_subcategory === "number" ?
 																<div>
 																	<div className="input-label">{"Min value"}</div>
 																	<input value={model.faker_params.min}
@@ -717,7 +727,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "between" ?
+															{model.faker_subcategory === "between" ?
 																<div>
 																	<div className="input-label">{"From"}</div>
 																	<input value={model.faker_params.from}
@@ -734,7 +744,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "future" || model.faker_type === "past" ?
+															{model.faker_subcategory === "future" || model.faker_subcategory === "past" ?
 																<div>
 																	<div className="input-label">{"Number of years"}</div>
 																	<input value={model.faker_params.years}
@@ -751,7 +761,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "recent" ?
+															{model.faker_subcategory === "recent" ?
 																<div>
 																	<div className="input-label">{"Number of days"}</div>
 																	<input value={model.faker_params.days}
@@ -762,7 +772,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "amount" ?
+															{model.faker_subcategory === "amount" ?
 																<div>
 																	<div className="input-label">{"Min value"}</div>
 																	<input value={model.faker_params.min}
@@ -787,7 +797,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "mask" ?
+															{model.faker_subcategory === "mask" ?
 																<div>
 																	<div className="input-label">{"Length of number"}</div>
 																	<input value={model.faker_params.length}
@@ -813,7 +823,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_category === "image" && model.faker_type !== "avatar" ?
+															{model.faker_category === "image" && model.faker_subcategory !== "avatar" ?
 																<div>
 																	<div className="input-label">{"Width"}</div>
 																	<input value={model.faker_params.width}
@@ -828,7 +838,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "email" ?
+															{model.faker_subcategory === "email" ?
 																<div>
 																	<div className="input-label">{"First name"}</div>
 																	<input value={model.faker_params.firstName}
@@ -848,7 +858,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "exampleEmail" ?
+															{model.faker_subcategory === "exampleEmail" ?
 																<div>
 																	<div className="input-label">{"First name"}</div>
 																	<input value={model.faker_params.firstName}
@@ -863,7 +873,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "password" ?
+															{model.faker_subcategory === "password" ?
 																<div>
 																	<div className="input-label">{"Length of password"}</div>
 																	<input value={model.faker_params.length}
@@ -881,7 +891,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "userName" ?
+															{model.faker_subcategory === "userName" ?
 																<div>
 																	<div className="input-label">{"First name"}</div>
 																	<input value={model.faker_params.firstName}
@@ -896,7 +906,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "lines" ?
+															{model.faker_subcategory === "lines" ?
 																<div>
 																	<div className="input-label">{"Number of lines"}</div>
 																	<input value={model.faker_params.lines}
@@ -907,7 +917,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "paragraphs" ?
+															{model.faker_subcategory === "paragraphs" ?
 																<div>
 																	<div className="input-label">{"Number of paragraphs"}</div>
 																	<input value={model.faker_params.paragraphCount}
@@ -923,7 +933,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "sentence" ?
+															{model.faker_subcategory === "sentence" ?
 																<div>
 																	<div className="input-label">{"Number of words"}</div>
 																	<input value={model.faker_params.wordCount}
@@ -934,7 +944,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "sentences" ?
+															{model.faker_subcategory === "sentences" ?
 																<div>
 																	<div className="input-label">{"Number of sentences"}</div>
 																	<input value={model.faker_params.sentenceCount}
@@ -950,7 +960,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "text" ?
+															{model.faker_subcategory === "text" ?
 																<div>
 																	<div className="input-label">{"Number of times"}</div>
 																	<input value={model.faker_params.times}
@@ -961,7 +971,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "words" ?
+															{model.faker_subcategory === "words" ?
 																<div>
 																	<div className="input-label">{"Number of words"}</div>
 																	<input value={model.faker_params.words}
@@ -972,7 +982,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "firstName" || model.faker_type === 'lastName' || model.faker_type === 'prefix' ?
+															{model.faker_subcategory === "firstName" || model.faker_subcategory === 'lastName' || model.faker_subcategory === 'prefix' ?
 																<div>
 																	<div className="input-label">{"Gender"}</div>
 																	<select value={model.gender}
@@ -992,7 +1002,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "arrayElement" ?
+															{model.faker_subcategory === "arrayElement" ?
 																<div>
 																	<div className="input-label">{"Array"}</div>
 																	<div className="editor-wrap">
@@ -1022,7 +1032,7 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_type === "objectElement" ?
+															{model.faker_subcategory === "objectElement" ?
 																<div>
 																	<div className="input-label">{"Object"}</div>
 																	<textarea value={model.faker_params.json}
