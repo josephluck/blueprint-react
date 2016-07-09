@@ -281,7 +281,7 @@ module.exports = {
 						config.datetime.latest = faker_params.refDate;
 					}
 					if (faker_params.years) {
-						config.datetime.earliest = moment(faker_params.refDate).year(0 - faker_params.years);
+						config.datetime.earliest = moment(faker_params.refDate).subtract(faker_params.years, 'years').format();
 					}
 				} else if (date_type === "month") {
 					if (parameter.faker_type === "month") {
