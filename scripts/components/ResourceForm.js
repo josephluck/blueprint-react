@@ -116,44 +116,65 @@ class ResourceForm extends Component {
 	render() {
 		return (
 			<div className="flex-1 overflow-auto">
-				<div className="box without-bottom-padding">
-					{this.props.nested === false ?
-						<div>
-							<div className="input-label">{"Name"}</div>
-							<input value={this.state.resource.name}
-								onChange={(e) => {
-									var value = e.target.value.replace(/\W+/g, " ").replace(/ /g,"_");
-									this.saveValue('name', value);
-								}}>
-							</input>
-						</div>
-						: null
-					}
-					<div className="input-label">{"Type"}</div>
-					<select value={this.state.resource.type}
-						onChange={(e) => {
-							this.saveValue('type', e.target.value);
-						}}>
-						<option value={"array"}>{"Array"}</option>
-						<option value={"singular"}>{"Signular"}</option>
-					</select>
-					{this.state.resource.type === 'array' ?
-						<div>
-							<div className="input-label">{"Length"}</div>
-							<input value={this.state.resource.length}
-								onChange={(e) => {
-									let value = 0;
+				<div className="flex box without-bottom-padding">
+					<div className="flex-1 large-right-margin">
+						{this.props.nested === false ?
+							<div>
+								<div className="input-label">{"Name"}</div>
+								<input value={this.state.resource.name}
+									onChange={(e) => {
+										var value = e.target.value.replace(/\W+/g, " ").replace(/ /g,"_");
+										this.saveValue('name', value);
+									}}>
+								</input>
+							</div>
+							: null
+						}
+						<div className="input-label">{"Type"}</div>
+						<select value={this.state.resource.type}
+							onChange={(e) => {
+								this.saveValue('type', e.target.value);
+							}}>
+							<option value={"array"}>{"Array"}</option>
+							<option value={"singular"}>{"Signular"}</option>
+						</select>
+						{this.state.resource.type === 'array' ?
+							<div>
+								<div className="input-label">{"Length"}</div>
+								<input value={this.state.resource.length}
+									onChange={(e) => {
+										let value = 0;
 
-									if (!isNaN(parseFloat(e.target.value)) && isFinite(e.target.value)) {
-										value = parseFloat(e.target.value);
-									}
+										if (!isNaN(parseFloat(e.target.value)) && isFinite(e.target.value)) {
+											value = parseFloat(e.target.value);
+										}
 
-									this.saveValue('length', value);
-								}}>
-							</input>
-						</div>
-						: null
-					}
+										this.saveValue('length', value);
+									}}>
+								</input>
+							</div>
+							: null
+						}
+					</div>
+					<div className="flex-2">
+						<div className="input-label">{"Supported methods"}</div>
+						<label className="checkbox-wrap">
+							<input type="checkbox" />
+							{"GET"}
+						</label>
+						<label className="checkbox-wrap">
+							<input type="checkbox" />
+							{"POST"}
+						</label>
+						<label className="checkbox-wrap">
+							<input type="checkbox" />
+							{"PUT"}
+						</label>
+						<label className="checkbox-wrap">
+							<input type="checkbox" />
+							{"DELETE"}
+						</label>
+					</div>
 				</div>
 
 				<div className="section-title with-top-border flex">
@@ -252,12 +273,14 @@ class ResourceForm extends Component {
 															{model.predefined_type === 'boolean' ?
 																<div>
 																	<div className="input-label">{"Value"}</div>
-																	<input value={model.predefined_value}
-																		type="checkbox"
-																		onChange={(e) => {
-																			this.handleModelChange(model, 'predefined_value', e.target.value);
-																		}} />
-																	{"True / false"}
+																	<label className="checkbox-wrap">
+																		<input value={model.predefined_value}
+																			type="checkbox"
+																			onChange={(e) => {
+																				this.handleModelChange(model, 'predefined_value', e.target.value);
+																			}} />
+																		{"True / false"}
+																	</label>
 																</div>
 																:
 																<div>
@@ -387,14 +410,14 @@ class ResourceForm extends Component {
 													{model.faker_type ?
 														<div>
 															{model.faker_type === "streetAddress" ?
-																<div className="checkbox-wrap">
+																<label className="checkbox-wrap">
 																	<input type="checkbox"
 																		checked={model.params.useFullAddress === true}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'useFullAddress', e.target.checked);
 																		}} />
-																	<span className="checkbox-label">{"Use full address?"} {model.params.useFullAddress}</span>
-																</div>
+																	{"Use full address?"} {model.params.useFullAddress}
+																</label>
 																: null
 															}
 															{model.faker_type === "department" ?

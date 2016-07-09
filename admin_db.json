@@ -7,14 +7,14 @@
       "model": [
         {
           "uuid": "8d2b9eb3-ee10-41ac-a776-ca427e87377e",
-          "type": "random",
+          "type": "predefined",
           "faker_type": "amount",
           "faker_category": "finance",
           "params": {
             "symbol": ""
           },
           "resource": {},
-          "predefined_type": "string",
+          "predefined_type": "boolean",
           "predefined_value": "",
           "key": "amount"
         },
