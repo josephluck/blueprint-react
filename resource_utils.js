@@ -183,7 +183,26 @@ module.exports = {
 
 
 	validateRequest: function(resource, request) {
-		console.log(resource.model);
-		console.log(request);
+		var valid = true;
+		var validation_errors = {};
+
+		// Map over the request body and validate against each value
+		resource.model.map((model) => {
+			if (model.required) {
+				var request_value_for_model = request[model.key];
+				if (request_value_for_model !== null && request_value_for_model !== undefined) {
+					// We're okay, there's a value
+				} else {
+					valid = false;
+					validation_errors[model.key] = `${model.key} is a required field.`
+				}
+			}
+		})
+
+		if (valid) {
+			return
+		} else {
+			return validation_errors
+		}
 	}
 }

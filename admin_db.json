@@ -45,7 +45,7 @@
           "predefined_type": "string",
           "predefined_value": "Super cool, yeah!",
           "key": "string",
-          "required": false
+          "required": true
         },
         {
           "uuid": "7a937c77-cc66-4301-92e1-fee4a07790db",
