@@ -12,6 +12,35 @@
       },
       "model": [
         {
+          "uuid": "0d24ce52-9a60-4854-b7bf-1b7d9d56b2a1",
+          "type": "random",
+          "faker_subcategory": "between",
+          "faker_category": "date",
+          "faker_params": {
+            "from": "2016-07-01",
+            "to": "2016-07-16"
+          },
+          "resource": {},
+          "predefined_type": "date",
+          "predefined_value": "",
+          "required": false,
+          "key": "birth_day",
+          "documentation_description": "Date. Must be a date between 1st July 2016 and 16th July 2016"
+        },
+        {
+          "uuid": "0e6e4241-36ba-42a1-8681-0caba265f291",
+          "type": "random",
+          "faker_subcategory": "lastName",
+          "faker_category": "name",
+          "faker_params": {},
+          "resource": {},
+          "predefined_type": "string",
+          "predefined_value": "",
+          "required": false,
+          "key": "last_name",
+          "documentation_description": "Last name, must be a string"
+        },
+        {
           "uuid": "aa3411a0-14af-42ff-a4f4-ec07f8905a3b",
           "type": "random",
           "faker_category": "name",
@@ -21,11 +50,19 @@
           "predefined_value": "",
           "required": true,
           "key": "first_name",
-          "faker_subcategory": "firstName"
+          "faker_subcategory": "firstName",
+          "documentation_description": "The first name of the user"
         }
       ],
       "id": 1,
       "validation_config": {
+        "birth_day": {
+          "datetime": {
+            "earliest": "2016-07-01",
+            "latest": "2016-07-16"
+          }
+        },
+        "last_name": {},
         "first_name": {
           "presence": true
         }

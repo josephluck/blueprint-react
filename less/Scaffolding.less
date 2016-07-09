@@ -37,7 +37,7 @@ html {
 	top: 0px;
 	right: 0px;
 	height: 100%;
-	width: 80%;
+	width: 100%;
 	box-sizing: border-box;
 	background: @appBackground;
 	border-left: solid @borderWidth darken(@borderColor, 5%);
@@ -70,6 +70,9 @@ html {
 	&.without-bottom-padding {
 		padding-bottom: 0px;
 	}
+	&.with-top-border {
+		border-top: solid @borderWidth @borderColor;
+	}
 	&.with-bottom-border {
 		border-bottom: solid @borderWidth @borderColor;
 	}
@@ -98,4 +101,9 @@ a {
 	&.--small {
 		font-size: @smallFontSize;
 	}
+}
+
+small {
+	font-size: @smallFontSize;
+	opacity: 0.8;
 }

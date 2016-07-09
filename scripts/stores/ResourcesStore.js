@@ -10,7 +10,7 @@ class ResourcesStore {
 		Store.initialize({
 			resources: [],
 			resources_loading: true,
-			right_bar_open: false
+			right_bar_open: true
 		});
 	}
 
