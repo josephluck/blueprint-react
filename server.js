@@ -25,7 +25,7 @@ var _resources;
 
 		adminServer.use(adminMiddlewares);
 
-		adminServer.use(function (req, res, next) {
+		adminServer.use((req, res, next) => {
 			// Pass immediately on to JSON server
 			next();
 
@@ -34,8 +34,8 @@ var _resources;
 		  		req.method === 'PUT' ||
 		  		req.method === 'DELETE') {
 
-		  	setTimeout(function() {
-		  		http('http://localhost:1401/resources', function(error, response, body) {
+		  	setTimeout(() => {
+		  		http('http://localhost:1401/resources', (error, response, body) => {
 		  			var resources = JSON.parse(body);
 		  			_resources = JSON.parse(body);
 		  			console.log("Database updated at: http://localhost:1400");
@@ -46,7 +46,7 @@ var _resources;
 		});
 
 		adminServer.use(adminRouter);
-		adminServer.listen(1401, function () {
+		adminServer.listen(1401, () => {
 		  console.log('Admin database running at: http://localhost:1401');
 		  startDatabaseServer();
 		});
@@ -60,7 +60,7 @@ var _resources;
 	var startDatabaseServer = function() {
 		console.log('Starting database server')
 
-		http('http://localhost:1401/resources', function(error, response, body) {
+		http('http://localhost:1401/resources', (error, response, body) => {
 		  var resources = JSON.parse(body);
 		  _resources = resources;
 		  dataServer = jsonServer.create();
@@ -68,6 +68,30 @@ var _resources;
 		  dataMiddlewares = jsonServer.defaults();
 
 		  dataServer.use(dataMiddlewares);
+
+		  dataServer.use((req, res, next) => {
+		  	// Check that the method is supported by the configuration
+		  	// first get the resource description in question and then
+		  	// check that the method is supported before passing it to
+		  	// json server. Otherwise throw a 405 method not allowed
+		  	var requestedResourceName = req.originalUrl.split('/')[1];
+		  	var requestedResourceDescription = _resources.find(function(resource) {
+		  		return resource.name === requestedResourceName;
+		  	});
+
+		  	if (req.method === 'GET' && requestedResourceDescription.supported_methods.get) {
+		  		next();
+		  	} else if (req.method === 'POST' && requestedResourceDescription.supported_methods.post) {
+		  		next();
+		  	} else if (req.method === 'PUT' && requestedResourceDescription.supported_methods.put) {
+		  		next();
+		  	} else if (req.method === 'DELETE' && requestedResourceDescription.supported_methods.delete) {
+		  		next();
+		  	} else {
+		  		res.status(405).send(`Method isn't supported for this resource`);
+		  	}
+		  });
+
 		  dataServer.use(dataRouter);
 		  dataServerInstance = dataServer.listen(1400, function () {
 		    console.log('Database running at: http://localhost:1400');
@@ -83,7 +107,7 @@ var _resources;
 		  publicPath: config.output.publicPath,
 		  hot: true,
 		  historyApiFallback: true
-		}).listen(1402, 'localhost', function (err) {
+		}).listen(1402, 'localhost', (err) => {
 		  if (err) {
 		    console.log(err);
 		  }
