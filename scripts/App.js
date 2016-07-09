@@ -10,21 +10,10 @@ import RightBar from 'containers/RightBar';
 class App extends Component {
 	constructor(props) {
 		super(props);
-		// Store.get().set({
-		// 	params: props.params
-		// })
 	}
 
 	componentWillMount() {
 		ResourcesStore.getResources();
-	}
-
-	componentWillReceiveProps(props) {
-		if (this.props.params !== props.params) {
-			// Store.get().set({
-			// 	params: props.params
-			// })
-		}
 	}
 
 	render() {

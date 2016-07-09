@@ -1,5 +1,6 @@
 var faker = require('faker');
 var validate = require('validate.js');
+var faker_sub_categories = require('./scripts/data/FakerSubCategories');
 var _resources = [];
 
 module.exports = {
@@ -205,6 +206,10 @@ module.exports = {
 		var config = {
 			presence: true
 		};
+
+		if (parameter.type === "random") {
+
+		}
 
 		return config;
 	}

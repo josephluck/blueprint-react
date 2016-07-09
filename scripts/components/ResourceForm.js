@@ -816,14 +816,13 @@ class ResourceForm extends Component {
 								</div>
 								<div className="flex-1 flex flex-vertical">
 									<div className="flex-0 input-label">{"Required?"}</div>
-									<label className="checkbox-wrap flex-0">
-										<input type="checkbox"
-											checked={model.required === true}
-											onClick={(e) => {
-												this.handleModelChange(model, 'required', !model.required);
-											}} />
-										{"Yes / no"}
-									</label>
+									<select value={model.required}
+										onChange={(e) => {
+											this.handleModelChange(model, 'required', eval(e.target.value));
+										}}>
+										<option value={false}>{"No"}</option>
+										<option value={true}>{"Yes"}</option>
+									</select>
 									<div className="input-label flex-0">{"Documentation description"}</div>
 									<textarea className="flex-1">
 									</textarea>
