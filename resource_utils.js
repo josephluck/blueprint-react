@@ -97,9 +97,7 @@ module.exports = {
 				// if the type is future date, faker expects the arguments to be
 				// years, refDate whereas this isn't the order stored in the faker_params
 				// object in the model...
-				if (property.faker_type === 'future' || property.faker_type === 'past') {
-					args.reverse();
-				}
+
 			}
 			return faker[property.faker_category][property.faker_type].apply(null, args);
 		} else {
@@ -276,7 +274,7 @@ module.exports = {
 						config.datetime.earliest = faker_params.refDate;
 					}
 					if (faker_params.years) {
-						config.datetime.latest = moment(faker_params.refDate).year(faker_params.years);
+						config.datetime.latest = moment(faker_params.refDate).add(faker_params.years, 'years').format();
 					}
 				} else if (date_type === "past") {
 					if (faker_params.refDate) {

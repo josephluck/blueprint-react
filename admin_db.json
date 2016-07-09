@@ -12,6 +12,21 @@
       },
       "model": [
         {
+          "uuid": "3cc9bb8b-5d65-4ac7-b781-0815fa0c59b2",
+          "type": "random",
+          "faker_type": "future",
+          "faker_category": "date",
+          "faker_params": {
+            "years": 1,
+            "refDate": "2016-07-09"
+          },
+          "resource": {},
+          "predefined_type": "string",
+          "predefined_value": "",
+          "required": false,
+          "key": "future"
+        },
+        {
           "uuid": "bfd26762-3159-4a8c-a505-cdf100ad7922",
           "type": "random",
           "faker_type": "between",

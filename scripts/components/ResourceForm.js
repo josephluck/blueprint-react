@@ -10,8 +10,10 @@ import 'brace/mode/json';
 import 'brace/theme/tomorrow';
 
 import validate from 'validate.js';
+import moment from 'moment';
 window.faker = Faker;
 window.validate = validate;
+window.moment = moment;
 
 class ResourceForm extends Component {
 	constructor(props) {
