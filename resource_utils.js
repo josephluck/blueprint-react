@@ -309,6 +309,8 @@ module.exports = {
 				config.inclusion = parameter.faker_params.json;
 			} else if (is_boolean) {
 				config.boolean = true;
+			} else if (parameter.faker_subcategory === "number") {
+				config.numericality = true;
 			}
 		}
 

@@ -21,14 +21,12 @@
           "predefined_value": "",
           "required": false,
           "key": "account_number",
-          "faker_subcategory": "boolean"
+          "faker_subcategory": "number"
         }
       ],
       "id": 1,
       "validation_config": {
-        "account_number": {
-          "boolean": true
-        }
+        "account_number": {}
       }
     }
   ]

@@ -717,21 +717,6 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "number" ?
-																<div>
-																	<div className="input-label">{"Min value"}</div>
-																	<input value={model.faker_params.min}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'min', e.target.value);
-																		}} />
-																	<div className="input-label">{"Max value"}</div>
-																	<input value={model.faker_params.max}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'max', e.target.value);
-																		}} />
-																</div>
-																: null
-															}
 															{model.faker_subcategory === "between" ?
 																<div>
 																	<div className="input-label">{"From"}</div>
