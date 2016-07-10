@@ -85,7 +85,9 @@
           "faker_category": "finance",
           "faker_params": {
             "min": 100,
-            "max": 400
+            "max": 200,
+            "dec": 2,
+            "symbol": "£"
           },
           "resource": {},
           "predefined_type": "string",

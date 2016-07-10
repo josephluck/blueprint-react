@@ -116,75 +116,75 @@ class ResourceForm extends Component {
 		let params = {};
 		if (faker_category === "state") {
 			params = {
-				useAbbr: undefined
+				useAbbr: null
 			};
 		} else if (faker_category === "streetAddress") {
 			params = {
-				useFullAddress: undefined
+				useFullAddress: null
 			}
 		} else if (faker_category === "zipCode") {
 			params = {
-				format: undefined
+				format: null
 			}
 		} else if (faker_category === "department") {
 			params = {
-				max: undefined,
-				fixedAmount: undefined
+				max: null,
+				fixedAmount: null
 			}
 		} else if (faker_category === "price") {
 			params = {
-				min: undefined,
-				max: undefined,
-				dec: undefined,
-				symbol: undefined
+				min: null,
+				max: null,
+				dec: null,
+				symbol: null
 			}
 		} else if (faker_category === "companyName") {
 			params = {
-				format: undefined
+				format: null
 			}
 		} else if (faker_category === "between") {
 			params = {
-				from: undefined,
-				to: undefined
+				from: null,
+				to: null
 			}
 		} else if (faker_category === "future") {
 			params = {
-				years: undefined,
-				refDate: undefined
+				years: null,
+				refDate: null
 			}
 		} else if (faker_category === "month") {
 			params = {
-				options: undefined
+				options: null
 			}
 		} else if (faker_category === "past") {
 			params = {
-				years: undefined,
-				refDate: undefined
+				years: null,
+				refDate: null
 			}
 		} else if (faker_category === "recent") {
 			params = {
-				days: undefined
+				days: null
 			}
 		} else if (faker_category === "weekday") {
 			params = {
-				options: undefined
+				options: null
 			}
 		} else if (faker_category === "account") {
 			params = {
-				length: undefined
+				length: null
 			}
 		} else if (faker_category === "amount") {
 			params = {
-				min: undefined,
-				max: undefined,
-				dec: undefined,
-				symbol: undefined
+				min: null,
+				max: null,
+				dec: null,
+				symbol: null
 			}
 		} else if (faker_category === "mask") {
 			params = {
-				length: undefined,
-				parens: undefined,
-				elipsis: undefined
+				length: null,
+				parens: null,
+				elipsis: null
 			}
 		} else if (faker_category === "abstract" ||
 			faker_category === "animals" ||
@@ -201,137 +201,137 @@ class ResourceForm extends Component {
 			faker_category === "technics" ||
 			faker_category === "transport") {
 			params = {
-				width: undefined,
-				height: undefined
+				width: null,
+				height: null
 			}
 		} else if (faker_category === "color") {
 			params = {
-				baseRed255: undefined,
-				baseGreen255: undefined,
-				baseBlue255: undefined
+				baseRed255: null,
+				baseGreen255: null,
+				baseBlue255: null
 			}
 		} else if (faker_category === "email") {
 			params = {
-				firstName: undefined,
-				lastName: undefined,
-				provider: undefined
+				firstName: null,
+				lastName: null,
+				provider: null
 			}
 		} else if (faker_category === "exampleEmail") {
 			params = {
-				firstName: undefined,
-				lastName: undefined
+				firstName: null,
+				lastName: null
 			}
 		} else if (faker_category === "password") {
 			params = {
-				len: undefined,
-				memorable: undefined,
-				pattern: undefined,
-				prefix: undefined
+				len: null,
+				memorable: null,
+				pattern: null,
+				prefix: null
 			}
 		} else if (faker_category === "userName") {
 			params = {
-				firstName: undefined,
-				lastName: undefined
+				firstName: null,
+				lastName: null
 			}
 		} else if (faker_category === "lines") {
 			params = {
-				lineCount: undefined
+				lineCount: null
 			}
 		} else if (faker_category === "paragraph") {
 			params = {
-				sentenceCount: undefined
+				sentenceCount: null
 			}
 		} else if (faker_category === "paragraphs") {
 			params = {
-				paragraphCount: undefined,
-				separatora: undefined
+				paragraphCount: null,
+				separatora: null
 			}
 		} else if (faker_category === "sentence") {
 			params = {
-				wordCount: undefined,
-				range: undefined
+				wordCount: null,
+				range: null
 			}
 		} else if (faker_category === "sentences") {
 			params = {
-				sentenceCount: undefined,
-				separatora: undefined
+				sentenceCount: null,
+				separatora: null
 			}
 		} else if (faker_category === "text") {
 			params = {
-				times: undefined
+				times: null
 			}
 		} else if (faker_category === "word") {
 			params = {
-				num: undefined
+				num: null
 			}
 		} else if (faker_category === "words") {
 			params = {
-				num: undefined
+				num: null
 			}
 		} else if (faker_category === "findName") {
 			params = {
-				firstName: undefined,
-				lastName: undefined,
-				gender: undefined
+				firstName: null,
+				lastName: null,
+				gender: null
 			}
 		} else if (faker_category === "firstName") {
 			params = {
-				gender: undefined
+				gender: null
 			}
 		} else if (faker_category === "lastName") {
 			params = {
-				gender: undefined
+				gender: null
 			}
 		} else if (faker_category === "prefix") {
 			params = {
-				gender: undefined
+				gender: null
 			}
 		} else if (faker_category === "phoneFormatsArrayIndex") {
 			params = {
-				phoneFormatsArrayIndex: undefined
+				phoneFormatsArrayIndex: null
 			}
 		} else if (faker_category === "phoneNumber") {
 			params = {
-				format: undefined
+				format: null
 			}
 		} else if (faker_category === "arrayElement") {
 			params = {
-				array: undefined
+				array: null
 			}
 		} else if (faker_category === "number") {
 			params = {
-				options: undefined
+				options: null
 			}
 		} else if (faker_category === "objectElement") {
 			params = {
-				object: undefined,
-				field: undefined
+				object: null,
+				field: null
 			}
 		} else if (faker_category === "word") {
 			params = {
-				type: undefined
+				type: null
 			}
 		} else if (faker_category === "words") {
 			params = {
-				count: undefined
+				count: null
 			}
 		} else if (faker_category === "commonFileExt") {
 			params = {
-				type: undefined
+				type: null
 			}
 		} else if (faker_category === "commonFileName") {
 			params = {
-				ext: undefined,
-				type: undefined
+				ext: null,
+				type: null
 			}
 		} else if (faker_category === "fileExt") {
 			params = {
-				mimeType: undefined
+				mimeType: null
 			}
 		} else if (faker_category === "fileName") {
 			params = {
-				ext: undefined,
-				type: undefined
+				ext: null,
+				type: null
 			}
 		}
 
