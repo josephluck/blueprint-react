@@ -3,7 +3,7 @@
     {
       "type": "array",
       "length": 5,
-      "name": "users",
+      "name": "example",
       "supported_methods": {
         "get": true,
         "post": true,
@@ -11,6 +11,45 @@
         "delete": true
       },
       "model": [
+        {
+          "uuid": "d80661f7-da1c-450a-adab-656d23b3a7c9",
+          "type": "random",
+          "faker_subcategory": "email",
+          "faker_category": "internet",
+          "faker_params": {},
+          "resource": {},
+          "predefined_type": "string",
+          "predefined_value": "",
+          "required": true,
+          "key": "random_email_address"
+        },
+        {
+          "uuid": "ee589674-940d-4e4d-915c-0bffe9d7985b",
+          "type": "random",
+          "faker_subcategory": "price",
+          "faker_category": "commerce",
+          "faker_params": {
+            "min": 50,
+            "max": 700
+          },
+          "resource": {},
+          "predefined_type": "string",
+          "predefined_value": "",
+          "required": false,
+          "key": "random_price"
+        },
+        {
+          "uuid": "741b46be-0eaf-41f3-9504-6ae6a4a1c04d",
+          "type": "random",
+          "faker_subcategory": "number",
+          "faker_category": "random",
+          "faker_params": {},
+          "resource": {},
+          "predefined_type": "string",
+          "predefined_value": "",
+          "required": false,
+          "key": "random_number"
+        },
         {
           "uuid": "0d24ce52-9a60-4854-b7bf-1b7d9d56b2a1",
           "type": "random",
@@ -23,9 +62,9 @@
           "resource": {},
           "predefined_type": "date",
           "predefined_value": "",
-          "required": false,
-          "key": "birth_day",
-          "documentation_description": "Date. Must be a date between 1st July 2016 and 16th July 2016"
+          "required": true,
+          "key": "random_date_between",
+          "documentation_description": ""
         },
         {
           "uuid": "0e6e4241-36ba-42a1-8681-0caba265f291",
@@ -37,37 +76,49 @@
           "predefined_type": "string",
           "predefined_value": "",
           "required": false,
-          "key": "last_name",
-          "documentation_description": "Last name, must be a string"
+          "key": "random_last_name",
+          "documentation_description": ""
         },
         {
           "uuid": "aa3411a0-14af-42ff-a4f4-ec07f8905a3b",
           "type": "random",
-          "faker_category": "name",
-          "faker_params": {},
+          "faker_category": "finance",
+          "faker_params": {
+            "min": 100,
+            "max": 400
+          },
           "resource": {},
           "predefined_type": "string",
           "predefined_value": "",
           "required": true,
-          "key": "first_name",
-          "faker_subcategory": "firstName",
-          "documentation_description": "The first name of the user"
+          "key": "random_amount",
+          "faker_subcategory": "amount",
+          "documentation_description": ""
         }
       ],
       "id": 1,
       "validation_config": {
-        "birth_day": {
+        "random_email_address": {
+          "presence": true,
+          "email": true
+        },
+        "random_price": {},
+        "random_number": {
+          "numericality": true
+        },
+        "random_date_between": {
+          "presence": true,
           "datetime": {
             "earliest": "2016-07-01",
             "latest": "2016-07-16"
           }
         },
-        "last_name": {},
-        "first_name": {
+        "random_last_name": {},
+        "random_amount": {
           "presence": true
         }
       },
-      "documentation_description": "A list of users"
+      "documentation_description": ""
     }
   ]
 }

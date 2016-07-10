@@ -37,36 +37,34 @@ class Resources extends Component {
 					</a>
 				</div>
 				<div className="flex flex-vertical">
-					<div className="flex flex-vertical">
-						<div className="flex-0 list-item without-bottom-padding">
-							<div className="input-with-icon">
-								<span className="ss-search"></span>
-								<input className="without-bottom-margin"
-									placeholder="Search"
-									onChange={(e) => {
-										this.handleSearchingResources(e.target.value);
-									}} />
-							</div>
+					<div className="flex-0 list-item without-bottom-padding">
+						<div className="input-with-icon">
+							<span className="ss-search"></span>
+							<input className="without-bottom-margin"
+								placeholder="Search"
+								onChange={(e) => {
+									this.handleSearchingResources(e.target.value);
+								}} />
 						</div>
-						<div className="flex-1 overflow-auto">
-							{this.props.resources.filter((resource, i) => {
-								return resource.name.toLowerCase().includes(this.state.search.toLowerCase());
-							}).map((resource, i) => {
-								if (resource.id == this.props.resource.id) {
-									return (
-										<div key={i} className="list-item active">
-											<span>{this.props.resource.name}</span>
-										</div>
-									)
-								} else {
-									return (
-										<div key={i} className="list-item">
-											<Link to={`/${resource.id}`}>{resource.name}</Link>
-										</div>
-									)
-								}
-							})}
-						</div>
+					</div>
+					<div className="flex-1 overflow-auto">
+						{this.props.resources.filter((resource, i) => {
+							return resource.name.toLowerCase().includes(this.state.search.toLowerCase());
+						}).map((resource, i) => {
+							if (resource.id == this.props.resource.id) {
+								return (
+									<div key={i} className="list-item active">
+										<span>{this.props.resource.name}</span>
+									</div>
+								)
+							} else {
+								return (
+									<div key={i} className="list-item">
+										<Link to={`/${resource.id}`}>{resource.name}</Link>
+									</div>
+								)
+							}
+						})}
 					</div>
 				</div>
 				<div className="list flex flex-0">
@@ -76,7 +74,7 @@ class Resources extends Component {
 							onClick={(e) => {
 								e.preventDefault();
 							}}>
-							{"Generate API docs"}
+							{"Open full docs"}
 						</a>
 					</div>
 				</div>

@@ -17,6 +17,10 @@ class RightBar extends Component {
 		ResourcesStore.toggleRightBar();
 	}
 
+	shouldComponentUpdate(props) {
+		return props.right_bar_open !== this.props.right_bar_open;
+	}
+
 /*=============================================================================
 	Render right bar
 
@@ -31,27 +35,41 @@ class RightBar extends Component {
 		}
 
 		return (
-			<div className={`right-bar flex flex-vertical ${right_bar_class}`}>
-				<div className="section-title flex flex-0">
-					<span className="flex-1">
-						{`Documentation examples for ${this.props.resource.name}`}
-					</span>
-					<a href=""
-						onClick={(e) => {
-							e.preventDefault();
-						}}>
-						{"Open full documentation"}
-					</a>
-					<a className="large-left-margin"
-						href=""
-						onClick={(e) => {
-							e.preventDefault();
-							this.toggleRightBar();
-						}}>
-						{"Close examples"}
-					</a>
+			<div className={`right-bar flex ${right_bar_class}`}>
+				<div className="documentation-left-nav flex flex-vertical">
+					<div className="section-title flex flex-0">
+						<span className="flex-1">
+							{"Documentaton"}
+						</span>
+						<a className="large-left-margin"
+							href=""
+							onClick={(e) => {
+								e.preventDefault();
+								this.toggleRightBar();
+							}}>
+							{"Close"}
+						</a>
+					</div>
+					<div className="flex flex-vertical">
+						<div className="flex-1 overflow-auto">
+							<div className="list-item">
+								<div>{"Get users"}</div>
+							</div>
+						</div>
+					</div>
+					<div className="list flex flex-0">
+						<div className="list-item with-bottom-padding flex text-align-center">
+							<a href=""
+								className="button flex-1"
+								onClick={(e) => {
+									e.preventDefault();
+								}}>
+								{"Open full docs"}
+							</a>
+						</div>
+					</div>
 				</div>
-				<div className={`flex-1 overflow-auto`}>
+				<div className={`flex-3 overflow-auto`}>
 					<ResourceDocumentation resource={this.props.resource.toJS()}
 						resources={this.props.resources.toJS()}>
 					</ResourceDocumentation>
