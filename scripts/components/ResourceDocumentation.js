@@ -28,14 +28,11 @@ class ResourceDocumentation extends Component {
 	}
 
 	getModelParameterConstraints(parameter) {
-		let constraints = "";
+		let constraints = parameter.required ? "Required " : "Optional ";
 		let validation = ResourceUtils.getSingleRequestParameterValidationRequirements(parameter);
 
-		console.log(validation);
+		constraints += this.getModelParameterType(parameter) + ". ";
 
-		if (validation.presence) {
-			constraints += "Must be present. ";
-		}
 		if (validation.numericality) {
 			constraints += "Must be a number. ";
 		}
@@ -71,86 +68,32 @@ class ResourceDocumentation extends Component {
 			example_response = ResourceUtils.generateResource(this.props.resource, this.props.resources);
 		}
 
-		let response_example = this.getSingleRecordFromResponse(example_response);
 		let request_example = this.getRequestExample(this.props.resource.model);
+		let response_example = request_example;
+
+		response_example["id"] = 1;
+
 		return (
 			<div className="flex">
 				<div className="flex-1 flex-vertical">
 					{this.props.resource.supported_methods.post ?
 						<div className="flex-1 flex">
 							<div className="flex-1 box extra-large-bottom-padding">
-								<div className="border-bottom bottom-padding bottom-margin">
+								<div className="border-bottom large-bottom-padding bottom-margin">
 									{"Parameters"}
 								</div>
 								<div>
 									{this.props.resource.model.map((parameter, i) => {
 										return (
-											<div className="flex flex-1 large-bottom-margin">
-												<div className="flex-1 overflow-hidden">
-													<div className="wrap-text">
+											<div className="flex flex-1 large-top-margin large-bottom-margin">
+												<div className="flex-2 overflow-hidden text-align-right">
+													<div className="wrap-text monospace bottom-padding">
 														{parameter.key}
 													</div>
-													<small>
-														{parameter.required ?
-															"required " : "optional "
-														}
-														{this.getModelParameterType(parameter)}
-													</small>
 												</div>
-												<div className="flex-2 left-margin">
+												<div className="flex-3 large-left-margin">
 													{this.getModelParameterConstraints(parameter)}
 													{" "}
-													{parameter.documentation_description}
-												</div>
-											</div>
-										)
-									})}
-								</div>
-							</div>
-							<div className="flex-1 overflow-hidden documentation-code-examples box extra-large-bottom-padding">
-								<div className="bottom-margin">
-									{"Request example"}
-								</div>
-								<div className="large-bottom-margin">
-									<Highlight className="javascript">
-									  {JSON.stringify(request_example, null, 2)}
-									</Highlight>
-								</div>
-
-								<div className="bottom-margin">
-									{"Response example"}
-								</div>
-								<div className="large-bottom-margin">
-									<Highlight className="javascript">
-									  {JSON.stringify(response_example, null, 2)}
-									</Highlight>
-								</div>
-							</div>
-						</div>
-						: null
-					}
-					{this.props.resource.supported_methods.post ?
-						<div className="flex-1 flex">
-							<div className="flex-1 box extra-large-bottom-padding">
-								<div className="border-bottom bottom-padding bottom-margin">
-									{"Parameters"}
-								</div>
-								<div>
-									{this.props.resource.model.map((parameter, i) => {
-										return (
-											<div className="flex flex-1 large-bottom-margin">
-												<div className="flex-1">
-													<div>
-														{parameter.key}
-													</div>
-													<small>
-														{parameter.required ?
-															"required " : "optional "
-														}
-														{this.getModelParameterType(parameter)}
-													</small>
-												</div>
-												<div className="flex-2">
 													{parameter.documentation_description}
 												</div>
 											</div>

@@ -421,6 +421,8 @@ class ResourceForm extends Component {
 											}} />
 										{"POST"}
 									</label>
+								</div>
+								<div className="flex-0 flex">
 									<label className="flex-1 checkbox-wrap">
 										<input type="checkbox"
 											checked={this.state.resource.supported_methods.put === true}

@@ -47,7 +47,7 @@ class ResourceEdit extends Component {
 							e.preventDefault();
 							this.toggleRightBar();
 						}}>
-						{"Open examples"}
+						{"Docs"}
 					</a>
 					<a className="large-right-margin"
 						href=""
