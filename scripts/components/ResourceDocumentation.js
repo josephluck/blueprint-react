@@ -75,12 +75,12 @@ class ResourceDocumentation extends Component {
 
 		return (
 			<div className="flex">
-				<div className="flex-1 flex-vertical">
+				<div className="flex-1 overflow-hidden flex-vertical">
 					{this.props.resource.supported_methods.post ?
 						<div className="flex-1 flex">
 							<div className="flex-1 extra-large-bottom-padding border-bottom">
 								<div className="section-title">
-									{"Create a user"}
+									{`Create ${this.props.resource.name}`}
 								</div>
 								<div className="box">
 									<div>
@@ -105,11 +105,20 @@ class ResourceDocumentation extends Component {
 							</div>
 							<div className="flex-1 overflow-hidden documentation-code-examples extra-large-bottom-padding">
 								<div className="section-title invisible">
-									{"Create a user"}
+									{`Create ${this.props.resource.name}`}
 								</div>
 								<div className="box">
 									<div className="bottom-margin">
-										{"Request example"}
+										{"Request method & url"}
+									</div>
+									<div className="large-bottom-margin">
+										<code>
+											{`POST /${this.props.resource.name}`}
+										</code>
+									</div>
+
+									<div className="bottom-margin">
+										{"Request body"}
 									</div>
 									<div className="large-bottom-margin">
 										<Highlight className="javascript">
@@ -118,7 +127,7 @@ class ResourceDocumentation extends Component {
 									</div>
 
 									<div className="bottom-margin">
-										{"Response example"}
+										{"Response body"}
 									</div>
 									<div className="large-bottom-margin">
 										<Highlight className="javascript">
@@ -130,126 +139,6 @@ class ResourceDocumentation extends Component {
 						</div>
 						: null
 					}
-
-
-
-					{this.props.resource.supported_methods.post ?
-						<div className="flex-1 flex">
-							<div className="flex-1 extra-large-bottom-padding border-bottom">
-								<div className="section-title">
-									{"Create a user"}
-								</div>
-								<div className="box">
-									<div>
-										{this.props.resource.model.map((parameter, i) => {
-											return (
-												<div className="flex flex-1 large-bottom-margin">
-													<div className="flex-2 overflow-hidden text-align-right">
-														<div className="wrap-text monospace bottom-padding">
-															{parameter.key}
-														</div>
-													</div>
-													<div className="flex-3 large-left-margin">
-														{this.getModelParameterConstraints(parameter)}
-														{" "}
-														{parameter.documentation_description}
-													</div>
-												</div>
-											)
-										})}
-									</div>
-								</div>
-							</div>
-							<div className="flex-1 overflow-hidden documentation-code-examples extra-large-bottom-padding">
-								<div className="section-title invisible">
-									{"Create a user"}
-								</div>
-								<div className="box">
-									<div className="bottom-margin">
-										{"Request example"}
-									</div>
-									<div className="large-bottom-margin">
-										<Highlight className="javascript">
-										  {JSON.stringify(request_example, null, 2)}
-										</Highlight>
-									</div>
-
-									<div className="bottom-margin">
-										{"Response example"}
-									</div>
-									<div className="large-bottom-margin">
-										<Highlight className="javascript">
-										  {JSON.stringify(response_example, null, 2)}
-										</Highlight>
-									</div>
-								</div>
-							</div>
-						</div>
-						: null
-					}
-
-
-
-
-
-					{this.props.resource.supported_methods.post ?
-						<div className="flex-1 flex">
-							<div className="flex-1 extra-large-bottom-padding border-bottom">
-								<div className="section-title">
-									{"Create a user"}
-								</div>
-								<div className="box">
-									<div>
-										{this.props.resource.model.map((parameter, i) => {
-											return (
-												<div className="flex flex-1 large-bottom-margin">
-													<div className="flex-2 overflow-hidden text-align-right">
-														<div className="wrap-text monospace bottom-padding">
-															{parameter.key}
-														</div>
-													</div>
-													<div className="flex-3 large-left-margin">
-														{this.getModelParameterConstraints(parameter)}
-														{" "}
-														{parameter.documentation_description}
-													</div>
-												</div>
-											)
-										})}
-									</div>
-								</div>
-							</div>
-							<div className="flex-1 overflow-hidden documentation-code-examples extra-large-bottom-padding">
-								<div className="section-title invisible">
-									{"Create a user"}
-								</div>
-								<div className="box">
-									<div className="bottom-margin">
-										{"Request example"}
-									</div>
-									<div className="large-bottom-margin">
-										<Highlight className="javascript">
-										  {JSON.stringify(request_example, null, 2)}
-										</Highlight>
-									</div>
-
-									<div className="bottom-margin">
-										{"Response example"}
-									</div>
-									<div className="large-bottom-margin">
-										<Highlight className="javascript">
-										  {JSON.stringify(response_example, null, 2)}
-										</Highlight>
-									</div>
-								</div>
-							</div>
-						</div>
-						: null
-					}
-
-
-
-
 				</div>
 			</div>
 		)

@@ -3,12 +3,18 @@
     {
       "type": "array",
       "length": 5,
-      "name": "example",
+      "name": "users",
       "supported_methods": {
         "get": true,
         "post": true,
         "put": true,
         "delete": true
+      },
+      "supported_utils": {
+        "filter": true,
+        "pagination": true,
+        "search": true,
+        "embed": true
       },
       "model": [
         {

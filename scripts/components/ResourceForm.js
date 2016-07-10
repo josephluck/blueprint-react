@@ -440,6 +440,37 @@ class ResourceForm extends Component {
 										{"DELETE"}
 									</label>
 								</div>
+
+
+								<div className="flex-0 input-label">{"Supported API utilities"}</div>
+								<div className="flex-0 flex">
+									<label className="flex-1 checkbox-wrap">
+										<input type="checkbox"
+											checked={this.state.resource.supported_utils.filter === true}
+											onClick={(e) => {
+												this.setResourceCRUD('filter');
+											}} />
+										{"Filters"}
+									</label>
+									<label className="flex-1 checkbox-wrap">
+										<input type="checkbox"
+											checked={this.state.resource.supported_utils.pagination === true}
+											onClick={(e) => {
+												this.setResourceCRUD('pagination');
+											}} />
+										{"Pagination"}
+									</label>
+								</div>
+								<div className="flex-0 flex">
+									<label className="flex-1 checkbox-wrap">
+										<input type="checkbox"
+											checked={this.state.resource.supported_utils.search === true}
+											onClick={(e) => {
+												this.setResourceCRUD('search');
+											}} />
+										{"Search"}
+									</label>
+								</div>
 							</div>
 							<div className="flex-1 flex flex-vertical large-left-margin">
 								<div className="input-label flex-0">{"Documentation description"}</div>
