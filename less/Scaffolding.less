@@ -81,8 +81,8 @@ html {
 code {
 	font-family: @monospaceFontFamily;
 	padding: @padding/2 !important;
-  background: rgba(0, 0, 0, 0.03) !important;
-  border: solid @borderWidth @borderColor;
+  background: rgba(0, 0, 0, 0.05) !important;
+  border: solid @borderWidth darken(@borderColor, 3%);
   border-radius: @borderRadius;
   display: inline-block;
 }
@@ -106,4 +106,14 @@ a {
 small {
 	font-size: @smallFontSize;
 	opacity: 0.8;
+}
+
+.documentation-left-nav {
+	background: @pureWhite;
+	border-right: solid @borderWidth @borderColor;
+}
+
+.documentation-code-examples {
+	background: darken(@white, 5%);
+	border-left: solid @borderWidth @borderColor;
 }

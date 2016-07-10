@@ -401,49 +401,53 @@ class ResourceForm extends Component {
 						}
 					</div>
 					{!this.props.nested ?
-						<div className="flex-1 flex flex-vertical large-left-margin">
-							<div className="flex-0 input-label">{"Supported methods"}</div>
-							<div className="flex-0 flex">
-								<label className="flex-1 checkbox-wrap">
-									<input type="checkbox"
-										checked={this.state.resource.supported_methods.get === true}
-										onClick={(e) => {
-											this.setResourceCRUD('get');
-										}} />
-									{"GET"}
-								</label>
-								<label className="flex-1 checkbox-wrap">
-									<input type="checkbox"
-										checked={this.state.resource.supported_methods.post === true}
-										onClick={(e) => {
-											this.setResourceCRUD('post');
-										}} />
-									{"POST"}
-								</label>
-								<label className="flex-1 checkbox-wrap">
-									<input type="checkbox"
-										checked={this.state.resource.supported_methods.put === true}
-										onClick={(e) => {
-											this.setResourceCRUD('put');
-										}} />
-									{"PUT"}
-								</label>
-								<label className="flex-1 checkbox-wrap">
-									<input type="checkbox"
-										checked={this.state.resource.supported_methods.delete === true}
-										onClick={(e) => {
-											this.setResourceCRUD('delete');
-										}} />
-									{"DELETE"}
-								</label>
+						<div className="flex-2 flex">
+							<div className="flex-1 flex flex-vertical large-left-margin">
+								<div className="flex-0 input-label">{"Supported methods"}</div>
+								<div className="flex-0 flex">
+									<label className="flex-1 checkbox-wrap">
+										<input type="checkbox"
+											checked={this.state.resource.supported_methods.get === true}
+											onClick={(e) => {
+												this.setResourceCRUD('get');
+											}} />
+										{"GET"}
+									</label>
+									<label className="flex-1 checkbox-wrap">
+										<input type="checkbox"
+											checked={this.state.resource.supported_methods.post === true}
+											onClick={(e) => {
+												this.setResourceCRUD('post');
+											}} />
+										{"POST"}
+									</label>
+									<label className="flex-1 checkbox-wrap">
+										<input type="checkbox"
+											checked={this.state.resource.supported_methods.put === true}
+											onClick={(e) => {
+												this.setResourceCRUD('put');
+											}} />
+										{"PUT"}
+									</label>
+									<label className="flex-1 checkbox-wrap">
+										<input type="checkbox"
+											checked={this.state.resource.supported_methods.delete === true}
+											onClick={(e) => {
+												this.setResourceCRUD('delete');
+											}} />
+										{"DELETE"}
+									</label>
+								</div>
 							</div>
-							<div className="input-label flex-0">{"Documentation description"}</div>
-							<textarea className="flex-1"
-								value={this.state.resource.documentation_description}
-								onChange={(e) => {
-									this.saveValue('documentation_description', e.target.value);
-								}}>
-							</textarea>
+							<div className="flex-1 flex flex-vertical large-left-margin">
+								<div className="input-label flex-0">{"Documentation description"}</div>
+								<textarea className="flex-1"
+									value={this.state.resource.documentation_description}
+									onChange={(e) => {
+										this.saveValue('documentation_description', e.target.value);
+									}}>
+								</textarea>
+							</div>
 						</div>
 						: null
 					}

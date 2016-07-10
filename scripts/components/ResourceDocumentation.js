@@ -23,6 +23,10 @@ class ResourceDocumentation extends Component {
 		return ResourceUtils.generateModel(models);
 	}
 
+	getModelParameterType(parameter) {
+		return typeof(ResourceUtils.generatePropertyValue(parameter));
+	}
+
 	render() {
 		let example_response = {};
 
@@ -34,80 +38,122 @@ class ResourceDocumentation extends Component {
 		let request_example = this.getRequestExample(this.props.resource.model);
 		return (
 			<div>
-				<div className="box with-bottom-border">
-					{this.props.resource.documentation_description}
-				</div>
-				{this.props.resource.supported_methods.post ?
-					<div>
-						<div className="section-title">
-							{`Create ${this.props.resource.name}`}
-						</div>
-						<div className="box flex with-bottom-border">
-							<div className="flex-1">
-								<div className="input-label">
-									{"Method & url"}
-								</div>
-								<code className="large-bottom-margin">
-									{`POST /${this.props.resource.name}`}
-								</code>
-
-								<div className="input-label">
-									{"Arguments"}
-								</div>
-								{this.props.resource.model.map((model, i) => {
-									let box_class = "";
-									if (i === 0) {
-										box_class = "with-top-border";
-									}
-
-									let model_type = typeof(response_example[model.key]);
-									if (model_type === "object") {
-										// Check it's a date
-										if (response_example[model.key] instanceof Date) {
-											model_type = "date";
-										}
-									}
-
-									return (
-										<div className={`box flex ${box_class}`}>
-											<div className="flex-1 text-align-right">
-												<div className="bottom-margin">{model.key}</div>
-												<small className="bottom-margin">
-													{model.required ?
-														"required " : "optional "
-													}
-													{model_type}
-												</small>
-											</div>
-											<div className="flex-2 large-left-margin">
-												{model.documentation_description}
-											</div>
-										</div>
-									)
-								})}
-							</div>
-							<div className="flex-1 large-left-margin overflow-hidden">
-								<div className="input-label">
-									{"Example request"}
-								</div>
-								<div className="large-bottom-margin">
-									<Highlight className="javascript">
-									  {JSON.stringify(request_example, null, 2)}
-									</Highlight>
-								</div>
-								<div className="input-label">
-									{"Example response"}
-								</div>
-								<div className="large-bottom-margin">
-									<Highlight className="javascript">
-									  {JSON.stringify(response_example, null, 2)}
-									</Highlight>
-								</div>
-							</div>
-						</div>
+				<div className="flex">
+					<div className="box documentation-left-nav">
+						{this.props.resource.supported_methods.get ?
+							<div>{"Get a list of users"}</div>
+							: null
+						}
+						{this.props.resource.supported_methods.get ?
+							<div>{"Get an individual user"}</div>
+							: null
+						}
 					</div>
-					: null
-				}
+					<div className="flex-1 flex-vertical">
+						{this.props.resource.supported_methods.post ?
+							<div className="flex-1 flex">
+								<div className="box extra-large-bottom-padding">
+									<div className="border-bottom bottom-padding bottom-margin">
+										{"Parameters"}
+									</div>
+									<div>
+										{this.props.resource.model.map((parameter, i) => {
+											return (
+												<div className="flex flex-1 large-bottom-margin">
+													<div className="flex-1">
+														<div>
+															{parameter.key}
+														</div>
+														<small>
+															{parameter.required ?
+																"required " : "optional "
+															}
+															{this.getModelParameterType(parameter)}
+														</small>
+													</div>
+													<div className="flex-2">
+														{parameter.documentation_description}
+													</div>
+												</div>
+											)
+										})}
+									</div>
+								</div>
+								<div className="flex-1 documentation-code-examples box extra-large-bottom-padding">
+									<div className="bottom-margin">
+										{"Request example"}
+									</div>
+									<div className="large-bottom-margin">
+										<Highlight className="javascript">
+										  {JSON.stringify(request_example, null, 2)}
+										</Highlight>
+									</div>
+
+									<div className="bottom-margin">
+										{"Response example"}
+									</div>
+									<div className="large-bottom-margin">
+										<Highlight className="javascript">
+										  {JSON.stringify(response_example, null, 2)}
+										</Highlight>
+									</div>
+								</div>
+							</div>
+							: null
+						}
+						{this.props.resource.supported_methods.post ?
+							<div className="flex-1 flex">
+								<div className="box extra-large-bottom-padding">
+									<div className="border-bottom bottom-padding bottom-margin">
+										{"Parameters"}
+									</div>
+									<div>
+										{this.props.resource.model.map((parameter, i) => {
+											return (
+												<div className="flex flex-1 large-bottom-margin">
+													<div className="flex-1">
+														<div>
+															{parameter.key}
+														</div>
+														<small>
+															{parameter.required ?
+																"required " : "optional "
+															}
+															{this.getModelParameterType(parameter)}
+														</small>
+													</div>
+													<div className="flex-2">
+														{parameter.documentation_description}
+													</div>
+												</div>
+											)
+										})}
+									</div>
+								</div>
+								<div className="flex-1 documentation-code-examples box extra-large-bottom-padding">
+									<div className="bottom-margin">
+										{"Request example"}
+									</div>
+									<div className="large-bottom-margin">
+										<Highlight className="javascript">
+										  {JSON.stringify(request_example, null, 2)}
+										</Highlight>
+									</div>
+
+									<div className="bottom-margin">
+										{"Response example"}
+									</div>
+									<div className="large-bottom-margin">
+										<Highlight className="javascript">
+										  {JSON.stringify(response_example, null, 2)}
+										</Highlight>
+									</div>
+								</div>
+							</div>
+							: null
+						}
+					</div>
+				</div>
 			</div>
 		)
 	}
