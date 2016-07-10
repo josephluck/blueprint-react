@@ -53,7 +53,7 @@ class RightBar extends Component {
 					<div className="flex flex-vertical">
 						<div className="flex-1 overflow-auto">
 							<div className="list-item">
-								<div>{"Get users"}</div>
+								<div>{"Create a user"}</div>
 							</div>
 						</div>
 					</div>

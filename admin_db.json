@@ -21,7 +21,8 @@
           "predefined_type": "string",
           "predefined_value": "",
           "required": true,
-          "key": "random_email_address"
+          "key": "random_email_address",
+          "documentation_description": "Must be a valid Commusoft e-mail address."
         },
         {
           "uuid": "ee589674-940d-4e4d-915c-0bffe9d7985b",
