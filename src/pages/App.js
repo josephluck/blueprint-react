@@ -1,8 +1,7 @@
-import html from 'choo/html';
+import html from 'choo/html'
 
 const App = (state, prev, send) => {
-  return html
-  `
+  return html `
     <main class="app">
       <h1>${state.input.title}</h1>
       <label>Set the title</label>
@@ -14,4 +13,4 @@ const App = (state, prev, send) => {
   `
 }
 
-export default App;
+export default App

@@ -4,13 +4,13 @@
       "type": "array",
       "length": 5,
       "name": "users",
-      "supported_methods": {
+      "supportedMethods": {
         "get": true,
         "post": true,
         "put": true,
         "delete": true
       },
-      "supported_utils": {
+      "supportedUtils": {
         "filter": true,
         "pagination": true,
         "search": true,
@@ -20,136 +20,136 @@
         {
           "uuid": "f84cc424-8f75-481d-8046-1ce3fada0535",
           "type": "random",
-          "faker_subcategory": "future",
-          "faker_category": "date",
-          "faker_params": {
+          "fakerSubcategory": "future",
+          "fakerCategory": "date",
+          "fakerParams": {
             "years": 3,
             "refDate": null
           },
           "resource": {},
-          "predefined_type": "string",
-          "predefined_value": "",
+          "predefinedType": "string",
+          "predefinedValue": "",
           "required": false,
-          "key": "future_date"
+          "key": "futureDate"
         },
         {
           "uuid": "d80661f7-da1c-450a-adab-656d23b3a7c9",
           "type": "random",
-          "faker_subcategory": "email",
-          "faker_category": "internet",
-          "faker_params": {},
+          "fakerSubcategory": "email",
+          "fakerCategory": "internet",
+          "fakerParams": {},
           "resource": {},
-          "predefined_type": "string",
-          "predefined_value": "",
+          "predefinedType": "string",
+          "predefinedValue": "",
           "required": true,
-          "key": "random_email_address",
-          "documentation_description": "Must be a valid Commusoft e-mail address."
+          "key": "randomEmailAddress",
+          "documentationDescription": "Must be a valid Commusoft e-mail address."
         },
         {
           "uuid": "ee589674-940d-4e4d-915c-0bffe9d7985b",
           "type": "random",
-          "faker_subcategory": "price",
-          "faker_category": "commerce",
-          "faker_params": {
+          "fakerSubcategory": "price",
+          "fakerCategory": "commerce",
+          "fakerParams": {
             "min": 50,
             "max": 700
           },
           "resource": {},
-          "predefined_type": "string",
-          "predefined_value": "",
+          "predefinedType": "string",
+          "predefinedValue": "",
           "required": true,
-          "key": "random_price"
+          "key": "randomPrice"
         },
         {
           "uuid": "741b46be-0eaf-41f3-9504-6ae6a4a1c04d",
           "type": "random",
-          "faker_subcategory": "number",
-          "faker_category": "random",
-          "faker_params": {},
+          "fakerSubcategory": "number",
+          "fakerCategory": "random",
+          "fakerParams": {},
           "resource": {},
-          "predefined_type": "string",
-          "predefined_value": "",
+          "predefinedType": "string",
+          "predefinedValue": "",
           "required": false,
-          "key": "random_number"
+          "key": "randomNumer"
         },
         {
           "uuid": "0d24ce52-9a60-4854-b7bf-1b7d9d56b2a1",
           "type": "random",
-          "faker_subcategory": "between",
-          "faker_category": "date",
-          "faker_params": {
+          "fakerSubcategory": "between",
+          "fakerCategory": "date",
+          "fakerParams": {
             "from": "2016-07-01",
             "to": "2016-07-16"
           },
           "resource": {},
-          "predefined_type": "date",
-          "predefined_value": "",
+          "predefinedType": "date",
+          "predefinedValue": "",
           "required": true,
-          "key": "random_date_between",
-          "documentation_description": ""
+          "key": "randomDateBetween",
+          "documentationDescription": ""
         },
         {
           "uuid": "0e6e4241-36ba-42a1-8681-0caba265f291",
           "type": "random",
-          "faker_subcategory": "lastName",
-          "faker_category": "name",
-          "faker_params": {},
+          "fakerSubcategory": "lastName",
+          "fakerCategory": "name",
+          "fakerParams": {},
           "resource": {},
-          "predefined_type": "string",
-          "predefined_value": "",
+          "predefinedType": "string",
+          "predefinedValue": "",
           "required": false,
-          "key": "random_last_name",
-          "documentation_description": ""
+          "key": "randomLastName",
+          "documentationDescription": ""
         },
         {
           "uuid": "aa3411a0-14af-42ff-a4f4-ec07f8905a3b",
           "type": "random",
-          "faker_category": "finance",
-          "faker_params": {
+          "fakerCategory": "finance",
+          "fakerParams": {
             "min": 100,
             "max": 200,
             "dec": 2,
             "symbol": "£"
           },
           "resource": {},
-          "predefined_type": "string",
-          "predefined_value": "",
+          "predefinedType": "string",
+          "predefinedValue": "",
           "required": true,
-          "key": "random_amount",
-          "faker_subcategory": "amount",
-          "documentation_description": ""
+          "key": "randomAmount",
+          "fakerSubcategory": "amount",
+          "documentationDescription": ""
         }
       ],
       "id": 1,
-      "validation_config": {
-        "future_date": {
+      "validationConfig": {
+        "futureDate": {
           "datetime": {
             "latest": "Invalid date"
           }
         },
-        "random_email_address": {
+        "randomEmailAddress": {
           "presence": true,
           "email": true
         },
-        "random_price": {
+        "randomPrice": {
           "presence": true
         },
-        "random_number": {
+        "randomNumer": {
           "numericality": true
         },
-        "random_date_between": {
+        "randomDateBetween": {
           "presence": true,
           "datetime": {
             "earliest": "2016-07-01",
             "latest": "2016-07-16"
           }
         },
-        "random_last_name": {},
-        "random_amount": {
+        "randomLastName": {},
+        "randomAmount": {
           "presence": true
         }
       },
-      "documentation_description": ""
+      "documentationDescription": ""
     }
   ]
 }

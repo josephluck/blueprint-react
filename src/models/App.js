@@ -9,4 +9,4 @@ export default {
   effects: {
     update: (data, state, send) => (document.title = data.payload)
   }
-};
+}

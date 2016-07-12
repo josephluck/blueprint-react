@@ -1,11 +1,10 @@
-import choo from 'choo';
-import html from 'choo/html';
+import choo from 'choo'
 const Application = choo()
 
-import AppModel from './models/App';
-Application.model(AppModel);
+import AppModel from './models/App'
+Application.model(AppModel)
 
-import AppView from './pages/App';
+import AppView from './pages/App'
 
 Application.router((route) => [
   route('/', AppView)
