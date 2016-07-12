@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "budo src/routes.js --dir=src --onupdate 'standard | notify-error' --live -- -t babelify -t lessify",
     "build": "browserify src/routes.js -o static/bundle.js -t [ babelify --presets [ es2015 ] ] -t lessify",
-    "server": "node server.js",
-    "lint": "./node_modules/.bin/eslint ."
+    "server": "node server.js"
   },
   "repository": {
     "type": "git",

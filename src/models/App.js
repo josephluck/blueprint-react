@@ -1,12 +1,20 @@
 export default {
-  namespace: 'input',
+  namespace: 'App',
   state: {
     title: 'my demo app'
   },
   reducers: {
-    update: (data, state) => ({ title: data.payload })
+    actuallyDoUpdate: (data, state) => {
+      console.log(data)
+      return {
+        title: data.payload
+      }
+    }
   },
   effects: {
-    update: (data, state, send) => (document.title = data.payload)
+    updateText: function (data, state, send, done) {
+      console.log(data.payload)
+      send('App:actuallyDoUpdate', data, done)
+    }
   }
 }
