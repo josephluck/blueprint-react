@@ -4,7 +4,8 @@
   "description": "Boilerplate for kick starting a React Project with ES6 (Babel) and Hot reloader using Webpack.",
   "main": "index.js",
   "scripts": {
-    "dev": "budo src/routes.js --dir=src --onupdate 'standard | notify-error' --live -- -t babelify",
+    "dev": "budo src/routes.js --dir=src --onupdate 'standard | notify-error' --live -- -t babelify -t lessify",
+    "build": "browserify src/routes.js -o static/bundle.js -t [ babelify --presets [ es2015 ] ] -t lessify",
     "server": "node server.js",
     "lint": "./node_modules/.bin/eslint ."
   },
@@ -37,6 +38,7 @@
   },
   "devDependencies": {
     "autoprefixer-loader": "^3.2.0",
+    "babel-cli": "^6.10.1",
     "babel-core": "^6.3.21",
     "babel-eslint": "^5.0.0-beta6",
     "babel-loader": "^6.2.0",
@@ -54,6 +56,7 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "less": "^2.6.1",
     "less-loader": "^2.2.2",
+    "lessify": "^1.0.1",
     "notify-error": "^1.2.0",
     "standard": "^7.1.2",
     "style-loader": "^0.13.1"

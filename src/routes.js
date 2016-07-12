@@ -1,4 +1,6 @@
 import choo from 'choo'
+require('../less/main.less')
+
 const Application = choo()
 
 import AppModel from './models/App'
