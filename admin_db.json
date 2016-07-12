@@ -18,6 +18,21 @@
       },
       "model": [
         {
+          "uuid": "f84cc424-8f75-481d-8046-1ce3fada0535",
+          "type": "random",
+          "faker_subcategory": "future",
+          "faker_category": "date",
+          "faker_params": {
+            "years": 3,
+            "refDate": null
+          },
+          "resource": {},
+          "predefined_type": "string",
+          "predefined_value": "",
+          "required": false,
+          "key": "future_date"
+        },
+        {
           "uuid": "d80661f7-da1c-450a-adab-656d23b3a7c9",
           "type": "random",
           "faker_subcategory": "email",
@@ -42,7 +57,7 @@
           "resource": {},
           "predefined_type": "string",
           "predefined_value": "",
-          "required": false,
+          "required": true,
           "key": "random_price"
         },
         {
@@ -107,11 +122,18 @@
       ],
       "id": 1,
       "validation_config": {
+        "future_date": {
+          "datetime": {
+            "latest": "Invalid date"
+          }
+        },
         "random_email_address": {
           "presence": true,
           "email": true
         },
-        "random_price": {},
+        "random_price": {
+          "presence": true
+        },
         "random_number": {
           "numericality": true
         },

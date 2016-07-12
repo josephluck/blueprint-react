@@ -31,6 +31,8 @@ class ResourceDocumentation extends Component {
 		let constraints = parameter.required ? "Required " : "Optional ";
 		let validation = ResourceUtils.getSingleRequestParameterValidationRequirements(parameter);
 
+		console.log(validation);
+
 		constraints += this.getModelParameterType(parameter) + ". ";
 
 		if (validation.numericality) {

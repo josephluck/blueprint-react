@@ -281,7 +281,14 @@ module.exports = {
 						config.datetime.earliest = faker_params.refDate;
 					}
 					if (faker_params.years) {
-						config.datetime.latest = moment(faker_params.refDate).add(faker_params.years, 'years').format('YYYY-MM-DD');
+						//
+						// NOTE: Refactor this so it works when this is run so it's always looking at todays date
+						// Consider storing latest as the string "today" and checking for that string when
+						// validation is run
+						//
+
+						var refDate = faker_params.refDate || new Date()
+						config.datetime.latest = moment(refDate).add(faker_params.years, 'years').format('YYYY-MM-DD');
 					}
 				} else if (date_type === "past") {
 					config.datetime = {}
