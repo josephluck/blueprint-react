@@ -2,9 +2,6 @@
 var http = require('request');
 var jsonServer = require('json-server');
 var bodyParser = require('body-parser');
-var webpack = require('webpack');
-var WebpackDevServer = require('webpack-dev-server');
-var config = require('./webpack.config');
 var resourceUtils = require('./resource_utils');
 var adminServer;
 var adminRouter;
@@ -112,23 +109,6 @@ var _resources;
 	}
 
 /*=============================================================================
-	Start up the admin front-end for managing resources and settings
-=============================================================================*/
-	var startFrontEndServer = function() {
-		new WebpackDevServer(webpack(config), {
-		  publicPath: config.output.publicPath,
-		  hot: true,
-		  historyApiFallback: true
-		}).listen(1402, 'localhost', (err) => {
-		  if (err) {
-		    console.log(err);
-		  }
-		  console.log('Frontend server running at: http://localhost:1402');
-		});
-	}
-
-/*=============================================================================
 	Bootstrap
 =============================================================================*/
 	startAdminServer();
-	startFrontEndServer();
