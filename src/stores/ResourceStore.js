@@ -18,13 +18,13 @@ class ResourceStore {
 	getResource({
 		resourceId
 	}) {
-		let resource = Store.get().resources.find((resource, i) => {
-			return resource.id === parseInt(resourceId, 10)
+		let resource = Store.get().resources.find((_resource) => {
+			return _resource.id === parseInt(resourceId, 10);
 		}).toJS();
 
-		resource.model = resource.model.map((model, value) => {
-			if (model.faker_subcategory === 'arrayElement' || model.faker_subcategory === 'objectElement') {
-				model.faker_params.json = JSON.stringify(model.faker_params.json, null, 2);
+		resource.model = resource.model.map((model) => {
+			if (model.fakerSubcategory === 'arrayElement' || model.fakerSubcategory === 'objectElement') {
+				model.fakerParams.json = JSON.stringify(model.fakerParams.json, null, 2);
 			}
 
 			return model;
@@ -33,19 +33,19 @@ class ResourceStore {
 		Store.get().resource.reset(resource);
 	}
 
-	saveResource(resource) {
-		Store.get().set({resource_saving: true});
+	saveResource(_resource) {
+		Store.get().set({resourceSaving: true});
 
-		resource = resource.toJS();
-		resource.model = resource.model.map((model, value) => {
-			if (model.faker_subcategory === 'arrayElement' || model.faker_subcategory === 'objectElement') {
-				model.faker_params.json = JSON.parse(model.faker_params.json);
+		let resource = _resource.toJS();
+		resource.model = resource.model.map((model) => {
+			if (model.fakerSubcategory === 'arrayElement' || model.fakerSubcategory === 'objectElement') {
+				model.fakerParams.json = JSON.parse(model.fakerParams.json);
 			}
 
 			return model;
 		});
 
-		resource.validation_config = ResourceUtils.generateValidationConfigForResource(resource);
+		resource.validationConfig = ResourceUtils.generateValidationConfigForResource(resource);
 
 		Api.put({
 			url: {
@@ -53,34 +53,34 @@ class ResourceStore {
 				resourceId: resource.id
 			},
 			payload: resource
-		}).then((resource) => {
-			resource.model = resource.model.map((model, value) => {
-				if (model.faker_subcategory === 'arrayElement' || model.faker_subcategory === 'objectElement') {
-					model.faker_params.json = JSON.stringify(model.faker_params.json, null, 2);
+		}).then((resp) => {
+			resp.model = resp.model.map((model) => {
+				if (model.fakerSubcategory === 'arrayElement' || model.fakerSubcategory === 'objectElement') {
+					model.fakerParams.json = JSON.stringify(model.fakerParams.json, null, 2);
 				}
 
 				return model;
 			});
 
 			Store.get().set({
-				resource_saving: false,
-				resource: resource
+				resourceSaving: false,
+				resource: resp
 			});
-			ResourcesStore.updateResource(resource);
+			ResourcesStore.updateResource(resp);
 		});
 	}
 
 	deleteResource(resource) {
-		Store.get().set({resource_saving: true});
+		Store.get().set({resourceSaving: true});
 
-		Api.delete({
+		Api.destroy({
 			url: {
 				name: 'resource',
 				resourceId: resource.id
 			}
 		}).then(() => {
 			browserHistory.push(`/`);
-			Store.get().set({resource_saving: false});
+			Store.get().set({resourceSaving: false});
 			ResourcesStore.removeResource(resource.id);
 		});
 	}

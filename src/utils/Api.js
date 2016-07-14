@@ -1,130 +1,125 @@
 import superagent from 'superagent';
-import {browserHistory} from 'react-router';
 
-var API_ROOT = 'http://localhost:1401/';
+const API_ROOT = 'http://localhost:1401/';
 
-// Handle errors (unauthorized, forbidden etc)
-
-function handleErrors(res) {
-  let status = res.status;
-  if (status === 403 || status === 401) {
-    console.log("Forbidden / unauthorized")
-  }
-}
-
-// POST some data to the server
-
-function post(params) {
-  return new Promise((resolve, reject) => {
-    superagent
-      .post(getApiUrl(params.url))
-      .send(params.payload)
-      .set('Content-Type', 'application/json')
-      .end((error, res, a, b, c) => {
-        error ?
-          (function(res) {
-            handleErrors(res);
-            reject(res.body, res.status, res)
-          })(res)
-          :
-          resolve(res.body, res.status, res);
-      });
-  });
-}
-
-// PUT some data to the server
-
-function put(params) {
-  return new Promise((resolve, reject) => {
-    superagent
-      .put(getApiUrl(params.url))
-      .send(params.payload)
-      .set('Content-Type', 'application/json')
-      .end((error, res, a, b, c) => {
-        error ?
-          (function(res) {
-            handleErrors(res);
-            reject(res.body, res.status, res)
-          })(res)
-          :
-          resolve(res.body, res.status, res);
-      });
-  });
-}
-
-// GET some data from the server
-
-function get(params) {
-  return new Promise((resolve, reject) => {
-    superagent
-      .get(getApiUrl(params.url))
-      .set('Content-Type', 'application/json')
-      .end((error, res, a, b, c) => {
-        error ?
-          (function(res) {
-            handleErrors(res);
-            reject(res.body, res.status, res)
-          })(res)
-          :
-          resolve(res.body, res.status, res)
-      });
-  });
-}
-
-// DELETE some data from the server
-
-function destroy(params) {
-  return new Promise((resolve, reject) => {
-    superagent
-      .delete(getApiUrl(params.url))
-      .send(params.payload)
-      .set('Content-Type', 'application/json')
-      .end((error, res, a, b, c) => {
-        error ?
-          (function(res) {
-            handleErrors(res);
-            reject(res.body, res.status, res)
-          })(res)
-          :
-          resolve(res.body, res.status, res);
-      });
-  });
-}
-
-// API urls
-
-function getApiUrl(options) {
+function url(options) {
   switch (options.name) {
     case 'resources':
       if (options.params) {
         return API_ROOT + `resources${options.params}`;
-      } else {
-        return API_ROOT + `resources`;
       }
-      break;
-
+      return API_ROOT + `resources`;
     case 'resource':
       return API_ROOT + `resources/${options.resourceId}`;
-      break;
-
     default:
       return false;
-      break
   }
 }
 
-
-// Redirect (usually after POST, PUT, DELETE)
-function redirect(path) {
-  browserHistory.push(path);
+/*=============================================================================
+  Create some data on the server
+=============================================================================*/
+function post(options) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      superagent
+        .post(url(options.url))
+        .send(options.payload)
+        .set('Content-Type', 'application/json')
+        .end((error, res) => {
+          if (error) {
+            handleErrors(res);
+            reject(res, error);
+          } else {
+            resolve(res);
+          }
+        });
+    });
+  });
 }
 
+/*=============================================================================
+  Update some data on the server
+=============================================================================*/
+function put(options) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      superagent
+        .put(url(options.url))
+        .send(options.payload)
+        .set('Content-Type', 'application/json')
+        .end((error, res) => {
+          if (error) {
+            handleErrors(res);
+            reject(res, error);
+          } else {
+            resolve(res);
+          }
+        });
+    });
+  });
+}
 
+/*=============================================================================
+  Get some data from the server
+=============================================================================*/
+function get(options) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      superagent
+        .get(url(options.url))
+        .set('Content-Type', 'application/json')
+        .end((error, res) => {
+          if (error) {
+            handleErrors(res);
+            reject(res, error);
+          } else {
+            resolve(res);
+          }
+        });
+    });
+  });
+}
+
+/*=============================================================================
+  Delete some data from the server, named destroy since delete is a
+  reserved word
+=============================================================================*/
+function destroy(options) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      superagent
+        .delete(url(options.url))
+        .set('Content-Type', 'application/json')
+        .end((error, res) => {
+          if (error) {
+            handleErrors(res);
+            reject(res, error);
+          } else {
+            resolve(res);
+          }
+        });
+    });
+  });
+}
+
+/*=============================================================================
+  Handle errors from the API (generic 404, 500, 403, 401 errors)
+=============================================================================*/
+function handleErrors(res) {
+  let status = res.status;
+  if (status === 403 || status === 401) {
+    // Handle errors here
+  }
+}
+
+/*=============================================================================
+  Export the four methods in an object, so it can be accessed under
+  Http.get(), Http.destroy() etc.
+=============================================================================*/
 export default {
   post,
   put,
   get,
-  delete: destroy,
-  redirect,
-  API_ROOT
-}
+  destroy
+};

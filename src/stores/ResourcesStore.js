@@ -9,28 +9,28 @@ class ResourcesStore {
 	constructor() {
 		Store.initialize({
 			resources: [],
-			resources_loading: true,
-			right_bar_open: true
+			resourcesLoading: true,
+			rightBarOpen: true
 		});
 	}
 
 	toggleRightBar() {
 		Store.get().set({
-			right_bar_open: !Store.get().right_bar_open
+			rightBarOpen: !Store.get().rightBarOpen
 		});
 	}
 
 	getResources() {
-		Store.get().set({resources_loading: true});
+		Store.get().set({resourcesLoading: true});
 		Api.get({
 			url: {
 				name: 'resources',
 				params: '?_sort=name&_order=ASC'
 			}
 		}).then((res) => {
-			Store.get().resources.reset(res);
+			Store.get().resources.reset(res.body);
 		});
-		Store.get().set({resources_loading: false});
+		Store.get().set({resourcesLoading: false});
 	}
 
 	createNewResource() {
@@ -39,30 +39,31 @@ class ResourcesStore {
 				name: 'resources'
 			},
 			payload: {
-				type: "array",
+				type: 'array',
 				length: 5,
-				"documentation_description": "",
-				name: "new_resource",
-				supported_methods: {
+				documentationDescription: '',
+				name: 'newResource',
+				supportedMethods: {
 					get: true,
 					post: true,
 					put: true,
-					delete: true
+					destroy: true
 				},
 				model: [
 					{
 						uuid: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-					    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-					    return v.toString(16);
+							let r = Math.random() * 16 | 0;
+							let v = c === 'x' ? r : (r & 0x3 | 0x8);
+							return v.toString(16);
 						}),
-						documentation_description: "",
-						type: "predefined",
-						faker_subcategory: "",
-						faker_category: "",
-						faker_params: {},
+						documentationDescription: '',
+						type: 'predefined',
+						fakerSubCategory: '',
+						fakerCategory: '',
+						fakerParams: {},
 						resource: {},
-						predefined_type: "string",
-						predefined_value: "",
+						predefinedType: 'string',
+						predefinedValue: '',
 						required: true
 					}
 				]
@@ -73,20 +74,20 @@ class ResourcesStore {
 		});
 	}
 
-	removeResource(resource_id) {
-		var index = Store.get().resources.findIndex((resource, i) => {
-			return resource.id === resource_id;
+	removeResource(resourceId) {
+		const index = Store.get().resources.findIndex((resource) => {
+			return resource.id === resourceId;
 		});
 
 		Store.get().resources.splice(index, 1);
 	}
 
 	updateResource(resource) {
-		var resource_to_update = Store.get().resources.find((_resource, i) => {
+		const resourceToUpdate = Store.get().resources.find((_resource) => {
 			return _resource.id === resource.id;
 		});
 
-		resource_to_update.reset(resource);
+		resourceToUpdate.reset(resource);
 	}
 }
 

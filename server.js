@@ -82,18 +82,18 @@ var _resources;
 		  	});
 
 		  	if (requestedResourceDescription) {
-			  	if (req.method === 'GET' && requestedResourceDescription.supported_methods.get) {
+			  	if (req.method === 'GET' && requestedResourceDescription.supportedMethods.get) {
 			  		next();
-			  	} else if (req.method === 'POST' && requestedResourceDescription.supported_methods.post) {
+			  	} else if (req.method === 'POST' && requestedResourceDescription.supportedMethods.post) {
 			  		validationErrors = resourceUtils.validateRequest(requestedResourceDescription, req.body);
 			  		if (validationErrors) {
 			  			res.status(400).send(validationErrors)
 			  		} else {
 			  			next();
 			  		}
-			  	} else if (req.method === 'PUT' && requestedResourceDescription.supported_methods.put) {
+			  	} else if (req.method === 'PUT' && requestedResourceDescription.supportedMethods.put) {
 			  		next();
-			  	} else if (req.method === 'DELETE' && requestedResourceDescription.supported_methods.delete) {
+			  	} else if (req.method === 'DELETE' && requestedResourceDescription.supportedMethods.destroy) {
 			  		next();
 			  	} else {
 			  		res.status(405).send(`Method isn't supported for this resource`);

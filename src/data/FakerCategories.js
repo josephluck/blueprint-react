@@ -51,4 +51,4 @@ export default [
 		name: 'System',
 		value: 'system'
 	}
-]
+];

@@ -1,6 +1,4 @@
-import React, {Component} from 'react';
-import Provide from 'hoc/Provide';
-import {Link} from 'react-router';
+import {Component} from 'react';
 
 // Stores
 import ResourceStore from 'stores/ResourceStore';
@@ -33,8 +31,8 @@ class Resource extends Component {
 	}
 
 	render() {
-		return this.props.children
+		return this.props.children;
 	}
 }
 
-export default Resource
+export default Resource;

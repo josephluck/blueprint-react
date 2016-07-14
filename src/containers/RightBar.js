@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import Provide from 'hoc/Provide';
-import {Link} from 'react-router';
 
 // Stores
 import ResourcesStore from 'stores/ResourcesStore';
@@ -18,7 +17,7 @@ class RightBar extends Component {
 	}
 
 	shouldComponentUpdate(props) {
-		return props.right_bar_open !== this.props.right_bar_open;
+		return props.rightBarOpen !== this.props.rightBarOpen;
 	}
 
 /*=============================================================================
@@ -28,18 +27,18 @@ class RightBar extends Component {
 	on render -- check perf for large resources
 =============================================================================*/
 	render() {
-		var right_bar_class = "";
+		let rightBarClass = '';
 
-		if (this.props.right_bar_open === true) {
-			right_bar_class = "--open"
+		if (this.props.rightBarOpen === true) {
+			rightBarClass = '--open';
 		}
 
 		return (
-			<div className={`right-bar flex ${right_bar_class}`}>
+			<div className={`right-bar flex ${rightBarClass}`}>
 				<div className="documentation-left-nav flex flex-vertical">
 					<div className="section-title flex flex-0">
 						<span className="flex-1">
-							{"Documentaton"}
+							{'Documentaton'}
 						</span>
 						<a className="large-left-margin"
 							href=""
@@ -47,7 +46,7 @@ class RightBar extends Component {
 								e.preventDefault();
 								this.toggleRightBar();
 							}}>
-							{"Close"}
+							{'Close'}
 						</a>
 					</div>
 					<div className="flex flex-vertical">
@@ -64,23 +63,28 @@ class RightBar extends Component {
 								onClick={(e) => {
 									e.preventDefault();
 								}}>
-								{"Open full docs"}
+								{'Open full docs'}
 							</a>
 						</div>
 					</div>
 				</div>
 				<div className={`flex-3 overflow-auto`}>
 					<ResourceDocumentation resource={this.props.resource.toJS()}
-						resources={this.props.resources.toJS()}>
-					</ResourceDocumentation>
+						resources={this.props.resources.toJS()} />
 				</div>
 			</div>
-		)
+		);
 	}
 }
+
+RightBar.propTypes = {
+	resource: React.PropTypes.object,
+	resources: React.PropTypes.array,
+	rightBarOpen: React.PropTypes.bool
+};
 
 export default Provide(RightBar, [
 	'resources',
 	'resource',
-	'right_bar_open'
-])
+	'rightBarOpen'
+]);

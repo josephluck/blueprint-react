@@ -1,14 +1,12 @@
 import React, {Component} from 'react';
-import {Link, browserHistory} from 'react-router';
+import {browserHistory} from 'react-router';
 
 import FakerCategories from 'data/FakerCategories';
 import FakerSubCategories from 'data/FakerSubCategories';
 import Faker from 'faker';
-import brace from 'brace';
 import AceEditor from 'react-ace';
 import 'brace/mode/json';
 import 'brace/theme/tomorrow';
-
 import validate from 'validate.js';
 import moment from 'moment';
 window.faker = Faker;
@@ -25,7 +23,7 @@ class ResourceForm extends Component {
 	}
 
 	shouldComponentUpdate(props) {
-		return this.props.resource !== props.resource
+		return this.props.resource !== props.resource;
 	}
 
 	componentWillReceiveProps(props) {
@@ -36,17 +34,18 @@ class ResourceForm extends Component {
 
 	addAnotherKey() {
 		this.state.resource.model.unshift({
-	  	uuid: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-	      var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-	      return v.toString(16);
-	  	}),
-	  	type: "predefined",
-	  	faker_subcategory: "",
-	  	faker_category: "",
-	  	faker_params: {},
-	  	resource: {},
-			predefined_type: "string",
-			predefined_value: "",
+			uuid: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+				let r = Math.random() * 16 | 0;
+				let v = c === 'x' ? r : (r & 0x3 | 0x8);
+				return v.toString(16);
+			}),
+			type: 'predefined',
+			fakerSubCategory: '',
+			fakerCategory: '',
+			fakerParams: {},
+			resource: {},
+			predefinedType: 'string',
+			predefinedValue: '',
 			required: false
 		});
 	}
@@ -60,7 +59,7 @@ class ResourceForm extends Component {
 	}
 
 	setResourceCRUD(name) {
-		this.state.resource.supported_methods.set(name, !this.state.resource.supported_methods[name]);
+		this.state.resource.supportedMethods.set(name, !this.state.resource.supportedMethods[name]);
 	}
 
 	handleModelChange(model, name, value) {
@@ -69,41 +68,42 @@ class ResourceForm extends Component {
 
 	handleModelTypeChanged(model, type) {
 		if (type === 'resource') {
-			model.set("child_resource", {});
+			model.set('childResource', {});
 		} else {
-			model.set("child_resource", undefined);
+			model.set('childResource', '');
 		}
 		if (type === 'object') {
 			model.resource.reset({
-				type: "array",
+				type: 'array',
 				length: 5,
 				model: [
 					{
-				  	uuid: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-				      var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-				      return v.toString(16);
-				  	}),
-				  	type: "predefined",
-				  	faker_subcategory: "",
-				  	faker_category: "",
-				  	faker_params: {},
-				  	resource: {},
-						predefined_type: "string",
-						predefined_value: "",
+						uuid: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+							let r = Math.random() * 16 | 0;
+							let v = c === 'x' ? r : (r & 0x3 | 0x8);
+							return v.toString(16);
+						}),
+						type: 'predefined',
+						fakerSubCategory: '',
+						fakerCategory: '',
+						fakerParams: {},
+						resource: {},
+						predefinedType: 'string',
+						predefinedValue: '',
 						required: false
 					}
 				]
 			});
 		} else {
-			model.set("resource", undefined);
+			model.set('resource', {});
 		}
 	}
 
 	handleRandomCategoryChanged(model, value) {
 		model.set({
-			faker_category: value,
-			faker_subcategory: "",
-			faker_params: {}
+			fakerCategory: value,
+			fakerSubCategory: '',
+			fakerParams: {}
 		});
 	}
 
@@ -112,249 +112,249 @@ class ResourceForm extends Component {
 	// based on the subcategory which will make this component more dynamically
 	// generated and not hard-coded and would provide a great foundation for
 	// including more random generation libraries
-	resetRandomParams(model, faker_category) {
+	resetRandomParams(model, fakerCategory) {
 		let params = {};
-		if (faker_category === "state") {
+		if (fakerCategory === 'state') {
 			params = {
 				useAbbr: null
 			};
-		} else if (faker_category === "streetAddress") {
+		} else if (fakerCategory === 'streetAddress') {
 			params = {
 				useFullAddress: null
-			}
-		} else if (faker_category === "zipCode") {
+			};
+		} else if (fakerCategory === 'zipCode') {
 			params = {
 				format: null
-			}
-		} else if (faker_category === "department") {
+			};
+		} else if (fakerCategory === 'department') {
 			params = {
 				max: null,
 				fixedAmount: null
-			}
-		} else if (faker_category === "price") {
+			};
+		} else if (fakerCategory === 'price') {
 			params = {
 				min: null,
 				max: null,
 				dec: null,
 				symbol: null
-			}
-		} else if (faker_category === "companyName") {
+			};
+		} else if (fakerCategory === 'companyName') {
 			params = {
 				format: null
-			}
-		} else if (faker_category === "between") {
+			};
+		} else if (fakerCategory === 'between') {
 			params = {
 				from: null,
 				to: null
-			}
-		} else if (faker_category === "future") {
+			};
+		} else if (fakerCategory === 'future') {
 			params = {
 				years: null,
 				refDate: null
-			}
-		} else if (faker_category === "month") {
+			};
+		} else if (fakerCategory === 'month') {
 			params = {
 				options: null
-			}
-		} else if (faker_category === "past") {
+			};
+		} else if (fakerCategory === 'past') {
 			params = {
 				years: null,
 				refDate: null
-			}
-		} else if (faker_category === "recent") {
+			};
+		} else if (fakerCategory === 'recent') {
 			params = {
 				days: null
-			}
-		} else if (faker_category === "weekday") {
+			};
+		} else if (fakerCategory === 'weekday') {
 			params = {
 				options: null
-			}
-		} else if (faker_category === "account") {
+			};
+		} else if (fakerCategory === 'account') {
 			params = {
 				length: null
-			}
-		} else if (faker_category === "amount") {
+			};
+		} else if (fakerCategory === 'amount') {
 			params = {
 				min: null,
 				max: null,
 				dec: null,
 				symbol: null
-			}
-		} else if (faker_category === "mask") {
+			};
+		} else if (fakerCategory === 'mask') {
 			params = {
 				length: null,
 				parens: null,
 				elipsis: null
-			}
-		} else if (faker_category === "abstract" ||
-			faker_category === "animals" ||
-			faker_category === "business" ||
-			faker_category === "cats" ||
-			faker_category === "city" ||
-			faker_category === "fashion" ||
-			faker_category === "food" ||
-			faker_category === "image" ||
-			faker_category === "nature" ||
-			faker_category === "nightlife" ||
-			faker_category === "people" ||
-			faker_category === "sports" ||
-			faker_category === "technics" ||
-			faker_category === "transport") {
+			};
+		} else if (fakerCategory === 'abstract' ||
+			fakerCategory === 'animals' ||
+			fakerCategory === 'business' ||
+			fakerCategory === 'cats' ||
+			fakerCategory === 'city' ||
+			fakerCategory === 'fashion' ||
+			fakerCategory === 'food' ||
+			fakerCategory === 'image' ||
+			fakerCategory === 'nature' ||
+			fakerCategory === 'nightlife' ||
+			fakerCategory === 'people' ||
+			fakerCategory === 'sports' ||
+			fakerCategory === 'technics' ||
+			fakerCategory === 'transport') {
 			params = {
 				width: null,
 				height: null
-			}
-		} else if (faker_category === "color") {
+			};
+		} else if (fakerCategory === 'color') {
 			params = {
 				baseRed255: null,
 				baseGreen255: null,
 				baseBlue255: null
-			}
-		} else if (faker_category === "email") {
+			};
+		} else if (fakerCategory === 'email') {
 			params = {
 				firstName: null,
 				lastName: null,
 				provider: null
-			}
-		} else if (faker_category === "exampleEmail") {
+			};
+		} else if (fakerCategory === 'exampleEmail') {
 			params = {
 				firstName: null,
 				lastName: null
-			}
-		} else if (faker_category === "password") {
+			};
+		} else if (fakerCategory === 'password') {
 			params = {
 				len: null,
 				memorable: null,
 				pattern: null,
 				prefix: null
-			}
-		} else if (faker_category === "userName") {
+			};
+		} else if (fakerCategory === 'userName') {
 			params = {
 				firstName: null,
 				lastName: null
-			}
-		} else if (faker_category === "lines") {
+			};
+		} else if (fakerCategory === 'lines') {
 			params = {
 				lineCount: null
-			}
-		} else if (faker_category === "paragraph") {
+			};
+		} else if (fakerCategory === 'paragraph') {
 			params = {
 				sentenceCount: null
-			}
-		} else if (faker_category === "paragraphs") {
+			};
+		} else if (fakerCategory === 'paragraphs') {
 			params = {
 				paragraphCount: null,
 				separatora: null
-			}
-		} else if (faker_category === "sentence") {
+			};
+		} else if (fakerCategory === 'sentence') {
 			params = {
 				wordCount: null,
 				range: null
-			}
-		} else if (faker_category === "sentences") {
+			};
+		} else if (fakerCategory === 'sentences') {
 			params = {
 				sentenceCount: null,
 				separatora: null
-			}
-		} else if (faker_category === "text") {
+			};
+		} else if (fakerCategory === 'text') {
 			params = {
 				times: null
-			}
-		} else if (faker_category === "word") {
+			};
+		} else if (fakerCategory === 'word') {
 			params = {
 				num: null
-			}
-		} else if (faker_category === "words") {
+			};
+		} else if (fakerCategory === 'words') {
 			params = {
 				num: null
-			}
-		} else if (faker_category === "findName") {
+			};
+		} else if (fakerCategory === 'findName') {
 			params = {
 				firstName: null,
 				lastName: null,
 				gender: null
-			}
-		} else if (faker_category === "firstName") {
+			};
+		} else if (fakerCategory === 'firstName') {
 			params = {
 				gender: null
-			}
-		} else if (faker_category === "lastName") {
+			};
+		} else if (fakerCategory === 'lastName') {
 			params = {
 				gender: null
-			}
-		} else if (faker_category === "prefix") {
+			};
+		} else if (fakerCategory === 'prefix') {
 			params = {
 				gender: null
-			}
-		} else if (faker_category === "phoneFormatsArrayIndex") {
+			};
+		} else if (fakerCategory === 'phoneFormatsArrayIndex') {
 			params = {
 				phoneFormatsArrayIndex: null
-			}
-		} else if (faker_category === "phoneNumber") {
+			};
+		} else if (fakerCategory === 'phoneNumber') {
 			params = {
 				format: null
-			}
-		} else if (faker_category === "arrayElement") {
+			};
+		} else if (fakerCategory === 'arrayElement') {
 			params = {
 				array: null
-			}
-		} else if (faker_category === "number") {
+			};
+		} else if (fakerCategory === 'number') {
 			params = {
 				options: null
-			}
-		} else if (faker_category === "objectElement") {
+			};
+		} else if (fakerCategory === 'objectElement') {
 			params = {
 				object: null,
 				field: null
-			}
-		} else if (faker_category === "word") {
+			};
+		} else if (fakerCategory === 'word') {
 			params = {
 				type: null
-			}
-		} else if (faker_category === "words") {
+			};
+		} else if (fakerCategory === 'words') {
 			params = {
 				count: null
-			}
-		} else if (faker_category === "commonFileExt") {
+			};
+		} else if (fakerCategory === 'commonFileExt') {
 			params = {
 				type: null
-			}
-		} else if (faker_category === "commonFileName") {
+			};
+		} else if (fakerCategory === 'commonFileName') {
 			params = {
 				ext: null,
 				type: null
-			}
-		} else if (faker_category === "fileExt") {
+			};
+		} else if (fakerCategory === 'fileExt') {
 			params = {
 				mimeType: null
-			}
-		} else if (faker_category === "fileName") {
+			};
+		} else if (fakerCategory === 'fileName') {
 			params = {
 				ext: null,
 				type: null
-			}
+			};
 		}
 
-		model.faker_params.reset(params);
+		model.fakerParams.reset(params);
 	}
 
-	handleModelPredefinedTypeChange(model, type) {
+	handleModelPredefinedTypeChange(model) {
 		model.reset({
-			predefined_value: ""
+			predefinedValue: ''
 		});
 	}
 
-	handleSelectedChildResource(model, resource_name) {
-		let resource = this.state.resources.find((resource) => {
-			return resource.name === resource_name
+	handleSelectedChildResource(model, resourceName) {
+		let resource = this.state.resources.find((_resource) => {
+			return _resource.name === resourceName;
 		});
 
-		model.set("child_resource_name", resource.name);
-		model.set("child_resource_type", resource.type);
+		model.set('childResourceName', resource.name);
+		model.set('childResourceType', resource.type);
 	}
 
 	handleModelParamsChange(model, name, value) {
-		model.faker_params.set(name, value);
+		model.fakerParams.set(name, value);
 	}
 
 	render() {
@@ -364,28 +364,28 @@ class ResourceForm extends Component {
 					<div className="flex-1">
 						{this.props.nested === false ?
 							<div>
-								<div className="input-label">{"Name"}</div>
-								<input value={this.state.resource.name}
+								<div className="input-label">{'Name'}</div>
+								<input value={this.state.resource.name || ''}
 									onChange={(e) => {
-										var value = e.target.value.replace(/\W+/g, " ").replace(/ /g,"_");
+										const value = e.target.value.replace(/\W+/g, ' ').replace(/ /g, '_');
 										this.saveValue('name', value);
 									}}>
 								</input>
 							</div>
 							: null
 						}
-						<div className="input-label">{"Type"}</div>
+						<div className="input-label">{'Type'}</div>
 						<select value={this.state.resource.type}
 							onChange={(e) => {
 								this.saveValue('type', e.target.value);
 							}}>
-							<option value={"array"}>{"Array"}</option>
-							<option value={"singular"}>{"Signular"}</option>
+							<option value={'array'}>{'Array'}</option>
+							<option value={'singular'}>{'Signular'}</option>
 						</select>
 						{this.state.resource.type === 'array' ?
 							<div>
-								<div className="input-label">{"Length"}</div>
-								<input value={this.state.resource.length}
+								<div className="input-label">{'Length'}</div>
+								<input value={this.state.resource.length || ''}
 									onChange={(e) => {
 										let value = 0;
 
@@ -403,77 +403,77 @@ class ResourceForm extends Component {
 					{!this.props.nested ?
 						<div className="flex-2 flex">
 							<div className="flex-1 flex flex-vertical large-left-margin">
-								<div className="flex-0 input-label">{"Supported methods"}</div>
+								<div className="flex-0 input-label">{'Supported methods'}</div>
 								<div className="flex-0 flex">
 									<label className="flex-1 checkbox-wrap">
 										<input type="checkbox"
-											checked={this.state.resource.supported_methods.get === true}
-											onClick={(e) => {
+											checked={this.state.resource.supportedMethods.get === true}
+											onClick={() => {
 												this.setResourceCRUD('get');
 											}} />
-										{"GET"}
+										{'GET'}
 									</label>
 									<label className="flex-1 checkbox-wrap">
 										<input type="checkbox"
-											checked={this.state.resource.supported_methods.post === true}
-											onClick={(e) => {
+											checked={this.state.resource.supportedMethods.post === true}
+											onClick={() => {
 												this.setResourceCRUD('post');
 											}} />
-										{"POST"}
+										{'POST'}
 									</label>
 								</div>
 								<div className="flex-0 flex">
 									<label className="flex-1 checkbox-wrap">
 										<input type="checkbox"
-											checked={this.state.resource.supported_methods.put === true}
-											onClick={(e) => {
+											checked={this.state.resource.supportedMethods.put === true}
+											onClick={() => {
 												this.setResourceCRUD('put');
 											}} />
-										{"PUT"}
+										{'PUT'}
 									</label>
 									<label className="flex-1 checkbox-wrap">
 										<input type="checkbox"
-											checked={this.state.resource.supported_methods.delete === true}
-											onClick={(e) => {
-												this.setResourceCRUD('delete');
+											checked={this.state.resource.supportedMethods.destroy === true}
+											onClick={() => {
+												this.setResourceCRUD('destroy');
 											}} />
-										{"DELETE"}
+										{'DELETE'}
 									</label>
 								</div>
 
 
-								<div className="flex-0 input-label">{"Supported API utilities"}</div>
+								<div className="flex-0 input-label">{'Supported API utilities'}</div>
 								<div className="flex-0 flex">
 									<label className="flex-1 checkbox-wrap">
 										<input type="checkbox"
-											checked={this.state.resource.supported_utils.filter === true}
-											onClick={(e) => {
+											checked={this.state.resource.supportedUtils.filter === true}
+											onClick={() => {
 												this.setResourceCRUD('filter');
 											}} />
-										{"Filters"}
+										{'Filters'}
 									</label>
 									<label className="flex-1 checkbox-wrap">
 										<input type="checkbox"
-											checked={this.state.resource.supported_utils.pagination === true}
-											onClick={(e) => {
+											checked={this.state.resource.supportedUtils.pagination === true}
+											onClick={() => {
 												this.setResourceCRUD('pagination');
 											}} />
-										{"Pagination"}
+										{'Pagination'}
 									</label>
 								</div>
 								<div className="flex-0 flex">
 									<label className="flex-1 checkbox-wrap">
 										<input type="checkbox"
-											checked={this.state.resource.supported_utils.search === true}
-											onClick={(e) => {
+											checked={this.state.resource.supportedUtils.search === true}
+											onClick={() => {
 												this.setResourceCRUD('search');
 											}} />
-										{"Search"}
+										{'Search'}
 									</label>
 								</div>
 							</div>
 							<div className="flex-1 flex flex-vertical large-left-margin">
-								<div className="input-label flex-0">{"Documentation description"}</div>
+								<div className="input-label flex-0">{'Documentation description'}</div>
 								<textarea className="flex-1"
 									value={this.state.resource.documentation_description}
 									onChange={(e) => {
@@ -488,116 +488,117 @@ class ResourceForm extends Component {
 
 				<div className="section-title with-top-border flex">
 					<span className="flex-1">
-						{`${this.state.resource.name || ""} model description`}
+						{`${this.state.resource.name || ''} model description`}
 					</span>
 					<a href=""
 						onClick={(e) => {
 							e.preventDefault();
 							this.addAnotherKey();
 						}}>
-						{"Add another key"}
+						{'Add another key'}
 					</a>
 				</div>
 				{this.state.resource.model.map((model, i) => {
 					return (
-						<div className="box without-bottom-padding with-bottom-border">
+						<div key={i}
+							className="box without-bottom-padding with-bottom-border">
 							<div key={model.id || model.uuid}
 								className="flex model-input-group">
 								<div className="flex-1 large-right-margin">
 									<div className="input-label flex">
-										<span className="flex-1">{"Key name"}</span>
+										<span className="flex-1">{'Key name'}</span>
 										<a href=""
 											onClick={(e) => {
 												e.preventDefault();
 												this.removeModelKey(model, i);
 											}}>
-											{"Remove key"}
+											{'Remove key'}
 										</a>
 									</div>
-									<input value={model.key}
+									<input value={model.key || ''}
 										onChange={(e) => {
-											var value = e.target.value.replace(/\W+/g, " ").replace(/ /g,"_");
+											const value = e.target.value.replace(/\W+/g, ' ').replace(/ /g, '_');
 											this.handleModelChange(model, 'key', value);
 										}} />
 								</div>
 								<div className="flex-1 overflow-hidden large-right-margin">
 									<div className="input-label flex-1">
-										<span className="flex-1">{"Type"}</span>
+										<span className="flex-1">{'Type'}</span>
 									</div>
 									<select value={model.type}
 										onChange={(e) => {
 											this.handleModelChange(model, 'type', e.target.value);
 											this.handleModelTypeChanged(model, e.target.value);
 										}}>
-										<option value={"predefined"}>
-											{"Pre-defined"}
+										<option value={'predefined'}>
+											{'Pre-defined'}
 										</option>
-										<option value={"child_resource"}>
-											{"From another resource"}
+										<option value={'childResource'}>
+											{'From another resource'}
 										</option>
-										<option value={"object"}>
-											{"Object / array of objects"}
+										<option value={'object'}>
+											{'Object / array of objects'}
 										</option>
-										<option value={"random"}>
-											{"Random"}
+										<option value={'random'}>
+											{'Random'}
 										</option>
 									</select>
 
 									{model.type === 'predefined' ?
 										<div>
-											<div className="input-label">{"Type"}</div>
-											<select value={model.predefined_type}
+											<div className="input-label">{'Type'}</div>
+											<select value={model.predefinedType}
 												onChange={(e) => {
-													this.handleModelChange(model, 'predefined_type', e.target.value);
+													this.handleModelChange(model, 'predefinedType', e.target.value);
 													this.handleModelPredefinedTypeChange(model, e.target.value);
 												}}>
-												<option value="string">{"String"}</option>
-												<option value="number">{"Number"}</option>
-												<option value="boolean">{"Boolean"}</option>
-												<option value="date">{"Date"}</option>
+												<option value="string">{'String'}</option>
+												<option value="number">{'Number'}</option>
+												<option value="boolean">{'Boolean'}</option>
+												<option value="date">{'Date'}</option>
 											</select>
 
-											{model.predefined_type === 'string' ?
+											{model.predefinedType === 'string' ?
 												<div>
-													<div className="input-label">{"Value"}</div>
-													<input value={model.predefined_value}
+													<div className="input-label">{'Value'}</div>
+													<input value={model.predefinedValue || ''}
 														onChange={(e) => {
-															this.handleModelChange(model, 'predefined_value', e.target.value);
+															this.handleModelChange(model, 'predefinedValue', e.target.value);
 														}} />
 												</div>
 												:
 												<div>
-													{model.predefined_type === 'number' ?
+													{model.predefinedType === 'number' ?
 														<div>
-															<div className="input-label">{"Value"}</div>
-															<input value={model.predefined_value}
+															<div className="input-label">{'Value'}</div>
+															<input value={model.predefinedValue || ''}
 																type="number"
 																onChange={(e) => {
-																	this.handleModelChange(model, 'predefined_value', e.target.value);
+																	this.handleModelChange(model, 'predefinedValue', e.target.value);
 																}} />
 														</div>
 														:
 														<div>
-															{model.predefined_type === 'boolean' ?
+															{model.predefinedType === 'boolean' ?
 																<div>
-																	<div className="input-label">{"Value"}</div>
-																	<select value={model.predefined_value}
+																	<div className="input-label">{'Value'}</div>
+																	<select value={model.predefinedValue}
 																		onChange={(e) => {
-																			this.handleModelChange(model, 'predefined_value', eval(e.target.value));
+																			this.handleModelChange(model, 'predefinedValue', e.target.value === 'true');
 																		}}>
-																		<option value={false}>{"False"}</option>
-																		<option value={true}>{"True"}</option>
+																		<option value={false}>{'False'}</option>
+																		<option value={true}>{'True'}</option>
 																	</select>
 																</div>
 																:
 																<div>
-																	{model.predefined_type === 'date' ?
+																	{model.predefinedType === 'date' ?
 																		<div>
-																			<div className="input-label">{"Value"}</div>
-																			<input value={model.predefined_value}
+																			<div className="input-label">{'Value'}</div>
+																			<input value={model.predefinedValue || ''}
 																				type="date"
 																				onChange={(e) => {
-																					this.handleModelChange(model, 'predefined_value', e.target.value);
+																					this.handleModelChange(model, 'predefinedValue', e.target.value);
 																				}} />
 																		</div>
 																		: null
@@ -612,52 +613,51 @@ class ResourceForm extends Component {
 										: null
 									}
 
-									{model.type === 'child_resource' ?
+									{model.type === 'childResource' ?
 										<div>
-											<div className="input-label">{"Resource"}</div>
-											<select value={"pleasechoose"}
-												value={model.child_resource_name}
+											<div className="input-label">{'Resource'}</div>
+											<select value={'pleasechoose'}
+												value={model.childResourceName}
 												onChange={(e) => {
 													this.handleSelectedChildResource(model, e.target.value);
 												}}>
-												<option disabled value="pleasechoose">{"Please choose"}</option>
-												{this.state.resources.map((resource, i) => {
+												<option disabled value="pleasechoose">{'Please choose'}</option>
+												{this.state.resources.map((resource, resourceIndex) => {
 													if (resource.id !== this.state.resource.id) {
 														return (
-															<option key={i}
+															<option key={resourceIndex}
 																value={resource.name}>
 																{resource.name}
 															</option>
-														)
-													} else {
-														return null
+														);
 													}
+													return null;
 												})}
 											</select>
 
-											{model.child_resource_type === 'array' ?
+											{model.childResourceType === 'array' ?
 												<div>
-													<div className="input-label">{"Method"}</div>
-													<select value={"pleasechoose"}
-														value={model.child_resource_method}
+													<div className="input-label">{'Method'}</div>
+													<select value={'pleasechoose'}
+														value={model.childResourceMethod}
 														onChange={(e) => {
-															this.handleModelChange(model, 'child_resource_method', e.target.value);
+															this.handleModelChange(model, 'childResourceMethod', e.target.value);
 														}}>
-														<option disabled value="pleasechoose">{"Please choose"}</option>
-														<option value="id">{"Randomly selected id from array"}</option>
-														<option value="object">{"Randomly selected object from array"}</option>
-														<option value="array">{"Subset from array"}</option>
+														<option disabled value="pleasechoose">{'Please choose'}</option>
+														<option value="id">{'Randomly selected id from array'}</option>
+														<option value="object">{'Randomly selected object from array'}</option>
+														<option value="array">{'Subset from array'}</option>
 													</select>
 												</div>
 												: null
 											}
 
-											{model.child_resource_method === 'array' ?
+											{model.childResourceMethod === 'array' ?
 												<div>
-													<div className="input-label">{"Limit (leave blank for entire array)"}</div>
-													<input value={model.child_resource_limit}
+													<div className="input-label">{'Limit (leave blank for entire array)'}</div>
+													<input value={model.childResource_limit || ''}
 														onChange={(e) => {
-															this.handleModelChange(model, 'child_resource_limit', e.target.value);
+															this.handleModelChange(model, 'childResource_limit', e.target.value);
 														}} />
 												</div>
 												: null
@@ -672,102 +672,102 @@ class ResourceForm extends Component {
 											// Use browser history to push current ${i} in to URL
 											browserHistory.push(`${window.location.pathname}/${i}`);
 										}}>
-											{"Configure"}
+											{'Configure'}
 										</a>
 										: null
 									}
 
 									{model.type === 'random' ?
 										<div>
-											<div className="input-label">{"Random category"}</div>
-											<select value={"pleasechoose"}
-												value={model.faker_category}
+											<div className="input-label">{'Random category'}</div>
+											<select value={'pleasechoose'}
+												value={model.fakerCategory}
 												onChange={(e) => {
 													this.handleRandomCategoryChanged(model, e.target.value);
 												}}>
-												<option disabled value="pleasechoose">{"Please choose"}</option>
-												{FakerCategories.map((category, i) => {
+												<option disabled value="pleasechoose">{'Please choose'}</option>
+												{FakerCategories.map((category, categoryIndex) => {
 													return (
-														<option key={i}
+														<option key={categoryIndex}
 															value={category.value}>
 															{category.name}
 														</option>
-													)
+													);
 												})}
 											</select>
 
-											{model.faker_category ?
+											{model.fakerCategory ?
 												<div>
-													<div className="input-label">{"Random sub-category"}</div>
-													<select value={"pleasechoose"}
-														value={model.faker_subcategory}
+													<div className="input-label">{'Random sub-category'}</div>
+													<select value={'pleasechoose'}
+														value={model.fakerSubCategory}
 														onChange={(e) => {
-															this.handleModelChange(model, 'faker_subcategory', e.target.value);
+															this.handleModelChange(model, 'fakerSubCategory', e.target.value);
 															this.resetRandomParams(model, e.target.value);
 														}}>
-														<option disabled value="pleasechoose">{"Please choose"}</option>
-														{FakerSubCategories[model.faker_category].map((type, i) => {
+														<option disabled value="pleasechoose">{'Please choose'}</option>
+														{FakerSubCategories[model.fakerCategory].map((type, categoryIndex) => {
 															return (
-																<option key={i}
+																<option key={categoryIndex}
 																	value={type.value}>
 																	{type.name}
 																</option>
-															)
+															);
 														})}
 													</select>
-													{model.faker_subcategory ?
+													{model.fakerSubCategory ?
 														<div>
-															{model.faker_subcategory === "streetAddress" ?
+															{model.fakerSubCategory === 'streetAddress' ?
 																<div>
-																	<div className="input-label">{"Use full address"}</div>
-																	<select value={model.faker_params.useFullAddress}
+																	<div className="input-label">{'Use full address'}</div>
+																	<select value={model.fakerParams.useFullAddress}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'useFullAddress', eval(e.target.value));
+																			this.handleModelParamsChange(model, 'useFullAddress', e.target.value === 'true');
 																		}}>
-																		<option value={false}>{"No"}</option>
-																		<option value={true}>{"Yes"}</option>
+																		<option value={false}>{'No'}</option>
+																		<option value={true}>{'Yes'}</option>
 																	</select>
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "price" ?
+															{model.fakerSubCategory === 'price' ?
 																<div>
-																	<div className="input-label">{"Min value"}</div>
-																	<input value={model.faker_params.min}
+																	<div className="input-label">{'Min value'}</div>
+																	<input value={model.fakerParams.min || ''}
 																		onChange={(e) => {
 																			let value = parseFloat(e.target.value) || 0;
 																			this.handleModelParamsChange(model, 'min', value);
 																		}} />
-																	<div className="input-label">{"Max value"}</div>
-																	<input value={model.faker_params.max}
+																	<div className="input-label">{'Max value'}</div>
+																	<input value={model.fakerParams.max || ''}
 																		onChange={(e) => {
 																			let value = parseFloat(e.target.value) || 0;
 																			this.handleModelParamsChange(model, 'max', value);
 																		}} />
-																	<div className="input-label">{"Decimal places"}</div>
-																	<input value={model.faker_params.dec}
+																	<div className="input-label">{'Decimal places'}</div>
+																	<input value={model.fakerParams.dec || ''}
 																		onChange={(e) => {
 																			let value = parseFloat(e.target.value) || 0;
 																			this.handleModelParamsChange(model, 'dec', value);
 																		}} />
-																	<div className="input-label">{"Symbol"}</div>
-																	<input value={model.faker_params.symbol}
+																	<div className="input-label">{'Symbol'}</div>
+																	<input value={model.fakerParams.symbol || ''}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'symbol', e.target.value);
 																		}} />
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "between" ?
+															{model.fakerSubCategory === 'between' ?
 																<div>
-																	<div className="input-label">{"From"}</div>
-																	<input value={model.faker_params.from}
+																	<div className="input-label">{'From'}</div>
+																	<input value={model.fakerParams.from || ''}
 																		type="date"
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'from', e.target.value);
 																		}} />
-																	<div className="input-label">{"To"}</div>
-																	<input value={model.faker_params.to}
+																	<div className="input-label">{'To'}</div>
+																	<input value={model.fakerParams.to || ''}
 																		type="date"
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'to', e.target.value);
@@ -775,16 +775,16 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "future" || model.faker_subcategory === "past" ?
+															{model.fakerSubCategory === 'future' || model.fakerSubCategory === 'past' ?
 																<div>
-																	<div className="input-label">{"Number of years"}</div>
-																	<input value={model.faker_params.years}
+																	<div className="input-label">{'Number of years'}</div>
+																	<input value={model.fakerParams.years || ''}
 																		onChange={(e) => {
-																			let value = parseInt(e.target.value) || 0;
+																			let value = parseInt(e.target.value, 10) || 0;
 																			this.handleModelParamsChange(model, 'years', value);
 																		}} />
-																	<div className="input-label">{"From date"}</div>
-																	<input value={model.faker_params.refDate}
+																	<div className="input-label">{'From date'}</div>
+																	<input value={model.fakerParams.refDate || ''}
 																		type="date"
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'refDate', e.target.value);
@@ -792,82 +792,82 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "recent" ?
+															{model.fakerSubCategory === 'recent' ?
 																<div>
-																	<div className="input-label">{"Number of days"}</div>
-																	<input value={model.faker_params.days}
+																	<div className="input-label">{'Number of days'}</div>
+																	<input value={model.fakerParams.days || ''}
 																		onChange={(e) => {
-																			let value = parseInt(e.target.value) || 0;
+																			let value = parseInt(e.target.value, 10) || 0;
 																			this.handleModelParamsChange(model, 'days', value);
 																		}} />
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "amount" ?
+															{model.fakerSubCategory === 'amount' ?
 																<div>
-																	<div className="input-label">{"Min value"}</div>
-																	<input value={model.faker_params.min}
+																	<div className="input-label">{'Min value'}</div>
+																	<input value={model.fakerParams.min || ''}
 																		onChange={(e) => {
 																			let value = parseFloat(e.target.value) || 0;
 																			this.handleModelParamsChange(model, 'min', value);
 																		}} />
-																	<div className="input-label">{"Max value"}</div>
-																	<input value={model.faker_params.max}
+																	<div className="input-label">{'Max value'}</div>
+																	<input value={model.fakerParams.max || ''}
 																		onChange={(e) => {
 																			let value = parseFloat(e.target.value) || 0;
 																			this.handleModelParamsChange(model, 'max', value);
 																		}} />
-																	<div className="input-label">{"Decimal places"}</div>
-																	<input value={model.faker_params.dec}
+																	<div className="input-label">{'Decimal places'}</div>
+																	<input value={model.fakerParams.dec || ''}
 																		onChange={(e) => {
 																			let value = parseFloat(e.target.value) || 0;
 																			this.handleModelParamsChange(model, 'dec', value);
 																		}} />
-																	<div className="input-label">{"Symbol"}</div>
-																	<input value={model.faker_params.symbol}
+																	<div className="input-label">{'Symbol'}</div>
+																	<input value={model.fakerParams.symbol || ''}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'symbol', e.target.value);
 																		}} />
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "mask" ?
+															{model.fakerSubCategory === 'mask' ?
 																<div>
-																	<div className="input-label">{"Length of number"}</div>
-																	<input value={model.faker_params.length}
+																	<div className="input-label">{'Length of number'}</div>
+																	<input value={model.fakerParams.length || ''}
 																		onChange={(e) => {
 																			let value = parseFloat(e.target.value) || 0;
 																			this.handleModelParamsChange(model, 'length', value);
 																		}} />
-																	<div className="input-label">{"Wrap in parenthesis?"}</div>
-																	<select value={model.faker_params.parens}
+																	<div className="input-label">{'Wrap in parenthesis?'}</div>
+																	<select value={model.fakerParams.parens}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'parens', eval(e.target.value));
+																			this.handleModelParamsChange(model, 'parens', e.target.value === 'true');
 																		}}>
-																		<option value={false}>{"No"}</option>
-																		<option value={true}>{"Yes"}</option>
+																		<option value={false}>{'No'}</option>
+																		<option value={true}>{'Yes'}</option>
 																	</select>
-																	<div className="input-label">{"Include an ellipsis?"}</div>
-																	<select value={model.faker_params.ellipsis}
+																	<div className="input-label">{'Include an ellipsis?'}</div>
+																	<select value={model.fakerParams.ellipsis}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'ellipsis', eval(e.target.value));
+																			this.handleModelParamsChange(model, 'ellipsis', e.target.value === 'true');
 																		}}>
-																		<option value={false}>{"No"}</option>
-																		<option value={true}>{"Yes"}</option>
+																		<option value={false}>{'No'}</option>
+																		<option value={true}>{'Yes'}</option>
 																	</select>
 																</div>
 																: null
 															}
-															{model.faker_category === "image" && model.faker_subcategory !== "avatar" ?
+															{model.fakerCategory === 'image' && model.fakerSubCategory !== 'avatar' ?
 																<div>
-																	<div className="input-label">{"Width"}</div>
-																	<input value={model.faker_params.width}
+																	<div className="input-label">{'Width'}</div>
+																	<input value={model.fakerParams.width || ''}
 																		onChange={(e) => {
 																			let value = parseFloat(e.target.value) || 0;
 																			this.handleModelParamsChange(model, 'width', value);
 																		}} />
-																	<div className="input-label">{"Height"}</div>
-																	<input value={model.faker_params.height}
+																	<div className="input-label">{'Height'}</div>
+																	<input value={model.fakerParams.height || ''}
 																		onChange={(e) => {
 																			let value = parseFloat(e.target.value) || 0;
 																			this.handleModelParamsChange(model, 'height', value);
@@ -875,205 +875,207 @@ class ResourceForm extends Component {
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "email" ?
+															{model.fakerSubCategory === 'email' ?
 																<div>
-																	<div className="input-label">{"First name"}</div>
-																	<input value={model.faker_params.firstName}
+																	<div className="input-label">{'First name'}</div>
+																	<input value={model.fakerParams.firstName || ''}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'firstName', e.target.value);
 																		}} />
-																	<div className="input-label">{"Last name"}</div>
-																	<input value={model.faker_params.lastName}
+																	<div className="input-label">{'Last name'}</div>
+																	<input value={model.fakerParams.lastName || ''}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'lastName', e.target.value);
 																		}} />
-																	<div className="input-label">{"Provider"}</div>
-																	<input value={model.faker_params.provider}
+																	<div className="input-label">{'Provider'}</div>
+																	<input value={model.fakerParams.provider || ''}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'provider', e.target.value);
 																		}} />
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "exampleEmail" ?
+															{model.fakerSubCategory === 'exampleEmail' ?
 																<div>
-																	<div className="input-label">{"First name"}</div>
-																	<input value={model.faker_params.firstName}
+																	<div className="input-label">{'First name'}</div>
+																	<input value={model.fakerParams.firstName || ''}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'firstName', e.target.value);
 																		}} />
-																	<div className="input-label">{"Last name"}</div>
-																	<input value={model.faker_params.lastName}
+																	<div className="input-label">{'Last name'}</div>
+																	<input value={model.fakerParams.lastName || ''}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'lastName', e.target.value);
 																		}} />
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "password" ?
+															{model.fakerSubCategory === 'password' ?
 																<div>
-																	<div className="input-label">{"Length of password"}</div>
-																	<input value={model.faker_params.length}
+																	<div className="input-label">{'Length of password'}</div>
+																	<input value={model.fakerParams.length || ''}
 																		onChange={(e) => {
-																			let value = parseInt(e.target.value) || 0;
+																			let value = parseInt(e.target.value, 10) || 0;
 																			this.handleModelParamsChange(model, 'length', value);
 																		}} />
-																	<div className="input-label">{"Memorable password?"}</div>
-																	<select value={model.faker_params.memorable}
+																	<div className="input-label">{'Memorable password?'}</div>
+																	<select value={model.fakerParams.memorable}
 																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'memorable', eval(e.target.value));
+																			this.handleModelParamsChange(model, 'memorable', e.target.value === 'true');
 																		}}>
-																		<option value={false}>{"No"}</option>
-																		<option value={true}>{"Yes"}</option>
+																		<option value={false}>{'No'}</option>
+																		<option value={true}>{'Yes'}</option>
 																	</select>
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "userName" ?
+															{model.fakerSubCategory === 'userName' ?
 																<div>
-																	<div className="input-label">{"First name"}</div>
-																	<input value={model.faker_params.firstName}
+																	<div className="input-label">{'First name'}</div>
+																	<input value={model.fakerParams.firstName || ''}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'firstName', e.target.value);
 																		}} />
-																	<div className="input-label">{"Last name"}</div>
-																	<input value={model.faker_params.lastName}
+																	<div className="input-label">{'Last name'}</div>
+																	<input value={model.fakerParams.lastName || ''}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'lastName', e.target.value);
 																		}} />
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "lines" ?
+															{model.fakerSubCategory === 'lines' ?
 																<div>
-																	<div className="input-label">{"Number of lines"}</div>
-																	<input value={model.faker_params.lines}
+																	<div className="input-label">{'Number of lines'}</div>
+																	<input value={model.fakerParams.lines || ''}
 																		onChange={(e) => {
-																			let value = parseInt(e.target.value) || 0;
+																			let value = parseInt(e.target.value, 10) || 0;
 																			this.handleModelParamsChange(model, 'lines', value);
 																		}} />
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "paragraphs" ?
+															{model.fakerSubCategory === 'paragraphs' ?
 																<div>
-																	<div className="input-label">{"Number of paragraphs"}</div>
-																	<input value={model.faker_params.paragraphCount}
+																	<div className="input-label">{'Number of paragraphs'}</div>
+																	<input value={model.fakerParams.paragraphCount || ''}
 																		onChange={(e) => {
-																			let value = parseInt(e.target.value) || 0;
+																			let value = parseInt(e.target.value, 10) || 0;
 																			this.handleModelParamsChange(model, 'paragraphCount', value);
 																		}} />
-																	<div className="input-label">{"Separator"}</div>
-																	<input value={model.faker_params.seperator}
+																	<div className="input-label">{'Separator'}</div>
+																	<input value={model.fakerParams.seperator || ''}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'seperator', e.target.value);
 																		}} />
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "sentence" ?
+															{model.fakerSubCategory === 'sentence' ?
 																<div>
-																	<div className="input-label">{"Number of words"}</div>
-																	<input value={model.faker_params.wordCount}
+																	<div className="input-label">{'Number of words'}</div>
+																	<input value={model.fakerParams.wordCount || ''}
 																		onChange={(e) => {
-																			let value = parseInt(e.target.value) || 0;
+																			let value = parseInt(e.target.value, 10) || 0;
 																			this.handleModelParamsChange(model, 'wordCount', value);
 																		}} />
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "sentences" ?
+															{model.fakerSubCategory === 'sentences' ?
 																<div>
-																	<div className="input-label">{"Number of sentences"}</div>
-																	<input value={model.faker_params.sentenceCount}
+																	<div className="input-label">{'Number of sentences'}</div>
+																	<input value={model.fakerParams.sentenceCount || ''}
 																		onChange={(e) => {
-																			let value = parseInt(e.target.value) || 0;
+																			let value = parseInt(e.target.value, 10) || 0;
 																			this.handleModelParamsChange(model, 'sentenceCount', value);
 																		}} />
-																	<div className="input-label">{"Separator"}</div>
-																	<input value={model.faker_params.seperator}
+																	<div className="input-label">{'Separator'}</div>
+																	<input value={model.fakerParams.seperator || ''}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'seperator', e.target.value);
 																		}} />
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "text" ?
+															{model.fakerSubCategory === 'text' ?
 																<div>
-																	<div className="input-label">{"Number of times"}</div>
-																	<input value={model.faker_params.times}
+																	<div className="input-label">{'Number of times'}</div>
+																	<input value={model.fakerParams.times || ''}
 																		onChange={(e) => {
-																			let value = parseInt(e.target.value) || 0;
+																			let value = parseInt(e.target.value, 10) || 0;
 																			this.handleModelParamsChange(model, 'times', value);
 																		}} />
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "words" ?
+															{model.fakerSubCategory === 'words' ?
 																<div>
-																	<div className="input-label">{"Number of words"}</div>
-																	<input value={model.faker_params.words}
+																	<div className="input-label">{'Number of words'}</div>
+																	<input value={model.fakerParams.words || ''}
 																		onChange={(e) => {
-																			let value = parseInt(e.target.value) || 0;
+																			let value = parseInt(e.target.value, 10) || 0;
 																			this.handleModelParamsChange(model, 'words', value);
 																		}} />
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "firstName" || model.faker_subcategory === 'lastName' || model.faker_subcategory === 'prefix' ?
+															{model.fakerSubCategory === 'firstName' ||
+																model.fakerSubCategory === 'lastName' ||
+																model.fakerSubCategory === 'prefix' ?
 																<div>
-																	<div className="input-label">{"Gender"}</div>
+																	<div className="input-label">{'Gender'}</div>
 																	<select value={model.gender}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'gender', e.target.value);
 																		}}>
-																		<option value={""}>
-																			{"Either"}
+																		<option value={''}>
+																			{'Either'}
 																		</option>
-																		<option value={"male"}>
-																			{"Male"}
+																		<option value={'male'}>
+																			{'Male'}
 																		</option>
-																		<option value={"female"}>
-																			{"Female"}
+																		<option value={'female'}>
+																			{'Female'}
 																		</option>
 																	</select>
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "arrayElement" ?
+															{model.fakerSubCategory === 'arrayElement' ?
 																<div>
-																	<div className="input-label">{"Array"}</div>
+																	<div className="input-label">{'Array'}</div>
 																	<div className="editor-wrap">
 																		<AceEditor
-																	    mode="json"
-																	    theme="tomorrow"
-																	    width="100%"
-																	    height="100%"
-																	    editorProps={{
-																	    	$blockScrolling: true
-																	    }}
-																	    setOptions={{
-																	    	showGutter: false,
-																	    	showLineNumbers: false,
-																	    	highlightGutterLine: false
-																	    }}
-																	    highlightActiveLine={false}
-																	    enableLiveAutocompletion={true}
-																	    tabSize={2}
-																	    onChange={(value) => {
-																	    	this.handleModelParamsChange(model, 'json', value);
-																	    }}
-																	    value={model.faker_params.json}
-																	    name={`model-${i}`}
-																	  />
+																			mode="json"
+																			theme="tomorrow"
+																			width="100%"
+																			height="100%"
+																			editorProps={{
+																				$blockScrolling: true
+																			}}
+																			setOptions={{
+																				showGutter: false,
+																				showLineNumbers: false,
+																				highlightGutterLine: false
+																			}}
+																			highlightActiveLine={false}
+																			enableLiveAutocompletion={true}
+																			tabSize={2}
+																			onChange={(value) => {
+																				this.handleModelParamsChange(model, 'json', value);
+																			}}
+																			value={model.fakerParams.json}
+																			name={`model-${i}`}
+																		/>
 																	</div>
 																</div>
 																: null
 															}
-															{model.faker_subcategory === "objectElement" ?
+															{model.fakerSubCategory === 'objectElement' ?
 																<div>
-																	<div className="input-label">{"Object"}</div>
-																	<textarea value={model.faker_params.json}
+																	<div className="input-label">{'Object'}</div>
+																	<textarea value={model.fakerParams.json}
 																		onChange={(e) => {
 																			this.handleModelParamsChange(model, 'json', e.target.value);
 																		}}>
@@ -1092,15 +1094,15 @@ class ResourceForm extends Component {
 									}
 								</div>
 								<div className="flex-1 flex flex-vertical">
-									<div className="flex-0 input-label">{"Required?"}</div>
+									<div className="flex-0 input-label">{'Required?'}</div>
 									<select value={model.required}
 										onChange={(e) => {
-											this.handleModelChange(model, 'required', eval(e.target.value));
+											this.handleModelChange(model, 'required', e.target.value === 'true');
 										}}>
-										<option value={false}>{"No"}</option>
-										<option value={true}>{"Yes"}</option>
+										<option value={false}>{'No'}</option>
+										<option value={true}>{'Yes'}</option>
 									</select>
-									<div className="input-label flex-0">{"Documentation description"}</div>
+									<div className="input-label flex-0">{'Documentation description'}</div>
 									<textarea className="flex-1"
 										value={model.documentation_description}
 										onChange={(e) => {
@@ -1110,12 +1112,16 @@ class ResourceForm extends Component {
 								</div>
 							</div>
 						</div>
-					)
+					);
 				})}
 			</div>
-		)
-		return null
+		);
 	}
 }
 
-export default ResourceForm
+ResourceForm.propTypes = {
+	nested: React.PropTypes.bool,
+	resource: React.PropTypes.object
+};
+
+export default ResourceForm;

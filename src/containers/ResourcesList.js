@@ -5,18 +5,18 @@ import {Link} from 'react-router';
 // Stores
 import ResourcesStore from 'stores/ResourcesStore';
 
-class Resources extends Component {
+class ResourcesList extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			search: ""
-		}
+			search: ''
+		};
 	}
 
 	handleSearchingResources(search) {
 		this.state.search = search;
 		this.forceUpdate();
- 	}
+	}
 
 /*=============================================================================
 	Render office tasks
@@ -26,14 +26,14 @@ class Resources extends Component {
 			<div className="flex flex-vertical">
 				<div className="section-title flex flex-0">
 					<span className="flex-1">
-						{"Resources"}
+						{'Resources'}
 					</span>
 					<a href=""
 						onClick={(e) => {
 							e.preventDefault();
 							ResourcesStore.createNewResource();
 						}}>
-						{"New"}
+						{'New'}
 					</a>
 				</div>
 				<div className="flex flex-vertical">
@@ -48,22 +48,21 @@ class Resources extends Component {
 						</div>
 					</div>
 					<div className="flex-1 overflow-auto">
-						{this.props.resources.filter((resource, i) => {
+						{this.props.resources.filter((resource) => {
 							return resource.name.toLowerCase().includes(this.state.search.toLowerCase());
 						}).map((resource, i) => {
-							if (resource.id == this.props.resource.id) {
+							if (resource.id === parseInt(this.props.resource.id, 10)) {
 								return (
 									<div key={i} className="list-item active">
 										<span>{this.props.resource.name}</span>
 									</div>
-								)
-							} else {
-								return (
-									<div key={i} className="list-item">
-										<Link to={`/${resource.id}`}>{resource.name}</Link>
-									</div>
-								)
+								);
 							}
+							return (
+								<div key={i} className="list-item">
+									<Link to={`/${resource.id}`}>{resource.name}</Link>
+								</div>
+							);
 						})}
 					</div>
 				</div>
@@ -74,17 +73,21 @@ class Resources extends Component {
 							onClick={(e) => {
 								e.preventDefault();
 							}}>
-							{"Open full docs"}
+							{'Open full docs'}
 						</a>
 					</div>
 				</div>
 			</div>
-		)
+		);
 	}
 }
 
-export default Provide(Resources, [
+ResourcesList.propTypes = {
+	resource: React.PropTypes.object,
+	resources: React.PropTypes.array
+};
+
+export default Provide(ResourcesList, [
 	'resources',
-	'resource',
-	'resources_loading'
-])
+	'resource'
+]);

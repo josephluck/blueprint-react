@@ -1,16 +1,6 @@
 import React, {Component} from 'react';
 import Provide from 'hoc/Provide';
-import {Link} from 'react-router';
-import FakerCategories from 'data/FakerCategories';
-import FakerSubCategories from 'data/FakerSubCategories';
-import Faker from 'faker';
-
-import brace from 'brace';
-import AceEditor from 'react-ace';
-import 'brace/mode/json';
-import 'brace/theme/tomorrow';
 import ResourceForm from 'components/ResourceForm';
-
 import ResourcesStore from 'stores/ResourcesStore';
 import ResourceStore from 'stores/ResourceStore';
 
@@ -72,11 +62,17 @@ class ResourceEdit extends Component {
 				/>
 				{this.props.children}
 			</div>
-		)
+		);
 	}
 }
+
+ResourceEdit.propTypes = {
+	children: React.PropTypes.node,
+	resource: React.PropTypes.object,
+	resources: React.PropTypes.array
+};
 
 export default Provide(ResourceEdit, [
 	'resource',
 	'resources'
-])
+]);

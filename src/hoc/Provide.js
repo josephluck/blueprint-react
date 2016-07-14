@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import { warmUp } from 'react-freezer-js';
+import React from 'react';
+import {warmUp} from 'react-freezer-js';
 
 /*=============================================================================
 	Given a component and prop paths, give the component props from the store
@@ -14,19 +14,19 @@ import { warmUp } from 'react-freezer-js';
 	<Application /> component will automatically re-render.
 =============================================================================*/
 
-export default function Provide(ComponentToBeProvided, requested_props) {
+export default function Provide(ComponentToBeProvided, requestedProps) {
 	/*=============================================================================
 		Convert the requested props in to an array of arrays that warmUp needs.
 	=============================================================================*/
-  var decorated_props = requested_props.map((prop) => {
+  const decoratedProps = requestedProps.map((prop) => {
     return [prop, prop];
   });
 
 	const ProvidedComponent = React.createClass({
 		render() {
-			return <ComponentToBeProvided {...this.props} />
+			return <ComponentToBeProvided {...this.props} />;
 		}
-	})
+	});
 
-  return warmUp(ProvidedComponent, decorated_props);
+  return warmUp(ProvidedComponent, decoratedProps);
 }

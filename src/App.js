@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { cool } from 'react-freezer-js';
+import {cool} from 'react-freezer-js';
 
 import Store from 'stores/Store';
 import ResourcesStore from 'stores/ResourcesStore';
@@ -17,26 +17,30 @@ class App extends Component {
 	}
 
 	render() {
-	  return (
-	  	<div className="app-container">
-	  		<div className="left-nav flex flex-vertical">
-	  			<div className="logo">
-	  				<span>{"B"}</span>
-	  			</div>
-		  		<ResourcesList />
-		  	</div>
-		  	{Store.get().resources.length > 0 ?
-		  		<div className="flex flex-1">
-				  	<div className="main-content flex flex-vertical">
-					  	<div className="flex">{this.props.children}</div>
-					  </div>
-					  <RightBar />
+		return (
+			<div className="app-container">
+				<div className="left-nav flex flex-vertical">
+					<div className="logo">
+						<span>{"B"}</span>
 					</div>
-			 	: null
-			 }
-		  </div>
-		)
+					<ResourcesList />
+				</div>
+				{Store.get().resources.length > 0 ?
+					<div className="flex flex-1">
+						<div className="main-content flex flex-vertical">
+							<div className="flex">{this.props.children}</div>
+						</div>
+						<RightBar />
+					</div>
+				: null
+				}
+			</div>
+		);
 	}
 }
+
+App.propTypes = {
+	children: React.PropTypes.node
+};
 
 export default cool(App, Store);
