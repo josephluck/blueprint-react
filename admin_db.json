@@ -3,7 +3,7 @@
     {
       "type": "array",
       "length": 5,
-      "name": "users",
+      "name": "usersss",
       "supportedMethods": {
         "get": true,
         "post": true,
@@ -17,6 +17,37 @@
         "embed": true
       },
       "model": [
+        {
+          "uuid": "71d90fae-baf0-4adf-ae53-fb531a6eb146",
+          "type": "object",
+          "fakerSubCategory": "",
+          "fakerCategory": "",
+          "fakerParams": {},
+          "resource": {
+            "type": "array",
+            "length": 5,
+            "model": [
+              {
+                "uuid": "274edc3e-33d9-49c9-bca0-7efe752b7361",
+                "type": "random",
+                "fakerSubCategory": "lastName",
+                "fakerCategory": "name",
+                "fakerParams": {
+                  "gender": null
+                },
+                "resource": {},
+                "predefinedType": "string",
+                "predefinedValue": "",
+                "required": false,
+                "key": "nested_key"
+              }
+            ]
+          },
+          "predefinedType": "string",
+          "predefinedValue": "",
+          "required": false,
+          "key": "nestedObject"
+        },
         {
           "uuid": "f84cc424-8f75-481d-8046-1ce3fada0535",
           "type": "random",
@@ -124,7 +155,7 @@
       "validationConfig": {
         "futureDate": {
           "datetime": {
-            "latest": "Invalid date"
+            "latest": "2019-07-14"
           }
         },
         "randomEmailAddress": {

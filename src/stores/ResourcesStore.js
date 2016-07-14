@@ -83,7 +83,7 @@ class ResourcesStore {
 	}
 
 	updateResource(resource) {
-		const resourceToUpdate = Store.get().resources.find((_resource) => {
+		let resourceToUpdate = Store.get().resources.find((_resource) => {
 			return _resource.id === resource.id;
 		});
 

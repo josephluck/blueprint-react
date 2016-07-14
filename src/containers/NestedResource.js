@@ -37,8 +37,6 @@ class NestedModel extends Component {
 						<ResourceForm
 							resource={this.state.nestedResource.resource}
 							resources={this.props.resources}
-							resource_id={this.props.resource.id}
-							current_splat={this.props.params.splat.split('/').map(Number)}
 							nested={true} />
 					</div>
 					: null

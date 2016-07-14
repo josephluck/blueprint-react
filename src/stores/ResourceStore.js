@@ -54,7 +54,7 @@ class ResourceStore {
 			},
 			payload: resource
 		}).then((resp) => {
-			resp.model = resp.model.map((model) => {
+			resource.model = resp.body.model.map((model) => {
 				if (model.fakerSubcategory === 'arrayElement' || model.fakerSubcategory === 'objectElement') {
 					model.fakerParams.json = JSON.stringify(model.fakerParams.json, null, 2);
 				}
@@ -64,9 +64,9 @@ class ResourceStore {
 
 			Store.get().set({
 				resourceSaving: false,
-				resource: resp
+				resource: resource
 			});
-			ResourcesStore.updateResource(resp);
+			ResourcesStore.updateResource(resource);
 		});
 	}
 

@@ -8,7 +8,7 @@ var _resources = [];
 =============================================================================*/
 validate.extend(validate.validators.datetime, {
   parse: function(value, options) {
-    return +moment.utc(value);
+    return + moment.utc(value);
   },
   format: function(value, options) {
     var format = options.dateOnly ? "YYYY-MM-DD" : "YYYY-MM-DD hh:mm:ss";
@@ -76,7 +76,7 @@ module.exports = {
 	generatePropertyValue: function(property) {
 		if (property.type === 'random') {
 			return this.generateRandomValue(property);
-		} else if (property.type === 'child_resource') {
+		} else if (property.type === 'childResource') {
 			return this.generateValueFromAnotherResource(property);
 		} else if (property.type === 'object') {
 			if (property.resource && property.resource.type) {
@@ -85,7 +85,7 @@ module.exports = {
 				return null
 			}
 		} else if (property.type === 'predefined') {
-			return property.predefined_value;
+			return property.predefinedValue;
 		}
 	},
 
@@ -94,15 +94,15 @@ module.exports = {
 	Uses faker.js (see docs for more info)
 =============================================================================*/
 	generateRandomValue: function(property) {
-		if (property.faker_category && property.faker_subcategory) {
+		if (property.fakerCategory && property.fakerSubCategory) {
 			var args = [];
-			if (property.faker_params) {
-				var keys = Object.keys(property.faker_params);
+			if (property.fakerParams) {
+				var keys = Object.keys(property.fakerParams);
 				args = keys.map(function(key, i) {
-					return property.faker_params[key];
+					return property.fakerParams[key];
 				});
 			}
-			return faker[property.faker_category][property.faker_subcategory].apply(null, args);
+			return faker[property.fakerCategory][property.fakerSubCategory].apply(null, args);
 		} else {
 			return null;
 		}
@@ -112,21 +112,21 @@ module.exports = {
 	Check whether a child resource has a model key that requests it's parent i.e:
 
 	users_model : [{
-		type: 'child_resource',
-		child_resource_name: 'comments'
+		type: 'childResource',
+		childResourceName: 'comments'
 	}];
 	comments_model: [{
-		type: 'child_resource',
-		child_resource_name: 'users'
+		type: 'childResource',
+		childResourceName: 'users'
 	}];
 
 	The above will fail since it'll cause an infinite loop of generateResource
 	calls.
 =============================================================================*/
-	childResourceContainsRecursiveParent: function(resource_name, child_resource) {
-		for (var i = 0, x = child_resource.model.length; i < x; i++) {
-			if (child_resource.model[i].type === 'child_resource') {
-				if (child_resource.model[i].name === resource_name) {
+	childResourceContainsRecursiveParent: function(resourceName, childResource) {
+		for (var i = 0, x = childResource.model.length; i < x; i++) {
+			if (childResource.model[i].type === 'childResource') {
+				if (childResource.model[i].name === resourceName) {
 					return true
 				}
 			}
@@ -155,23 +155,23 @@ module.exports = {
 =============================================================================*/
 	generateValueFromAnotherResource: function(property) {
 		for (var i = 0, x = _resources.length; i < x; i++) {
-			if (_resources[i].name === property.child_resource_name) {
-				var resource_description = _resources[i];
+			if (_resources[i].name === property.childResourceName) {
+				var resourceDescription = _resources[i];
 				break;
 			}
 		}
 
-		if (resource_description) {
-			if (this.childResourceContainsRecursiveParent(property.child_resource_name, resource_description)) {
-				return "ERROR, " + property.child_resource_name + " is a recursive key";
+		if (resourceDescription) {
+			if (this.childResourceContainsRecursiveParent(property.childResourceName, resourceDescription)) {
+				return "ERROR, " + property.childResourceName + " is a recursive key";
 			} else {
 				// Refactor this line below so it doesn't generate the resource
 				// but is the prevously-generated resource.
-				var resource = this.generateResource(resource_description);
+				var resource = this.generateResource(resourceDescription);
 
-				if (property.child_resource_method === 'array') {
-					if (property.child_resource_limit) {
-						var limit = parseFloat(property.child_resource_limit);
+				if (property.childResourceMethod === 'array') {
+					if (property.childResourceLimit) {
+						var limit = parseFloat(property.childResourceLimit);
 						if (limit > resource.length) {
 							return resource;
 						} else {
@@ -180,9 +180,9 @@ module.exports = {
 					} else {
 						return resource;
 					}
-				} else if (property.child_resource_method === 'object') {
+				} else if (property.childResourceMethod === 'object') {
 					return resource[Math.floor((Math.random() * resource.length))];
-				} else if  (property.child_resource_method === 'id') {
+				} else if  (property.childResourceMethod === 'id') {
 					return resource[Math.floor((Math.random() * resource.length))].id;
 				}
 			}
@@ -210,27 +210,27 @@ module.exports = {
 	is a required parameter.
 =============================================================================*/
 	validateRequest: function(resource, request) {
-		return validate(request, resource.validation_config);
+		return validate(request, resource.validationConfig);
 	},
 
 /*=============================================================================
 	Generate validation config (for validate.js) for a resource
 =============================================================================*/
 	generateValidationConfigForResource: function(resource) {
-		var validation_config = {};
+		var validationConfig = {};
 
 		// Generate a validate.js configuraton from the model description
 		resource.model.map((parameter) => {
-			if (parameter.type === "child_resource") {
+			if (parameter.type === "childResource") {
 				// Handle a nested resource and validate it
 			} else if (parameter.type === "object") {
 				// Handle a nested object / array and validate it
 			} else {
-				validation_config[parameter.key] = this.getSingleRequestParameterValidationRequirements(parameter);
+				validationConfig[parameter.key] = this.getSingleRequestParameterValidationRequirements(parameter);
 			}
 		});
 
-		return validation_config;
+		return validationConfig;
 	},
 
 /*=============================================================================
@@ -238,85 +238,85 @@ module.exports = {
 =============================================================================*/
 	getSingleRequestParameterValidationRequirements: function(parameter) {
 		var config = {};
-		var required_type;
+		var requiredType;
 
 		if (parameter.required) {
 			config.presence = true;
 		}
 
 		if (parameter.type === "predefined") {
-			required_type = parameter.predefined_type;
+			requiredType = parameter.predefinedType;
 		} else if (parameter.type === "random") {
-			var example_value = this.generateRandomValue(parameter); // Generate a random value from the resource description and grab it's type
-			var is_date = moment(example_value).isValid();
-			var is_number = !isNaN(example_value);
-			var is_boolean = typeof(example_value) === "boolean";
-			var is_string = typeof(example_value) === "string";
+			var exampleValue = this.generateRandomValue(parameter); // Generate a random value from the resource description and grab it's type
+			var isDate = moment(exampleValue).isValid();
+			var isNumber = !isNaN(exampleValue);
+			var isBoolean = typeof(exampleValue) === "boolean";
+			var isString = typeof(exampleValue) === "string";
 
-			if (is_date) {
-				required_type = "date";
-			} else if (is_number) {
-				required_type = "number";
-			} else if (is_boolean) {
-				required_type = "boolean";
+			if (isDate) {
+				requiredType = "date";
+			} else if (isNumber) {
+				requiredType = "number";
+			} else if (isBoolean) {
+				requiredType = "boolean";
 			} else {
-				required_type = "string";
+				requiredType = "string";
 			}
 
 			// Date validation (range)
-			if (parameter.faker_category === "date") {
-				var date_type = parameter.faker_subcategory; // Get the params from the model for min max etc
-				var faker_params = parameter.faker_params;
-				if (date_type === "between") {
+			if (parameter.fakerCategory === "date") {
+				var dateType = parameter.fakerSubCategory; // Get the params from the model for min max etc
+				var fakerParams = parameter.fakerParams;
+				if (dateType === "between") {
 					config.datetime = {}
-					if (faker_params.from) {
-						config.datetime.earliest = faker_params.from;
+					if (fakerParams.from) {
+						config.datetime.earliest = fakerParams.from;
 					}
-					if (faker_params.to) {
-						config.datetime.latest = faker_params.to;
+					if (fakerParams.to) {
+						config.datetime.latest = fakerParams.to;
 					}
-				} else if (date_type === "future") {
+				} else if (dateType === "future") {
 					config.datetime = {}
-					if (faker_params.refDate) {
-						config.datetime.earliest = faker_params.refDate;
+					if (fakerParams.refDate) {
+						config.datetime.earliest = fakerParams.refDate;
 					}
-					if (faker_params.years) {
+					if (fakerParams.years) {
 						//
 						// NOTE: Refactor this so it works when this is run so it's always looking at todays date
 						// Consider storing latest as the string "today" and checking for that string when
 						// validation is run
 						//
 
-						var refDate = faker_params.refDate || new Date()
-						config.datetime.latest = moment(refDate).add(faker_params.years, 'years').format('YYYY-MM-DD');
+						var refDate = fakerParams.refDate || new Date()
+						config.datetime.latest = moment(refDate).add(fakerParams.years, 'years').format('YYYY-MM-DD');
 					}
-				} else if (date_type === "past") {
+				} else if (dateType === "past") {
 					config.datetime = {}
-					if (faker_params.refDate) {
-						config.datetime.latest = faker_params.refDate;
+					if (fakerParams.refDate) {
+						config.datetime.latest = fakerParams.refDate;
 					}
-					if (faker_params.years) {
-						config.datetime.earliest = moment(faker_params.refDate).subtract(faker_params.years, 'years').format('YYYY-MM-DD');
+					if (fakerParams.years) {
+						config.datetime.earliest = moment(fakerParams.refDate).subtract(fakerParams.years, 'years').format('YYYY-MM-DD');
 					}
-				} else if (date_type === "month") {
-					if (parameter.faker_subcategory === "month") {
+				} else if (dateType === "month") {
+					if (parameter.fakerSubCategory === "month") {
 						config.inclusion = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "November", "December"];
 					}
 				} else {
 					// Else it's just a random date, no min or max needed
 					config.datetime = true;
 				}
-			} else if (parameter.faker_subcategory === "email") {
+			} else if (parameter.fakerSubCategory === "email") {
 				config.email = true;
-			} else if (parameter.faker_subcategory === "url") {
+			} else if (parameter.fakerSubCategory === "url") {
 				config.url = true
-			} else if (is_string && parameter.faker_subcategory === "arrayElement") {
+			} else if (isString && parameter.fakerSubCategory === "arrayElement") {
 				// We have to check if array is an array of strings since validate.js doesn't support
 				// nested objects. TODO: write a validator that supports deepEqual of nested objects.
-				config.inclusion = parameter.faker_params.json;
-			} else if (is_boolean) {
+				config.inclusion = parameter.fakerParams.json;
+			} else if (isBoolean) {
 				config.boolean = true;
-			} else if (parameter.faker_subcategory === "number") {
+			} else if (parameter.fakerSubCategory === "number") {
 				config.numericality = true;
 			}
 		}

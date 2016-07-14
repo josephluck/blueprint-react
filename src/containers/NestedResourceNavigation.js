@@ -8,14 +8,7 @@ class NestedResourceNavigation extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			currentNestedResource: {
-				resource: {
-					type: 'array',
-					length: 5,
-					name: 'nested_2',
-					model: []
-				}
-			}
+			currentNestedResource: {}
 		};
 
 		this.state.nestedResources = this.updateNestedResources(props);
@@ -55,11 +48,10 @@ class NestedResourceNavigation extends Component {
 				<div className="section-title with-top-border flex flex-0">
 					<span className="flex-1">
 						{this.state.nestedResources.map((resource, i) => {
-							console.log(resource);
 							if (i !== this.state.nestedResources.length - 1) {
 								let path = window.location.pathname.split('/').slice(2, i + 3).join('/');
 								return (
-									<span>
+									<span key={i}>
 										<Link to={`/${this.props.resource.id}/${path}`}>
 											{resource.key}
 										</Link>
@@ -77,14 +69,10 @@ class NestedResourceNavigation extends Component {
 					</Link>
 				</div>
 				<div className="flex-1 overflow-auto">
-					{this.state.test ?
-						<ResourceForm
-							resource={this.state.currentNestedResource.resource}
-							resources={this.props.resources}
-							resource_id={this.props.resource.id}
-							nested={true} />
-						: null
-					}
+					<ResourceForm
+						resource={this.state.currentNestedResource.resource}
+						resources={this.props.resources}
+						nested={true} />
 				</div>
 			</div>
 		);
