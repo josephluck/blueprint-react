@@ -6,20 +6,16 @@ module.exports = {
     'webpack-dev-server/client?http://localhost:1402',
     'webpack/hot/dev-server',
     'babel-polyfill',
-    './scripts/index',
+    './src/index',
     './less/main.less',
   ],
   output: {
-    path: path.join(__dirname, 'static'),
+    path: path.join(__dirname, 'build'),
     filename: 'bundle.js',
-    publicPath: '/static/'
+    publicPath: '/build/'
   },
   resolve: {
-    root: path.resolve('./scripts'),
-    // alias: {
-    //   'react': 'react-lite',
-    //   'react-dom': 'react-lite'
-    // },
+    root: path.resolve('./src'),
     extensions: ['', '.js']
   },
   devtool: 'eval-source-map',
@@ -37,12 +33,22 @@ module.exports = {
           plugins: ['transform-decorators-legacy'],
           presets: ['es2015', 'stage-0', 'react']
         },
-        include: path.join(__dirname, 'scripts')
+        include: path.join(__dirname, 'src')
       },
       {
         test: /\.less$/,
         loader: "style!css!autoprefixer!less"
       },
+    ],
+    preLoaders: [
+      {
+        test: /\.js$/,
+        loaders: ['eslint'],
+        include: [new RegExp(path.join(__dirname, 'src'))]
+      }
     ]
+  },
+  eslint: {
+    configFile: './.eslintrc'
   }
 };
