@@ -2,445 +2,566 @@ const categories = {
 	address: [
 		{
 			name: 'City prefix',
-			value: 'cityPrefix'
+			value: 'cityPrefix',
+			params: []
 		},
 		{
 			name: 'City suffix',
-			value: 'citySuffix'
+			value: 'citySuffix',
+			params: []
 		},
 		{
 			name: 'Country',
-			value: 'country'
+			value: 'country',
+			params: []
 		},
 		{
 			name: 'Country code',
-			value: 'countryCode'
+			value: 'countryCode',
+			params: []
 		},
 		{
 			name: 'County',
-			value: 'county'
+			value: 'county',
+			params: []
 		},
 		{
 			name: 'Latitude',
-			value: 'latitude'
+			value: 'latitude',
+			params: []
 		},
 		{
 			name: 'Longitude',
-			value: 'longitude'
+			value: 'longitude',
+			params: []
 		},
 		{
 			name: 'Secondary address',
-			value: 'secondaryAddress'
+			value: 'secondaryAddress',
+			params: []
 		},
 		{
 			name: 'State',
-			value: 'state'
+			value: 'state',
+			params: []
 		},
 		{
-			name: 'State Abbreviation',
-			value: 'stateAbbr'
+			name: 'State abbreviation',
+			value: 'stateAbbr',
+			params: []
 		},
 		{
 			name: 'Street address',
-			value: 'streetAddress'
+			value: 'streetAddress',
+			params: [
+				{
+					name: 'Use full address',
+					param: 'useFullAddress',
+					type: 'select',
+					options: [
+						{
+							description: 'Yes',
+							value: true
+						},
+						{
+							description: 'No',
+							value: false
+						}
+					]
+				}
+			]
 		},
 		{
 			name: 'Street name',
-			value: 'streetName'
+			value: 'streetName',
+			params: []
 		},
 		{
 			name: 'Street prefix',
-			value: 'streetPrefix'
+			value: 'streetPrefix',
+			params: []
 		},
 		{
 			name: 'Street suffix',
-			value: 'streetSuffix'
+			value: 'streetSuffix',
+			params: []
 		},
 		{
 			name: 'Zip code',
-			value: 'zipCode'
+			value: 'zipCode',
+			params: []
 		}
 	],
 	commerce: [
 		{
 			name: 'Color',
-			value: 'color'
+			value: 'color',
+			params: []
 		},
 		{
 			name: 'Department',
-			value: 'department'
+			value: 'department',
+			params: []
 		},
 		{
 			name: 'Price',
-			value: 'price'
+			value: 'price',
+			params: []
 		},
 		{
 			name: 'Product',
-			value: 'product'
+			value: 'product',
+			params: []
 		},
 		{
 			name: 'Product adjective',
-			value: 'productAdjective'
+			value: 'productAdjective',
+			params: []
 		},
 		{
 			name: 'Product material',
-			value: 'productMaterial'
+			value: 'productMaterial',
+			params: []
 		},
 		{
 			name: 'Product name',
-			value: 'productName'
+			value: 'productName',
+			params: []
 		}
 	],
 	company: [
 		{
 			name: 'Bullshit',
-			value: 'bs'
+			value: 'bs',
+			params: []
 		},
 		{
 			name: 'Bullshit adjective',
-			value: 'bsAdjective'
+			value: 'bsAdjective',
+			params: []
 		},
 		{
 			name: 'Bullshit buzz',
-			value: 'bsBuzz'
+			value: 'bsBuzz',
+			params: []
 		},
 		{
 			name: 'Bullshit noun',
-			value: 'bsNoun'
+			value: 'bsNoun',
+			params: []
 		},
 		{
 			name: 'Catch phrase',
-			value: 'catchPrase'
+			value: 'catchPrase',
+			params: []
 		},
 		{
 			name: 'Catch phrase adjective',
-			value: 'catchPraseAdjective'
+			value: 'catchPraseAdjective',
+			params: []
 		},
 		{
 			name: 'Catch phrase descriptor',
-			value: 'catchPraseDescriptor'
+			value: 'catchPraseDescriptor',
+			params: []
 		},
 		{
 			name: 'Catch phrase noun',
-			value: 'catchPraseNoun'
+			value: 'catchPraseNoun',
+			params: []
 		},
 		{
 			name: 'Company name',
-			value: 'companyName'
+			value: 'companyName',
+			params: []
 		}
 	],
 	date: [
 		{
 			name: 'Between',
-			value: 'between'
+			value: 'between',
+			params: []
 		},
 		{
 			name: 'Future',
-			value: 'future'
+			value: 'future',
+			params: []
 		},
 		{
 			name: 'Month',
-			value: 'month'
+			value: 'month',
+			params: []
 		},
 		{
 			name: 'Past',
-			value: 'past'
+			value: 'past',
+			params: []
 		},
 		{
 			name: 'Recent',
-			value: 'recent'
+			value: 'recent',
+			params: []
 		}
 	],
 	finance: [
 		{
 			name: 'Account number',
-			value: 'account'
+			value: 'account',
+			params: []
 		},
 		{
 			name: 'Account name',
-			value: 'accountName'
+			value: 'accountName',
+			params: []
 		},
 		{
 			name: 'Amount',
-			value: 'amount'
+			value: 'amount',
+			params: []
 		},
 		{
 			name: 'Bitcoin address',
-			value: 'bitcoinAddress'
+			value: 'bitcoinAddress',
+			params: []
 		},
 		{
 			name: 'Currency code',
-			value: 'currencyCode'
+			value: 'currencyCode',
+			params: []
 		},
 		{
 			name: 'Currency name',
-			value: 'currencyName'
+			value: 'currencyName',
+			params: []
 		},
 		{
 			name: 'Currency symbol',
-			value: 'currencySymbol'
+			value: 'currencySymbol',
+			params: []
 		},
 		{
 			name: 'Masked number (i.e. account number)',
-			value: 'mask'
+			value: 'mask',
+			params: []
 		},
 		{
 			name: 'Transaction type',
-			value: 'transactionType'
+			value: 'transactionType',
+			params: []
 		}
 	],
 	hacker: [
 		{
 			name: 'Abbreviation',
-			value: 'abbreviation'
+			value: 'abbreviation',
+			params: []
 		},
 		{
 			name: 'Adjective',
-			value: 'adjective'
+			value: 'adjective',
+			params: []
 		},
 		{
 			name: 'Ingverb',
-			value: 'ingverb'
+			value: 'ingverb',
+			params: []
 		},
 		{
 			name: 'Noun',
-			value: 'noun'
+			value: 'noun',
+			params: []
 		},
 		{
 			name: 'Phrase',
-			value: 'phrase'
+			value: 'phrase',
+			params: []
 		},
 		{
 			name: 'Verb',
-			value: 'verb'
+			value: 'verb',
+			params: []
 		}
 	],
 	image: [
 		{
 			name: 'Abstract',
-			value: 'abstract'
+			value: 'abstract',
+			params: []
 		},
 		{
 			name: 'Animals',
-			value: 'animals'
+			value: 'animals',
+			params: []
 		},
 		{
 			name: 'Avatar',
-			value: 'avatar'
+			value: 'avatar',
+			params: []
 		},
 		{
 			name: 'Business',
-			value: 'business'
+			value: 'business',
+			params: []
 		},
 		{
 			name: 'Cats',
-			value: 'cats'
+			value: 'cats',
+			params: []
 		},
 		{
 			name: 'City',
-			value: 'city'
+			value: 'city',
+			params: []
 		},
 		{
 			name: 'Fashion',
-			value: 'fashion'
+			value: 'fashion',
+			params: []
 		},
 		{
 			name: 'Food',
-			value: 'food'
+			value: 'food',
+			params: []
 		},
 		{
 			name: 'Image',
-			value: 'image'
+			value: 'image',
+			params: []
 		},
 		{
 			name: 'Nature',
-			value: 'nature'
+			value: 'nature',
+			params: []
 		},
 		{
 			name: 'Nightlife',
-			value: 'nightlife'
+			value: 'nightlife',
+			params: []
 		},
 		{
 			name: 'People',
-			value: 'people'
+			value: 'people',
+			params: []
 		},
 		{
 			name: 'Sports',
-			value: 'sports'
+			value: 'sports',
+			params: []
 		},
 		{
 			name: 'Technics',
-			value: 'technics'
+			value: 'technics',
+			params: []
 		},
 		{
 			name: 'Transport',
-			value: 'transport'
+			value: 'transport',
+			params: []
 		}
 	],
 	internet: [
 		{
 			name: 'Avatar',
-			value: 'avatar'
+			value: 'avatar',
+			params: []
 		},
 		{
 			name: 'Color',
-			value: 'color'
+			value: 'color',
+			params: []
 		},
 		{
 			name: 'Domain name',
-			value: 'domainName'
+			value: 'domainName',
+			params: []
 		},
 		{
 			name: 'Domain word',
-			value: 'domainWord'
+			value: 'domainWord',
+			params: []
 		},
 		{
 			name: 'Email',
-			value: 'email'
+			value: 'email',
+			params: []
 		},
 		{
 			name: 'Example email',
-			value: 'exampleEmail'
+			value: 'exampleEmail',
+			params: []
 		},
 		{
 			name: 'IP address',
-			value: 'ip'
+			value: 'ip',
+			params: []
 		},
 		{
 			name: 'Mac address',
-			value: 'mac'
+			value: 'mac',
+			params: []
 		},
 		{
 			name: 'Password',
-			value: 'password'
+			value: 'password',
+			params: []
 		},
 		{
 			name: 'Protocol',
-			value: 'protocol'
+			value: 'protocol',
+			params: []
 		},
 		{
 			name: 'Url',
-			value: 'url'
+			value: 'url',
+			params: []
 		},
 		{
 			name: 'User agent',
-			value: 'userAgent'
+			value: 'userAgent',
+			params: []
 		},
 		{
 			name: 'Username',
-			value: 'userName'
+			value: 'userName',
+			params: []
 		}
 	],
 	lorem: [
 		{
 			name: 'Lines',
-			value: 'lines'
+			value: 'lines',
+			params: []
 		},
 		{
 			name: 'Paragraphs',
-			value: 'paragraphs'
+			value: 'paragraphs',
+			params: []
 		},
 		{
 			name: 'Sentence',
-			value: 'sentence'
+			value: 'sentence',
+			params: []
 		},
 		{
 			name: 'Sentences',
-			value: 'sentences'
+			value: 'sentences',
+			params: []
 		},
 		{
 			name: 'Text',
-			value: 'text'
+			value: 'text',
+			params: []
 		},
 		{
 			name: 'Word',
-			value: 'word'
+			value: 'word',
+			params: []
 		},
 		{
 			name: 'Words',
-			value: 'words'
+			value: 'words',
+			params: []
 		}
 	],
 	name: [
 		{
 			name: 'First name',
-			value: 'firstName'
+			value: 'firstName',
+			params: []
 		},
 		{
 			name: 'Job area',
-			value: 'jobArea'
+			value: 'jobArea',
+			params: []
 		},
 		{
 			name: 'Job descriptor',
-			value: 'jobDescriptor'
+			value: 'jobDescriptor',
+			params: []
 		},
 		{
 			name: 'Job title',
-			value: 'jobTitle'
+			value: 'jobTitle',
+			params: []
 		},
 		{
 			name: 'Job type',
-			value: 'jobType'
+			value: 'jobType',
+			params: []
 		},
 		{
 			name: 'Last name',
-			value: 'lastName'
+			value: 'lastName',
+			params: []
 		},
 		{
 			name: 'Prefix',
-			value: 'prefix'
+			value: 'prefix',
+			params: []
 		},
 		{
 			name: 'Suffix',
-			value: 'suffix'
+			value: 'suffix',
+			params: []
 		},
 		{
 			name: 'Title',
-			value: 'title'
+			value: 'title',
+			params: []
 		}
 	],
 	phone: [
 		{
 			name: 'Phone formats',
-			value: 'phoneFormats'
+			value: 'phoneFormats',
+			params: []
 		},
 		{
 			name: 'Phone number',
-			value: 'phoneNumber'
+			value: 'phoneNumber',
+			params: []
 		}
 	],
 	random: [
 		{
 			name: 'Alpha numeric',
-			value: 'alphaNumeric'
+			value: 'alphaNumeric',
+			params: []
 		},
 		{
 			name: 'Array element',
-			value: 'arrayElement'
+			value: 'arrayElement',
+			params: []
 		},
 		{
 			name: 'Boolean',
-			value: 'boolean'
+			value: 'boolean',
+			params: []
 		},
 		{
 			name: 'Image',
-			value: 'image'
+			value: 'image',
+			params: []
 		},
 		{
 			name: 'Locale',
-			value: 'locale'
+			value: 'locale',
+			params: []
 		},
 		{
 			name: 'Number',
-			value: 'number'
+			value: 'number',
+			params: []
 		},
 		{
 			name: 'Object element',
-			value: 'objectElement'
+			value: 'objectElement',
+			params: []
 		},
 		{
 			name: 'UUID',
-			value: 'uuid'
+			value: 'uuid',
+			params: []
 		}
 	],
 	system: []

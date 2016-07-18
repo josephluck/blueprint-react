@@ -3,15 +3,9 @@ import {browserHistory} from 'react-router';
 
 import FakerCategories from 'data/FakerCategories';
 import FakerSubCategories from 'data/FakerSubCategories';
-import Faker from 'faker';
 import AceEditor from 'react-ace';
 import 'brace/mode/json';
 import 'brace/theme/tomorrow';
-import validate from 'validate.js';
-import moment from 'moment';
-window.faker = Faker;
-window.validate = validate;
-window.moment = moment;
 
 class ResourceForm extends Component {
 	constructor(props) {
@@ -99,12 +93,21 @@ class ResourceForm extends Component {
 		}
 	}
 
-	handleRandomCategoryChanged(model, value) {
+	setSelectedRandomCategory(model, value) {
 		model.set({
 			fakerCategory: value,
 			fakerSubCategory: '',
 			fakerParams: {}
 		});
+	}
+
+	setSelectedRandomSubcategory(model, category) {
+		model.set({
+			selectedFakerSubCategory: category,
+			fakerSubCategory: category.value
+		});
+
+		this.resetRandomParams(model, category);
 	}
 
 	// Consider storing this in faker subcategories json instead of here
@@ -401,7 +404,7 @@ class ResourceForm extends Component {
 						}
 					</div>
 					{!this.props.nested ?
-						<div className="flex-2 flex">
+						<div className="flex-1 flex">
 							<div className="flex-1 flex flex-vertical large-left-margin">
 								<div className="flex-0 input-label">{'Supported methods'}</div>
 								<div className="flex-0 flex">
@@ -472,15 +475,6 @@ class ResourceForm extends Component {
 									</label>
 								</div>
 							</div>
-							<div className="flex-1 flex flex-vertical large-left-margin">
-								<div className="input-label flex-0">{'Documentation description'}</div>
-								<textarea className="flex-1"
-									value={this.state.resource.documentation_description}
-									onChange={(e) => {
-										this.saveValue('documentation_description', e.target.value);
-									}}>
-								</textarea>
-							</div>
 						</div>
 						: null
 					}
@@ -520,6 +514,14 @@ class ResourceForm extends Component {
 											const value = e.target.value.replace(/\W+/g, ' ').replace(/ /g, '_');
 											this.handleModelChange(model, 'key', value);
 										}} />
+									<div className="flex-0 input-label">{'Required?'}</div>
+									<select value={model.required}
+										onChange={(e) => {
+											this.handleModelChange(model, 'required', e.target.value === 'true');
+										}}>
+										<option value={false}>{'No'}</option>
+										<option value={true}>{'Yes'}</option>
+									</select>
 								</div>
 								<div className="flex-1 overflow-hidden large-right-margin">
 									<div className="input-label flex-1">
@@ -683,7 +685,7 @@ class ResourceForm extends Component {
 											<select value={'pleasechoose'}
 												value={model.fakerCategory}
 												onChange={(e) => {
-													this.handleRandomCategoryChanged(model, e.target.value);
+													this.setSelectedRandomCategory(model, e.target.value);
 												}}>
 												<option disabled value="pleasechoose">{'Please choose'}</option>
 												{FakerCategories.map((category, categoryIndex) => {
@@ -702,8 +704,10 @@ class ResourceForm extends Component {
 													<select value={'pleasechoose'}
 														value={model.fakerSubCategory}
 														onChange={(e) => {
-															this.handleModelChange(model, 'fakerSubCategory', e.target.value);
-															this.resetRandomParams(model, e.target.value);
+															let selectedFakerSubCategory = FakerSubCategories[model.fakerCategory].find((category) => {
+																return category.value === e.target.value;
+															});
+															this.setSelectedRandomSubcategory(model, selectedFakerSubCategory);
 														}}>
 														<option disabled value="pleasechoose">{'Please choose'}</option>
 														{FakerSubCategories[model.fakerCategory].map((type, categoryIndex) => {
@@ -717,6 +721,31 @@ class ResourceForm extends Component {
 													</select>
 													{model.fakerSubCategory ?
 														<div>
+															{model.selectedFakerSubCategory.params.map((param, paramIndex) => {
+																return (
+																	<div key={paramIndex}>
+																		<div className="input-label">{param.name}</div>
+																		{param.type === 'select' ?
+																			<select
+																				onChange={(e) => {
+																					this.handleModelParamsChange(model, param.param, e.target.value);
+																				}}>
+																				{param.options.map((option, optionIndex) => {
+																					return (
+																						<option key={optionIndex}
+																							value={option.value}>
+																							{option.description}
+																						</option>
+																					);
+																				})}
+																			</select>
+																			: null
+																		}
+																	</div>
+																);
+															})}
+
+
 															{model.fakerSubCategory === 'streetAddress' ?
 																<div>
 																	<div className="input-label">{'Use full address'}</div>
@@ -1092,23 +1121,6 @@ class ResourceForm extends Component {
 										</div>
 										: null
 									}
-								</div>
-								<div className="flex-1 flex flex-vertical">
-									<div className="flex-0 input-label">{'Required?'}</div>
-									<select value={model.required}
-										onChange={(e) => {
-											this.handleModelChange(model, 'required', e.target.value === 'true');
-										}}>
-										<option value={false}>{'No'}</option>
-										<option value={true}>{'Yes'}</option>
-									</select>
-									<div className="input-label flex-0">{'Documentation description'}</div>
-									<textarea className="flex-1"
-										value={model.documentation_description}
-										onChange={(e) => {
-											this.handleModelChange(model, 'documentation_description', e.target.value);
-										}}>
-									</textarea>
 								</div>
 							</div>
 						</div>

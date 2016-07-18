@@ -10,7 +10,7 @@ class ResourcesStore {
 		Store.initialize({
 			resources: [],
 			resourcesLoading: true,
-			rightBarOpen: true
+			rightBarOpen: false
 		});
 	}
 
@@ -41,13 +41,17 @@ class ResourcesStore {
 			payload: {
 				type: 'array',
 				length: 5,
-				documentationDescription: '',
 				name: 'newResource',
 				supportedMethods: {
 					get: true,
 					post: true,
 					put: true,
 					destroy: true
+				},
+				supportedUtils: {
+					filter: true,
+					pagination: true,
+					sort: true
 				},
 				model: [
 					{
@@ -56,7 +60,6 @@ class ResourcesStore {
 							let v = c === 'x' ? r : (r & 0x3 | 0x8);
 							return v.toString(16);
 						}),
-						documentationDescription: '',
 						type: 'predefined',
 						fakerSubCategory: '',
 						fakerCategory: '',

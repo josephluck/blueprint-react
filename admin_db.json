@@ -3,7 +3,7 @@
     {
       "type": "array",
       "length": 5,
-      "name": "usersss",
+      "name": "newResource",
       "supportedMethods": {
         "get": true,
         "post": true,
@@ -11,176 +11,22 @@
         "destroy": true
       },
       "supportedUtils": {
-        "filter": true,
-        "pagination": true,
-        "search": true,
-        "embed": true
+
       },
       "model": [
         {
-          "uuid": "71d90fae-baf0-4adf-ae53-fb531a6eb146",
-          "type": "object",
+          "uuid": "fe597003-4fe5-4496-a7e9-a3c50dac09d6",
+          "type": "predefined",
           "fakerSubCategory": "",
           "fakerCategory": "",
           "fakerParams": {},
-          "resource": {
-            "type": "array",
-            "length": 5,
-            "model": [
-              {
-                "uuid": "274edc3e-33d9-49c9-bca0-7efe752b7361",
-                "type": "random",
-                "fakerSubCategory": "lastName",
-                "fakerCategory": "name",
-                "fakerParams": {
-                  "gender": null
-                },
-                "resource": {},
-                "predefinedType": "string",
-                "predefinedValue": "",
-                "required": false,
-                "key": "nested_key"
-              }
-            ]
-          },
-          "predefinedType": "string",
-          "predefinedValue": "",
-          "required": false,
-          "key": "nestedObject"
-        },
-        {
-          "uuid": "f84cc424-8f75-481d-8046-1ce3fada0535",
-          "type": "random",
-          "fakerSubCategory": "future",
-          "fakerCategory": "date",
-          "fakerParams": {
-            "years": 3,
-            "refDate": null
-          },
           "resource": {},
           "predefinedType": "string",
           "predefinedValue": "",
-          "required": false,
-          "key": "futureDate"
-        },
-        {
-          "uuid": "d80661f7-da1c-450a-adab-656d23b3a7c9",
-          "type": "random",
-          "fakerSubCategory": "email",
-          "fakerCategory": "internet",
-          "fakerParams": {},
-          "resource": {},
-          "predefinedType": "string",
-          "predefinedValue": "",
-          "required": true,
-          "key": "randomEmailAddress",
-          "documentationDescription": "Must be a valid Commusoft e-mail address."
-        },
-        {
-          "uuid": "ee589674-940d-4e4d-915c-0bffe9d7985b",
-          "type": "random",
-          "fakerSubCategory": "price",
-          "fakerCategory": "commerce",
-          "fakerParams": {
-            "min": 50,
-            "max": 700
-          },
-          "resource": {},
-          "predefinedType": "string",
-          "predefinedValue": "",
-          "required": true,
-          "key": "randomPrice"
-        },
-        {
-          "uuid": "741b46be-0eaf-41f3-9504-6ae6a4a1c04d",
-          "type": "random",
-          "fakerSubCategory": "number",
-          "fakerCategory": "random",
-          "fakerParams": {},
-          "resource": {},
-          "predefinedType": "string",
-          "predefinedValue": "",
-          "required": false,
-          "key": "randomNumber"
-        },
-        {
-          "uuid": "0d24ce52-9a60-4854-b7bf-1b7d9d56b2a1",
-          "type": "random",
-          "fakerSubCategory": "between",
-          "fakerCategory": "date",
-          "fakerParams": {
-            "from": "2016-07-01",
-            "to": "2016-07-16"
-          },
-          "resource": {},
-          "predefinedType": "date",
-          "predefinedValue": "",
-          "required": true,
-          "key": "randomDateBetween",
-          "documentationDescription": ""
-        },
-        {
-          "uuid": "0e6e4241-36ba-42a1-8681-0caba265f291",
-          "type": "random",
-          "fakerSubCategory": "lastName",
-          "fakerCategory": "name",
-          "fakerParams": {},
-          "resource": {},
-          "predefinedType": "string",
-          "predefinedValue": "",
-          "required": false,
-          "key": "randomLastName",
-          "documentationDescription": ""
-        },
-        {
-          "uuid": "aa3411a0-14af-42ff-a4f4-ec07f8905a3b",
-          "type": "random",
-          "fakerCategory": "finance",
-          "fakerParams": {
-            "min": 100,
-            "max": 200,
-            "dec": 2,
-            "symbol": "£"
-          },
-          "resource": {},
-          "predefinedType": "string",
-          "predefinedValue": "",
-          "required": true,
-          "key": "randomAmount",
-          "fakerSubCategory": "amount",
-          "documentationDescription": ""
+          "required": true
         }
       ],
-      "id": 1,
-      "validationConfig": {
-        "futureDate": {
-          "datetime": {
-            "latest": "2019-07-14"
-          }
-        },
-        "randomEmailAddress": {
-          "presence": true,
-          "email": true
-        },
-        "randomPrice": {
-          "presence": true
-        },
-        "randomNumber": {
-          "numericality": true
-        },
-        "randomDateBetween": {
-          "presence": true,
-          "datetime": {
-            "earliest": "2016-07-01",
-            "latest": "2016-07-16"
-          }
-        },
-        "randomLastName": {},
-        "randomAmount": {
-          "presence": true
-        }
-      },
-      "documentationDescription": ""
+      "id": 1
     }
   ]
 }
