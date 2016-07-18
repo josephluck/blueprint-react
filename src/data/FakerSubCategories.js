@@ -106,7 +106,31 @@ const categories = {
 		{
 			name: 'Price',
 			value: 'price',
-			params: []
+			params: [
+				{
+					name: 'Min value',
+					param: 'min',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Max value',
+					param: 'max',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Decimal places',
+					param: 'dec',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Symbol',
+					param: 'symbol',
+					type: 'input'
+				}
+			]
 		},
 		{
 			name: 'Product',
@@ -180,12 +204,38 @@ const categories = {
 		{
 			name: 'Between',
 			value: 'between',
-			params: []
+			params: [
+				{
+					name: 'From',
+					param: 'from',
+					type: 'input',
+					inputType: 'date'
+				},
+				{
+					name: 'To',
+					param: 'to',
+					type: 'input',
+					inputType: 'date'
+				}
+			]
 		},
 		{
 			name: 'Future',
 			value: 'future',
-			params: []
+			params: [
+				{
+					name: 'Number of years',
+					param: 'years',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'From date',
+					param: 'refDate',
+					type: 'input',
+					inputType: 'date'
+				}
+			]
 		},
 		{
 			name: 'Month',
@@ -195,12 +245,32 @@ const categories = {
 		{
 			name: 'Past',
 			value: 'past',
-			params: []
+			params: [
+				{
+					name: 'Number of years',
+					param: 'years',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'From date',
+					param: 'refDate',
+					type: 'input',
+					inputType: 'date'
+				}
+			]
 		},
 		{
 			name: 'Recent',
 			value: 'recent',
-			params: []
+			params: [
+				{
+					name: 'Number of days',
+					param: 'days',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		}
 	],
 	finance: [
@@ -217,7 +287,31 @@ const categories = {
 		{
 			name: 'Amount',
 			value: 'amount',
-			params: []
+			params: [
+				{
+					name: 'Min value',
+					param: 'min',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Max value',
+					param: 'max',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Decimal places',
+					param: 'dec',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Symbol',
+					param: 'symbol',
+					type: 'input'
+				}
+			]
 		},
 		{
 			name: 'Bitcoin address',
@@ -242,7 +336,44 @@ const categories = {
 		{
 			name: 'Masked number (i.e. account number)',
 			value: 'mask',
-			params: []
+			params: [
+				{
+					name: 'Length of number',
+					param: 'min',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Wrap in parenthesis?',
+					param: 'parens',
+					type: 'select',
+					options: [
+						{
+							description: 'Yes',
+							value: true
+						},
+						{
+							description: 'No',
+							value: false
+						}
+					]
+				},
+				{
+					name: 'Include an ellipsis?',
+					param: 'ellipsis',
+					type: 'select',
+					options: [
+						{
+							description: 'Yes',
+							value: true
+						},
+						{
+							description: 'No',
+							value: false
+						}
+					]
+				}
+			]
 		},
 		{
 			name: 'Transaction type',
@@ -286,77 +417,272 @@ const categories = {
 		{
 			name: 'Abstract',
 			value: 'abstract',
-			params: []
+			params: [
+				{
+					name: 'Width',
+					param: 'width',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Height',
+					param: 'height',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		},
 		{
 			name: 'Animals',
 			value: 'animals',
-			params: []
+			params: [
+				{
+					name: 'Width',
+					param: 'width',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Height',
+					param: 'height',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		},
 		{
 			name: 'Avatar',
 			value: 'avatar',
-			params: []
+			params: [
+				{
+					name: 'Width',
+					param: 'width',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Height',
+					param: 'height',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		},
 		{
 			name: 'Business',
 			value: 'business',
-			params: []
+			params: [
+				{
+					name: 'Width',
+					param: 'width',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Height',
+					param: 'height',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		},
 		{
 			name: 'Cats',
 			value: 'cats',
-			params: []
+			params: [
+				{
+					name: 'Width',
+					param: 'width',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Height',
+					param: 'height',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		},
 		{
 			name: 'City',
 			value: 'city',
-			params: []
+			params: [
+				{
+					name: 'Width',
+					param: 'width',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Height',
+					param: 'height',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		},
 		{
 			name: 'Fashion',
 			value: 'fashion',
-			params: []
+			params: [
+				{
+					name: 'Width',
+					param: 'width',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Height',
+					param: 'height',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		},
 		{
 			name: 'Food',
 			value: 'food',
-			params: []
+			params: [
+				{
+					name: 'Width',
+					param: 'width',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Height',
+					param: 'height',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		},
 		{
 			name: 'Image',
 			value: 'image',
-			params: []
+			params: [
+				{
+					name: 'Width',
+					param: 'width',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Height',
+					param: 'height',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		},
 		{
 			name: 'Nature',
 			value: 'nature',
-			params: []
+			params: [
+				{
+					name: 'Width',
+					param: 'width',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Height',
+					param: 'height',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		},
 		{
 			name: 'Nightlife',
 			value: 'nightlife',
-			params: []
+			params: [
+				{
+					name: 'Width',
+					param: 'width',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Height',
+					param: 'height',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		},
 		{
 			name: 'People',
 			value: 'people',
-			params: []
+			params: [
+				{
+					name: 'Width',
+					param: 'width',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Height',
+					param: 'height',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		},
 		{
 			name: 'Sports',
 			value: 'sports',
-			params: []
+			params: [
+				{
+					name: 'Width',
+					param: 'width',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Height',
+					param: 'height',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		},
 		{
 			name: 'Technics',
 			value: 'technics',
-			params: []
+			params: [
+				{
+					name: 'Width',
+					param: 'width',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Height',
+					param: 'height',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		},
 		{
 			name: 'Transport',
 			value: 'transport',
-			params: []
+			params: [
+				{
+					name: 'Width',
+					param: 'width',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Height',
+					param: 'height',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		}
 	],
 	internet: [
@@ -383,12 +709,39 @@ const categories = {
 		{
 			name: 'Email',
 			value: 'email',
-			params: []
+			params: [
+				{
+					name: 'First name',
+					param: 'firstName',
+					type: 'input'
+				},
+				{
+					name: 'Last',
+					param: 'lastName',
+					type: 'input'
+				},
+				{
+					name: 'Provider',
+					param: 'provider',
+					type: 'input'
+				}
+			]
 		},
 		{
 			name: 'Example email',
 			value: 'exampleEmail',
-			params: []
+			params: [
+				{
+					name: 'First name',
+					param: 'firstName',
+					type: 'input'
+				},
+				{
+					name: 'Last',
+					param: 'lastName',
+					type: 'input'
+				}
+			]
 		},
 		{
 			name: 'IP address',
@@ -403,7 +756,29 @@ const categories = {
 		{
 			name: 'Password',
 			value: 'password',
-			params: []
+			params: [
+				{
+					name: 'Length of password',
+					param: 'length',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Memorable password?',
+					param: 'memorable',
+					type: 'select',
+					options: [
+						{
+							description: 'Yes',
+							value: true
+						},
+						{
+							description: 'No',
+							value: false
+						}
+					]
+				}
+			]
 		},
 		{
 			name: 'Protocol',
@@ -423,34 +798,85 @@ const categories = {
 		{
 			name: 'Username',
 			value: 'userName',
-			params: []
+			params: [
+				{
+					name: 'First name',
+					param: 'firstName',
+					type: 'input'
+				},
+				{
+					name: 'Last name',
+					param: 'lastName',
+					type: 'input'
+				}
+			]
 		}
 	],
 	lorem: [
 		{
 			name: 'Lines',
 			value: 'lines',
-			params: []
+			params: [
+				{
+					name: 'Number of lines',
+					param: 'lines',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		},
 		{
 			name: 'Paragraphs',
 			value: 'paragraphs',
-			params: []
+			params: [
+				{
+					name: 'Number of paragraphs',
+					param: 'paragraphsCount',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		},
 		{
 			name: 'Sentence',
 			value: 'sentence',
-			params: []
+			params: [
+				{
+					name: 'Number of words',
+					param: 'wordCount',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		},
 		{
 			name: 'Sentences',
 			value: 'sentences',
-			params: []
+			params: [
+				{
+					name: 'Number of sentances',
+					param: 'sentancesCount',
+					type: 'input',
+					inputType: 'number'
+				},
+				{
+					name: 'Separator',
+					param: 'seperator',
+					type: 'input'
+				}
+			]
 		},
 		{
 			name: 'Text',
 			value: 'text',
-			params: []
+			params: [
+				{
+					name: 'Number of times',
+					param: 'times',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		},
 		{
 			name: 'Word',
@@ -460,14 +886,41 @@ const categories = {
 		{
 			name: 'Words',
 			value: 'words',
-			params: []
+			params: [
+				{
+					name: 'Number of words',
+					param: 'words',
+					type: 'input',
+					inputType: 'number'
+				}
+			]
 		}
 	],
 	name: [
 		{
 			name: 'First name',
 			value: 'firstName',
-			params: []
+			params: [
+				{
+					name: 'Gender',
+					param: 'gender',
+					type: 'select',
+					options: [
+						{
+							description: 'Either',
+							value: ''
+						},
+						{
+							description: 'Male',
+							value: 'male'
+						},
+						{
+							description: 'Female',
+							value: 'female'
+						}
+					]
+				}
+			]
 		},
 		{
 			name: 'Job area',
@@ -492,12 +945,52 @@ const categories = {
 		{
 			name: 'Last name',
 			value: 'lastName',
-			params: []
+			params: [
+				{
+					name: 'Gender',
+					param: 'gender',
+					type: 'select',
+					options: [
+						{
+							description: 'Either',
+							value: ''
+						},
+						{
+							description: 'Male',
+							value: 'male'
+						},
+						{
+							description: 'Female',
+							value: 'female'
+						}
+					]
+				}
+			]
 		},
 		{
 			name: 'Prefix',
 			value: 'prefix',
-			params: []
+			params: [
+				{
+					name: 'Gender',
+					param: 'gender',
+					type: 'select',
+					options: [
+						{
+							description: 'Either',
+							value: ''
+						},
+						{
+							description: 'Male',
+							value: 'male'
+						},
+						{
+							description: 'Female',
+							value: 'female'
+						}
+					]
+				}
+			]
 		},
 		{
 			name: 'Suffix',

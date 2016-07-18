@@ -726,9 +726,15 @@ class ResourceForm extends Component {
 																	<div key={paramIndex}>
 																		<div className="input-label">{param.name}</div>
 																		{param.type === 'select' ?
-																			<select
+																			<select value={model.fakerParams[param.param]}
 																				onChange={(e) => {
-																					this.handleModelParamsChange(model, param.param, e.target.value);
+																					let value = e.target.value;
+																					if (e.target.value === 'false') {
+																						value = false;
+																					} else if (e.target.value === 'true') {
+																						value = true;
+																					}
+																					this.handleModelParamsChange(model, param.param, value);
 																				}}>
 																				{param.options.map((option, optionIndex) => {
 																					return (
@@ -741,336 +747,33 @@ class ResourceForm extends Component {
 																			</select>
 																			: null
 																		}
+																		{param.type === 'input' ?
+																			<div>
+																				{param.inputType === 'date' ?
+																					<input value={model.fakerParams[param.param] || ''}
+																						type="date"
+																						onChange={(e) => {
+																							let value = e.target.value;
+																							this.handleModelParamsChange(model, param.param, value);
+																						}}
+																					/>
+																					:
+																					<input value={model.fakerParams[param.param] || ''}
+																						onChange={(e) => {
+																							let value = e.target.value;
+																							if (param.inputType === 'number') {
+																								value = parseFloat(e.target.value) || 0;
+																							}
+																							this.handleModelParamsChange(model, param.param, value);
+																						}}
+																					/>
+																				}
+																			</div>
+																			: null
+																		}
 																	</div>
 																);
 															})}
-
-
-															{model.fakerSubCategory === 'streetAddress' ?
-																<div>
-																	<div className="input-label">{'Use full address'}</div>
-																	<select value={model.fakerParams.useFullAddress}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'useFullAddress', e.target.value === 'true');
-																		}}>
-																		<option value={false}>{'No'}</option>
-																		<option value={true}>{'Yes'}</option>
-																	</select>
-																</div>
-																: null
-															}
-															{model.fakerSubCategory === 'price' ?
-																<div>
-																	<div className="input-label">{'Min value'}</div>
-																	<input value={model.fakerParams.min || ''}
-																		onChange={(e) => {
-																			let value = parseFloat(e.target.value) || 0;
-																			this.handleModelParamsChange(model, 'min', value);
-																		}} />
-																	<div className="input-label">{'Max value'}</div>
-																	<input value={model.fakerParams.max || ''}
-																		onChange={(e) => {
-																			let value = parseFloat(e.target.value) || 0;
-																			this.handleModelParamsChange(model, 'max', value);
-																		}} />
-																	<div className="input-label">{'Decimal places'}</div>
-																	<input value={model.fakerParams.dec || ''}
-																		onChange={(e) => {
-																			let value = parseFloat(e.target.value) || 0;
-																			this.handleModelParamsChange(model, 'dec', value);
-																		}} />
-																	<div className="input-label">{'Symbol'}</div>
-																	<input value={model.fakerParams.symbol || ''}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'symbol', e.target.value);
-																		}} />
-																</div>
-																: null
-															}
-															{model.fakerSubCategory === 'between' ?
-																<div>
-																	<div className="input-label">{'From'}</div>
-																	<input value={model.fakerParams.from || ''}
-																		type="date"
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'from', e.target.value);
-																		}} />
-																	<div className="input-label">{'To'}</div>
-																	<input value={model.fakerParams.to || ''}
-																		type="date"
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'to', e.target.value);
-																		}} />
-																</div>
-																: null
-															}
-															{model.fakerSubCategory === 'future' || model.fakerSubCategory === 'past' ?
-																<div>
-																	<div className="input-label">{'Number of years'}</div>
-																	<input value={model.fakerParams.years || ''}
-																		onChange={(e) => {
-																			let value = parseInt(e.target.value, 10) || 0;
-																			this.handleModelParamsChange(model, 'years', value);
-																		}} />
-																	<div className="input-label">{'From date'}</div>
-																	<input value={model.fakerParams.refDate || ''}
-																		type="date"
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'refDate', e.target.value);
-																		}} />
-																</div>
-																: null
-															}
-															{model.fakerSubCategory === 'recent' ?
-																<div>
-																	<div className="input-label">{'Number of days'}</div>
-																	<input value={model.fakerParams.days || ''}
-																		onChange={(e) => {
-																			let value = parseInt(e.target.value, 10) || 0;
-																			this.handleModelParamsChange(model, 'days', value);
-																		}} />
-																</div>
-																: null
-															}
-															{model.fakerSubCategory === 'amount' ?
-																<div>
-																	<div className="input-label">{'Min value'}</div>
-																	<input value={model.fakerParams.min || ''}
-																		onChange={(e) => {
-																			let value = parseFloat(e.target.value) || 0;
-																			this.handleModelParamsChange(model, 'min', value);
-																		}} />
-																	<div className="input-label">{'Max value'}</div>
-																	<input value={model.fakerParams.max || ''}
-																		onChange={(e) => {
-																			let value = parseFloat(e.target.value) || 0;
-																			this.handleModelParamsChange(model, 'max', value);
-																		}} />
-																	<div className="input-label">{'Decimal places'}</div>
-																	<input value={model.fakerParams.dec || ''}
-																		onChange={(e) => {
-																			let value = parseFloat(e.target.value) || 0;
-																			this.handleModelParamsChange(model, 'dec', value);
-																		}} />
-																	<div className="input-label">{'Symbol'}</div>
-																	<input value={model.fakerParams.symbol || ''}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'symbol', e.target.value);
-																		}} />
-																</div>
-																: null
-															}
-															{model.fakerSubCategory === 'mask' ?
-																<div>
-																	<div className="input-label">{'Length of number'}</div>
-																	<input value={model.fakerParams.length || ''}
-																		onChange={(e) => {
-																			let value = parseFloat(e.target.value) || 0;
-																			this.handleModelParamsChange(model, 'length', value);
-																		}} />
-																	<div className="input-label">{'Wrap in parenthesis?'}</div>
-																	<select value={model.fakerParams.parens}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'parens', e.target.value === 'true');
-																		}}>
-																		<option value={false}>{'No'}</option>
-																		<option value={true}>{'Yes'}</option>
-																	</select>
-																	<div className="input-label">{'Include an ellipsis?'}</div>
-																	<select value={model.fakerParams.ellipsis}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'ellipsis', e.target.value === 'true');
-																		}}>
-																		<option value={false}>{'No'}</option>
-																		<option value={true}>{'Yes'}</option>
-																	</select>
-																</div>
-																: null
-															}
-															{model.fakerCategory === 'image' && model.fakerSubCategory !== 'avatar' ?
-																<div>
-																	<div className="input-label">{'Width'}</div>
-																	<input value={model.fakerParams.width || ''}
-																		onChange={(e) => {
-																			let value = parseFloat(e.target.value) || 0;
-																			this.handleModelParamsChange(model, 'width', value);
-																		}} />
-																	<div className="input-label">{'Height'}</div>
-																	<input value={model.fakerParams.height || ''}
-																		onChange={(e) => {
-																			let value = parseFloat(e.target.value) || 0;
-																			this.handleModelParamsChange(model, 'height', value);
-																		}} />
-																</div>
-																: null
-															}
-															{model.fakerSubCategory === 'email' ?
-																<div>
-																	<div className="input-label">{'First name'}</div>
-																	<input value={model.fakerParams.firstName || ''}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'firstName', e.target.value);
-																		}} />
-																	<div className="input-label">{'Last name'}</div>
-																	<input value={model.fakerParams.lastName || ''}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'lastName', e.target.value);
-																		}} />
-																	<div className="input-label">{'Provider'}</div>
-																	<input value={model.fakerParams.provider || ''}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'provider', e.target.value);
-																		}} />
-																</div>
-																: null
-															}
-															{model.fakerSubCategory === 'exampleEmail' ?
-																<div>
-																	<div className="input-label">{'First name'}</div>
-																	<input value={model.fakerParams.firstName || ''}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'firstName', e.target.value);
-																		}} />
-																	<div className="input-label">{'Last name'}</div>
-																	<input value={model.fakerParams.lastName || ''}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'lastName', e.target.value);
-																		}} />
-																</div>
-																: null
-															}
-															{model.fakerSubCategory === 'password' ?
-																<div>
-																	<div className="input-label">{'Length of password'}</div>
-																	<input value={model.fakerParams.length || ''}
-																		onChange={(e) => {
-																			let value = parseInt(e.target.value, 10) || 0;
-																			this.handleModelParamsChange(model, 'length', value);
-																		}} />
-																	<div className="input-label">{'Memorable password?'}</div>
-																	<select value={model.fakerParams.memorable}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'memorable', e.target.value === 'true');
-																		}}>
-																		<option value={false}>{'No'}</option>
-																		<option value={true}>{'Yes'}</option>
-																	</select>
-																</div>
-																: null
-															}
-															{model.fakerSubCategory === 'userName' ?
-																<div>
-																	<div className="input-label">{'First name'}</div>
-																	<input value={model.fakerParams.firstName || ''}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'firstName', e.target.value);
-																		}} />
-																	<div className="input-label">{'Last name'}</div>
-																	<input value={model.fakerParams.lastName || ''}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'lastName', e.target.value);
-																		}} />
-																</div>
-																: null
-															}
-															{model.fakerSubCategory === 'lines' ?
-																<div>
-																	<div className="input-label">{'Number of lines'}</div>
-																	<input value={model.fakerParams.lines || ''}
-																		onChange={(e) => {
-																			let value = parseInt(e.target.value, 10) || 0;
-																			this.handleModelParamsChange(model, 'lines', value);
-																		}} />
-																</div>
-																: null
-															}
-															{model.fakerSubCategory === 'paragraphs' ?
-																<div>
-																	<div className="input-label">{'Number of paragraphs'}</div>
-																	<input value={model.fakerParams.paragraphCount || ''}
-																		onChange={(e) => {
-																			let value = parseInt(e.target.value, 10) || 0;
-																			this.handleModelParamsChange(model, 'paragraphCount', value);
-																		}} />
-																	<div className="input-label">{'Separator'}</div>
-																	<input value={model.fakerParams.seperator || ''}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'seperator', e.target.value);
-																		}} />
-																</div>
-																: null
-															}
-															{model.fakerSubCategory === 'sentence' ?
-																<div>
-																	<div className="input-label">{'Number of words'}</div>
-																	<input value={model.fakerParams.wordCount || ''}
-																		onChange={(e) => {
-																			let value = parseInt(e.target.value, 10) || 0;
-																			this.handleModelParamsChange(model, 'wordCount', value);
-																		}} />
-																</div>
-																: null
-															}
-															{model.fakerSubCategory === 'sentences' ?
-																<div>
-																	<div className="input-label">{'Number of sentences'}</div>
-																	<input value={model.fakerParams.sentenceCount || ''}
-																		onChange={(e) => {
-																			let value = parseInt(e.target.value, 10) || 0;
-																			this.handleModelParamsChange(model, 'sentenceCount', value);
-																		}} />
-																	<div className="input-label">{'Separator'}</div>
-																	<input value={model.fakerParams.seperator || ''}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'seperator', e.target.value);
-																		}} />
-																</div>
-																: null
-															}
-															{model.fakerSubCategory === 'text' ?
-																<div>
-																	<div className="input-label">{'Number of times'}</div>
-																	<input value={model.fakerParams.times || ''}
-																		onChange={(e) => {
-																			let value = parseInt(e.target.value, 10) || 0;
-																			this.handleModelParamsChange(model, 'times', value);
-																		}} />
-																</div>
-																: null
-															}
-															{model.fakerSubCategory === 'words' ?
-																<div>
-																	<div className="input-label">{'Number of words'}</div>
-																	<input value={model.fakerParams.words || ''}
-																		onChange={(e) => {
-																			let value = parseInt(e.target.value, 10) || 0;
-																			this.handleModelParamsChange(model, 'words', value);
-																		}} />
-																</div>
-																: null
-															}
-															{model.fakerSubCategory === 'firstName' ||
-																model.fakerSubCategory === 'lastName' ||
-																model.fakerSubCategory === 'prefix' ?
-																<div>
-																	<div className="input-label">{'Gender'}</div>
-																	<select value={model.gender}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'gender', e.target.value);
-																		}}>
-																		<option value={''}>
-																			{'Either'}
-																		</option>
-																		<option value={'male'}>
-																			{'Male'}
-																		</option>
-																		<option value={'female'}>
-																			{'Female'}
-																		</option>
-																	</select>
-																</div>
-																: null
-															}
 															{model.fakerSubCategory === 'arrayElement' ?
 																<div>
 																	<div className="input-label">{'Array'}</div>
