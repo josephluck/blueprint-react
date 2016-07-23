@@ -1024,7 +1024,13 @@ const categories = {
 		{
 			name: 'Array element',
 			value: 'arrayElement',
-			params: []
+			params: [
+				{
+					name: 'Array',
+					param: 'json',
+					type: 'editor'
+				}
+			]
 		},
 		{
 			name: 'Boolean',
@@ -1049,7 +1055,13 @@ const categories = {
 		{
 			name: 'Object element',
 			value: 'objectElement',
-			params: []
+			params: [
+				{
+					name: 'Array',
+					param: 'json',
+					type: 'editor'
+				}
+			]
 		},
 		{
 			name: 'UUID',

@@ -15,32 +15,53 @@
         {
           "uuid": "fe597003-4fe5-4496-a7e9-a3c50dac09d6",
           "type": "random",
-          "fakerSubCategory": "text",
-          "fakerCategory": "lorem",
+          "fakerSubCategory": "price",
+          "fakerCategory": "commerce",
           "fakerParams": {
-            "times": 5
+            "min": 100,
+            "max": 400,
+            "dec": 0,
+            "symbol": ""
           },
           "resource": {},
           "predefinedType": "string",
           "predefinedValue": "",
           "required": true,
           "selectedFakerSubCategory": {
-            "name": "Text",
-            "value": "text",
+            "name": "Price",
+            "value": "price",
             "params": [
               {
-                "name": "Number of times",
-                "param": "times",
+                "name": "Min value",
+                "param": "min",
                 "type": "input",
                 "inputType": "number"
+              },
+              {
+                "name": "Max value",
+                "param": "max",
+                "type": "input",
+                "inputType": "number"
+              },
+              {
+                "name": "Decimal places",
+                "param": "dec",
+                "type": "input",
+                "inputType": "number"
+              },
+              {
+                "name": "Symbol",
+                "param": "symbol",
+                "type": "input"
               }
             ]
-          }
+          },
+          "key": "price"
         }
       ],
       "id": 1,
       "validationConfig": {
-        "undefined": {
+        "price": {
           "presence": true
         }
       }

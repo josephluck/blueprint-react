@@ -6,6 +6,7 @@ import FakerSubCategories from 'data/FakerSubCategories';
 import AceEditor from 'react-ace';
 import 'brace/mode/json';
 import 'brace/theme/tomorrow';
+import ResourceStore from 'stores/ResourceStore';
 
 class ResourceForm extends Component {
 	constructor(props) {
@@ -26,340 +27,6 @@ class ResourceForm extends Component {
 		}
 	}
 
-	addAnotherKey() {
-		this.state.resource.model.unshift({
-			uuid: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-				let r = Math.random() * 16 | 0;
-				let v = c === 'x' ? r : (r & 0x3 | 0x8);
-				return v.toString(16);
-			}),
-			type: 'predefined',
-			fakerSubCategory: '',
-			fakerCategory: '',
-			fakerParams: {},
-			resource: {},
-			predefinedType: 'string',
-			predefinedValue: '',
-			required: false
-		});
-	}
-
-	removeModelKey(model, index) {
-		this.state.resource.model.splice(index, 1);
-	}
-
-	saveValue(name, value) {
-		this.state.resource.set(name, value);
-	}
-
-	setResourceCRUD(name) {
-		this.state.resource.supportedMethods.set(name, !this.state.resource.supportedMethods[name]);
-	}
-
-	handleModelChange(model, name, value) {
-		model.set(name, value);
-	}
-
-	handleModelTypeChanged(model, type) {
-		if (type === 'resource') {
-			model.set('childResource', {});
-		} else {
-			model.set('childResource', '');
-		}
-		if (type === 'object') {
-			model.resource.reset({
-				type: 'array',
-				length: 5,
-				model: [
-					{
-						uuid: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-							let r = Math.random() * 16 | 0;
-							let v = c === 'x' ? r : (r & 0x3 | 0x8);
-							return v.toString(16);
-						}),
-						type: 'predefined',
-						fakerSubCategory: '',
-						fakerCategory: '',
-						fakerParams: {},
-						resource: {},
-						predefinedType: 'string',
-						predefinedValue: '',
-						required: false
-					}
-				]
-			});
-		} else {
-			model.set('resource', {});
-		}
-	}
-
-	setSelectedRandomCategory(model, value) {
-		model.set({
-			fakerCategory: value,
-			fakerSubCategory: '',
-			fakerParams: {}
-		});
-	}
-
-	setSelectedRandomSubcategory(model, category) {
-		model.set({
-			selectedFakerSubCategory: category,
-			fakerSubCategory: category.value
-		});
-
-		this.resetRandomParams(model, category);
-	}
-
-	// Consider storing this in faker subcategories json instead of here
-	// that way the params could be mapped over as an object in this component
-	// based on the subcategory which will make this component more dynamically
-	// generated and not hard-coded and would provide a great foundation for
-	// including more random generation libraries
-	resetRandomParams(model, fakerCategory) {
-		let params = {};
-		if (fakerCategory === 'state') {
-			params = {
-				useAbbr: null
-			};
-		} else if (fakerCategory === 'streetAddress') {
-			params = {
-				useFullAddress: null
-			};
-		} else if (fakerCategory === 'zipCode') {
-			params = {
-				format: null
-			};
-		} else if (fakerCategory === 'department') {
-			params = {
-				max: null,
-				fixedAmount: null
-			};
-		} else if (fakerCategory === 'price') {
-			params = {
-				min: null,
-				max: null,
-				dec: null,
-				symbol: null
-			};
-		} else if (fakerCategory === 'companyName') {
-			params = {
-				format: null
-			};
-		} else if (fakerCategory === 'between') {
-			params = {
-				from: null,
-				to: null
-			};
-		} else if (fakerCategory === 'future') {
-			params = {
-				years: null,
-				refDate: null
-			};
-		} else if (fakerCategory === 'month') {
-			params = {
-				options: null
-			};
-		} else if (fakerCategory === 'past') {
-			params = {
-				years: null,
-				refDate: null
-			};
-		} else if (fakerCategory === 'recent') {
-			params = {
-				days: null
-			};
-		} else if (fakerCategory === 'weekday') {
-			params = {
-				options: null
-			};
-		} else if (fakerCategory === 'account') {
-			params = {
-				length: null
-			};
-		} else if (fakerCategory === 'amount') {
-			params = {
-				min: null,
-				max: null,
-				dec: null,
-				symbol: null
-			};
-		} else if (fakerCategory === 'mask') {
-			params = {
-				length: null,
-				parens: null,
-				elipsis: null
-			};
-		} else if (fakerCategory === 'abstract' ||
-			fakerCategory === 'animals' ||
-			fakerCategory === 'business' ||
-			fakerCategory === 'cats' ||
-			fakerCategory === 'city' ||
-			fakerCategory === 'fashion' ||
-			fakerCategory === 'food' ||
-			fakerCategory === 'image' ||
-			fakerCategory === 'nature' ||
-			fakerCategory === 'nightlife' ||
-			fakerCategory === 'people' ||
-			fakerCategory === 'sports' ||
-			fakerCategory === 'technics' ||
-			fakerCategory === 'transport') {
-			params = {
-				width: null,
-				height: null
-			};
-		} else if (fakerCategory === 'color') {
-			params = {
-				baseRed255: null,
-				baseGreen255: null,
-				baseBlue255: null
-			};
-		} else if (fakerCategory === 'email') {
-			params = {
-				firstName: null,
-				lastName: null,
-				provider: null
-			};
-		} else if (fakerCategory === 'exampleEmail') {
-			params = {
-				firstName: null,
-				lastName: null
-			};
-		} else if (fakerCategory === 'password') {
-			params = {
-				len: null,
-				memorable: null,
-				pattern: null,
-				prefix: null
-			};
-		} else if (fakerCategory === 'userName') {
-			params = {
-				firstName: null,
-				lastName: null
-			};
-		} else if (fakerCategory === 'lines') {
-			params = {
-				lineCount: null
-			};
-		} else if (fakerCategory === 'paragraph') {
-			params = {
-				sentenceCount: null
-			};
-		} else if (fakerCategory === 'paragraphs') {
-			params = {
-				paragraphCount: null,
-				separatora: null
-			};
-		} else if (fakerCategory === 'sentence') {
-			params = {
-				wordCount: null,
-				range: null
-			};
-		} else if (fakerCategory === 'sentences') {
-			params = {
-				sentenceCount: null,
-				separatora: null
-			};
-		} else if (fakerCategory === 'text') {
-			params = {
-				times: null
-			};
-		} else if (fakerCategory === 'word') {
-			params = {
-				num: null
-			};
-		} else if (fakerCategory === 'words') {
-			params = {
-				num: null
-			};
-		} else if (fakerCategory === 'findName') {
-			params = {
-				firstName: null,
-				lastName: null,
-				gender: null
-			};
-		} else if (fakerCategory === 'firstName') {
-			params = {
-				gender: null
-			};
-		} else if (fakerCategory === 'lastName') {
-			params = {
-				gender: null
-			};
-		} else if (fakerCategory === 'prefix') {
-			params = {
-				gender: null
-			};
-		} else if (fakerCategory === 'phoneFormatsArrayIndex') {
-			params = {
-				phoneFormatsArrayIndex: null
-			};
-		} else if (fakerCategory === 'phoneNumber') {
-			params = {
-				format: null
-			};
-		} else if (fakerCategory === 'arrayElement') {
-			params = {
-				array: null
-			};
-		} else if (fakerCategory === 'number') {
-			params = {
-				options: null
-			};
-		} else if (fakerCategory === 'objectElement') {
-			params = {
-				object: null,
-				field: null
-			};
-		} else if (fakerCategory === 'word') {
-			params = {
-				type: null
-			};
-		} else if (fakerCategory === 'words') {
-			params = {
-				count: null
-			};
-		} else if (fakerCategory === 'commonFileExt') {
-			params = {
-				type: null
-			};
-		} else if (fakerCategory === 'commonFileName') {
-			params = {
-				ext: null,
-				type: null
-			};
-		} else if (fakerCategory === 'fileExt') {
-			params = {
-				mimeType: null
-			};
-		} else if (fakerCategory === 'fileName') {
-			params = {
-				ext: null,
-				type: null
-			};
-		}
-
-		model.fakerParams.reset(params);
-	}
-
-	handleModelPredefinedTypeChange(model) {
-		model.reset({
-			predefinedValue: ''
-		});
-	}
-
-	handleSelectedChildResource(model, resourceName) {
-		let resource = this.state.resources.find((_resource) => {
-			return _resource.name === resourceName;
-		});
-
-		model.set('childResourceName', resource.name);
-		model.set('childResourceType', resource.type);
-	}
-
-	handleModelParamsChange(model, name, value) {
-		model.fakerParams.set(name, value);
-	}
-
 	render() {
 		return (
 			<div className="flex-1 overflow-auto">
@@ -371,7 +38,7 @@ class ResourceForm extends Component {
 								<input value={this.state.resource.name || ''}
 									onChange={(e) => {
 										const value = e.target.value.replace(/\W+/g, ' ').replace(/ /g, '_');
-										this.saveValue('name', value);
+										ResourceStore.saveValue('name', value);
 									}}>
 								</input>
 							</div>
@@ -380,7 +47,7 @@ class ResourceForm extends Component {
 						<div className="input-label">{'Type'}</div>
 						<select value={this.state.resource.type}
 							onChange={(e) => {
-								this.saveValue('type', e.target.value);
+								ResourceStore.saveValue('type', e.target.value);
 							}}>
 							<option value={'array'}>{'Array'}</option>
 							<option value={'singular'}>{'Signular'}</option>
@@ -396,7 +63,7 @@ class ResourceForm extends Component {
 											value = parseFloat(e.target.value);
 										}
 
-										this.saveValue('length', value);
+										ResourceStore.saveValue('length', value);
 									}}>
 								</input>
 							</div>
@@ -412,7 +79,7 @@ class ResourceForm extends Component {
 										<input type="checkbox"
 											checked={this.state.resource.supportedMethods.get === true}
 											onClick={() => {
-												this.setResourceCRUD('get');
+												ResourceStore.setResourceCRUD('get');
 											}} />
 										{'GET'}
 									</label>
@@ -420,7 +87,7 @@ class ResourceForm extends Component {
 										<input type="checkbox"
 											checked={this.state.resource.supportedMethods.post === true}
 											onClick={() => {
-												this.setResourceCRUD('post');
+												ResourceStore.setResourceCRUD('post');
 											}} />
 										{'POST'}
 									</label>
@@ -430,7 +97,7 @@ class ResourceForm extends Component {
 										<input type="checkbox"
 											checked={this.state.resource.supportedMethods.put === true}
 											onClick={() => {
-												this.setResourceCRUD('put');
+												ResourceStore.setResourceCRUD('put');
 											}} />
 										{'PUT'}
 									</label>
@@ -438,7 +105,7 @@ class ResourceForm extends Component {
 										<input type="checkbox"
 											checked={this.state.resource.supportedMethods.destroy === true}
 											onClick={() => {
-												this.setResourceCRUD('destroy');
+												ResourceStore.setResourceCRUD('destroy');
 											}} />
 										{'DELETE'}
 									</label>
@@ -451,7 +118,7 @@ class ResourceForm extends Component {
 										<input type="checkbox"
 											checked={this.state.resource.supportedUtils.filter === true}
 											onClick={() => {
-												this.setResourceCRUD('filter');
+												ResourceStore.setResourceCRUD('filter');
 											}} />
 										{'Filters'}
 									</label>
@@ -459,7 +126,7 @@ class ResourceForm extends Component {
 										<input type="checkbox"
 											checked={this.state.resource.supportedUtils.pagination === true}
 											onClick={() => {
-												this.setResourceCRUD('pagination');
+												ResourceStore.setResourceCRUD('pagination');
 											}} />
 										{'Pagination'}
 									</label>
@@ -469,7 +136,7 @@ class ResourceForm extends Component {
 										<input type="checkbox"
 											checked={this.state.resource.supportedUtils.search === true}
 											onClick={() => {
-												this.setResourceCRUD('search');
+												ResourceStore.setResourceCRUD('search');
 											}} />
 										{'Search'}
 									</label>
@@ -487,7 +154,7 @@ class ResourceForm extends Component {
 					<a href=""
 						onClick={(e) => {
 							e.preventDefault();
-							this.addAnotherKey();
+							ResourceStore.addAnotherKey();
 						}}>
 						{'Add another key'}
 					</a>
@@ -504,7 +171,7 @@ class ResourceForm extends Component {
 										<a href=""
 											onClick={(e) => {
 												e.preventDefault();
-												this.removeModelKey(model, i);
+												ResourceStore.removeModelKey(model, i);
 											}}>
 											{'Remove key'}
 										</a>
@@ -512,12 +179,12 @@ class ResourceForm extends Component {
 									<input value={model.key || ''}
 										onChange={(e) => {
 											const value = e.target.value.replace(/\W+/g, ' ').replace(/ /g, '_');
-											this.handleModelChange(model, 'key', value);
+											ResourceStore.handleModelChange(model, 'key', value);
 										}} />
 									<div className="flex-0 input-label">{'Required?'}</div>
 									<select value={model.required}
 										onChange={(e) => {
-											this.handleModelChange(model, 'required', e.target.value === 'true');
+											ResourceStore.handleModelChange(model, 'required', e.target.value === 'true');
 										}}>
 										<option value={false}>{'No'}</option>
 										<option value={true}>{'Yes'}</option>
@@ -529,7 +196,7 @@ class ResourceForm extends Component {
 									</div>
 									<select value={model.type}
 										onChange={(e) => {
-											this.handleModelChange(model, 'type', e.target.value);
+											ResourceStore.handleModelChange(model, 'type', e.target.value);
 											this.handleModelTypeChanged(model, e.target.value);
 										}}>
 										<option value={'predefined'}>
@@ -551,7 +218,7 @@ class ResourceForm extends Component {
 											<div className="input-label">{'Type'}</div>
 											<select value={model.predefinedType}
 												onChange={(e) => {
-													this.handleModelChange(model, 'predefinedType', e.target.value);
+													ResourceStore.handleModelChange(model, 'predefinedType', e.target.value);
 													this.handleModelPredefinedTypeChange(model, e.target.value);
 												}}>
 												<option value="string">{'String'}</option>
@@ -564,9 +231,7 @@ class ResourceForm extends Component {
 												<div>
 													<div className="input-label">{'Value'}</div>
 													<input value={model.predefinedValue || ''}
-														onChange={(e) => {
-															this.handleModelChange(model, 'predefinedValue', e.target.value);
-														}} />
+														onChange={(e) => ResourceStore.handleModelChange(model, 'predefinedValue', e.target.value)} />
 												</div>
 												:
 												<div>
@@ -575,9 +240,7 @@ class ResourceForm extends Component {
 															<div className="input-label">{'Value'}</div>
 															<input value={model.predefinedValue || ''}
 																type="number"
-																onChange={(e) => {
-																	this.handleModelChange(model, 'predefinedValue', e.target.value);
-																}} />
+																onChange={(e) => ResourceStore.handleModelChange(model, 'predefinedValue', e.target.value)} />
 														</div>
 														:
 														<div>
@@ -585,9 +248,7 @@ class ResourceForm extends Component {
 																<div>
 																	<div className="input-label">{'Value'}</div>
 																	<select value={model.predefinedValue}
-																		onChange={(e) => {
-																			this.handleModelChange(model, 'predefinedValue', e.target.value === 'true');
-																		}}>
+																		onChange={(e) => ResourceStore.handleModelChange(model, 'predefinedValue', e.target.value === 'true')}>
 																		<option value={false}>{'False'}</option>
 																		<option value={true}>{'True'}</option>
 																	</select>
@@ -599,9 +260,7 @@ class ResourceForm extends Component {
 																			<div className="input-label">{'Value'}</div>
 																			<input value={model.predefinedValue || ''}
 																				type="date"
-																				onChange={(e) => {
-																					this.handleModelChange(model, 'predefinedValue', e.target.value);
-																				}} />
+																				onChange={(e) => ResourceStore.handleModelChange(model, 'predefinedValue', e.target.value)} />
 																		</div>
 																		: null
 																	}
@@ -618,11 +277,8 @@ class ResourceForm extends Component {
 									{model.type === 'childResource' ?
 										<div>
 											<div className="input-label">{'Resource'}</div>
-											<select value={'pleasechoose'}
-												value={model.childResourceName}
-												onChange={(e) => {
-													this.handleSelectedChildResource(model, e.target.value);
-												}}>
+											<select value={model.childResourceName}
+												onChange={(e) => ResourceStore.handleSelectedChildResource(model, e.target.value)}>
 												<option disabled value="pleasechoose">{'Please choose'}</option>
 												{this.state.resources.map((resource, resourceIndex) => {
 													if (resource.id !== this.state.resource.id) {
@@ -643,9 +299,8 @@ class ResourceForm extends Component {
 													<select value={'pleasechoose'}
 														value={model.childResourceMethod}
 														onChange={(e) => {
-															this.handleModelChange(model, 'childResourceMethod', e.target.value);
+															ResourceStore.handleModelChange(model, 'childResourceMethod', e.target.value);
 														}}>
-														<option disabled value="pleasechoose">{'Please choose'}</option>
 														<option value="id">{'Randomly selected id from array'}</option>
 														<option value="object">{'Randomly selected object from array'}</option>
 														<option value="array">{'Subset from array'}</option>
@@ -659,7 +314,7 @@ class ResourceForm extends Component {
 													<div className="input-label">{'Limit (leave blank for entire array)'}</div>
 													<input value={model.childResource_limit || ''}
 														onChange={(e) => {
-															this.handleModelChange(model, 'childResource_limit', e.target.value);
+															ResourceStore.handleModelChange(model, 'childResource_limit', e.target.value);
 														}} />
 												</div>
 												: null
@@ -671,7 +326,6 @@ class ResourceForm extends Component {
 									{model.type === 'object' ?
 										<a onClick={(e) => {
 											e.preventDefault();
-											// Use browser history to push current ${i} in to URL
 											browserHistory.push(`${window.location.pathname}/${i}`);
 										}}>
 											{'Configure'}
@@ -684,9 +338,7 @@ class ResourceForm extends Component {
 											<div className="input-label">{'Random category'}</div>
 											<select value={'pleasechoose'}
 												value={model.fakerCategory}
-												onChange={(e) => {
-													this.setSelectedRandomCategory(model, e.target.value);
-												}}>
+												onChange={(e) => ResourceStore.setSelectedRandomCategory(model, e.target.value)}>
 												<option disabled value="pleasechoose">{'Please choose'}</option>
 												{FakerCategories.map((category, categoryIndex) => {
 													return (
@@ -707,7 +359,7 @@ class ResourceForm extends Component {
 															let selectedFakerSubCategory = FakerSubCategories[model.fakerCategory].find((category) => {
 																return category.value === e.target.value;
 															});
-															this.setSelectedRandomSubcategory(model, selectedFakerSubCategory);
+															ResourceStore.setSelectedRandomSubcategory(model, selectedFakerSubCategory);
 														}}>
 														<option disabled value="pleasechoose">{'Please choose'}</option>
 														{FakerSubCategories[model.fakerCategory].map((type, categoryIndex) => {
@@ -734,7 +386,7 @@ class ResourceForm extends Component {
 																					} else if (e.target.value === 'true') {
 																						value = true;
 																					}
-																					this.handleModelParamsChange(model, param.param, value);
+																					ResourceStore.handleModelParamsChange(model, param.param, value);
 																				}}>
 																				{param.options.map((option, optionIndex) => {
 																					return (
@@ -752,10 +404,7 @@ class ResourceForm extends Component {
 																				{param.inputType === 'date' ?
 																					<input value={model.fakerParams[param.param] || ''}
 																						type="date"
-																						onChange={(e) => {
-																							let value = e.target.value;
-																							this.handleModelParamsChange(model, param.param, value);
-																						}}
+																						onChange={(e) => ResourceStore.handleModelParamsChange(model, param.param, e.target.value)}
 																					/>
 																					:
 																					<input value={model.fakerParams[param.param] || ''}
@@ -764,57 +413,41 @@ class ResourceForm extends Component {
 																							if (param.inputType === 'number') {
 																								value = parseFloat(e.target.value) || 0;
 																							}
-																							this.handleModelParamsChange(model, param.param, value);
+																							ResourceStore.handleModelParamsChange(model, param.param, value);
 																						}}
 																					/>
 																				}
 																			</div>
 																			: null
 																		}
+																		{param.type === 'json' ?
+																			<div className="editor-wrap">
+																				<AceEditor
+																					mode="json"
+																					theme="tomorrow"
+																					width="100%"
+																					height="100%"
+																					editorProps={{
+																						$blockScrolling: true
+																					}}
+																					setOptions={{
+																						showGutter: false,
+																						showLineNumbers: false,
+																						highlightGutterLine: false
+																					}}
+																					highlightActiveLine={false}
+																					enableLiveAutocompletion={true}
+																					tabSize={2}
+																					onChange={(value) => ResourceStore.handleModelParamsChange(model, param.param, value)}
+																					value={model.fakerParams[param.param]}
+																					name={`model-${i}`}
+																				/>
+																			</div>
+																			: null
+																		}
 																	</div>
 																);
 															})}
-															{model.fakerSubCategory === 'arrayElement' ?
-																<div>
-																	<div className="input-label">{'Array'}</div>
-																	<div className="editor-wrap">
-																		<AceEditor
-																			mode="json"
-																			theme="tomorrow"
-																			width="100%"
-																			height="100%"
-																			editorProps={{
-																				$blockScrolling: true
-																			}}
-																			setOptions={{
-																				showGutter: false,
-																				showLineNumbers: false,
-																				highlightGutterLine: false
-																			}}
-																			highlightActiveLine={false}
-																			enableLiveAutocompletion={true}
-																			tabSize={2}
-																			onChange={(value) => {
-																				this.handleModelParamsChange(model, 'json', value);
-																			}}
-																			value={model.fakerParams.json}
-																			name={`model-${i}`}
-																		/>
-																	</div>
-																</div>
-																: null
-															}
-															{model.fakerSubCategory === 'objectElement' ?
-																<div>
-																	<div className="input-label">{'Object'}</div>
-																	<textarea value={model.fakerParams.json}
-																		onChange={(e) => {
-																			this.handleModelParamsChange(model, 'json', e.target.value);
-																		}}>
-																	</textarea>
-																</div>
-																: null
-															}
 														</div>
 														: null
 													}
