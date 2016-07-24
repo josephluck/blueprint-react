@@ -23,7 +23,7 @@ class NestedModel extends Component {
 
 	render() {
 		return (
-			<div className="modal flex flex-vertical">
+			<div className="modal flex flex-column">
 				<div className="section-title with-top-border flex flex-0">
 					<span className="flex-1">
 						{`${this.state.nestedResource.key} model description`}

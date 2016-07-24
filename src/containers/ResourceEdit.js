@@ -26,12 +26,12 @@ class ResourceEdit extends Component {
 =============================================================================*/
 	render() {
 		return (
-			<div className="flex flex-vertical">
+			<div className="flex flex-1 flex-column">
 				<div className="section-title flex flex-0">
 					<span className="flex-1">
 						{this.props.resource.name}
 					</span>
-					<a className="large-right-margin"
+					<a className="mr3"
 						href=""
 						onClick={(e) => {
 							e.preventDefault();
@@ -39,7 +39,7 @@ class ResourceEdit extends Component {
 						}}>
 						{"Docs"}
 					</a>
-					<a className="large-right-margin"
+					<a className="mr3"
 						href=""
 						onClick={(e) => {
 							e.preventDefault();

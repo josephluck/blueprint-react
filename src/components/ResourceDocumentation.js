@@ -68,7 +68,7 @@ class ResourceDocumentation extends Component {
 
 		return (
 			<div className="flex">
-				<div className="flex-1 overflow-hidden flex-vertical">
+				<div className="flex-1 overflow-hidden flex-column">
 					{this.props.resource.supportedMethods.post ?
 						<div className="flex-1 flex">
 							<div className="flex-1 extra-large-bottom-padding border-bottom">

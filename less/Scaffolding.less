@@ -56,25 +56,12 @@ html {
 }
 
 .section-title {
-	border-bottom: solid @borderWidth @borderColor;
+	border: solid @borderWidth @borderColor;
+	border-top-width: 0px;
+	border-left-width: 0px;
+	border-right-width: 0px;
 	background: @pureWhite;
-	padding: @padding;
-	&.with-top-border {
-		border-top: solid @borderWidth @borderColor;
-	}
-}
-
-.box {
-	padding: @padding;
-	&.without-bottom-padding {
-		padding-bottom: 0px;
-	}
-	&.with-top-border {
-		border-top: solid @borderWidth @borderColor;
-	}
-	&.with-bottom-border {
-		border-bottom: solid @borderWidth @borderColor;
-	}
+	padding: 1rem;
 }
 
 code {

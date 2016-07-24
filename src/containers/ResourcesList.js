@@ -23,7 +23,7 @@ class ResourcesList extends Component {
 =============================================================================*/
 	render() {
 		return (
-			<div className="flex flex-vertical">
+			<div className="flex flex-1 flex-column">
 				<div className="section-title flex flex-0">
 					<span className="flex-1">
 						{'Resources'}
@@ -36,8 +36,8 @@ class ResourcesList extends Component {
 						{'New'}
 					</a>
 				</div>
-				<div className="flex flex-vertical">
-					<div className="flex-0 list-item without-bottom-padding">
+				<div className="flex flex-1 flex-column">
+					<div className="flex-0 pa3 pb0">
 						<div className="input-with-icon">
 							<span className="ss-search"></span>
 							<input className="without-bottom-margin"
@@ -53,23 +53,23 @@ class ResourcesList extends Component {
 						}).map((resource, i) => {
 							if (resource.id === parseInt(this.props.resource.id, 10)) {
 								return (
-									<div key={i} className="list-item active">
+									<div key={i} className="pa3 active">
 										<span>{this.props.resource.name}</span>
 									</div>
 								);
 							}
 							return (
-								<div key={i} className="list-item">
+								<div key={i} className="pa3">
 									<Link to={`/${resource.id}`}>{resource.name}</Link>
 								</div>
 							);
 						})}
 					</div>
 				</div>
-				<div className="list flex flex-0">
-					<div className="list-item with-bottom-padding flex text-align-center">
+				<div className="flex flex-0">
+					<div className="flex flex-1 pa3 text-align-center">
 						<a href=""
-							className="button flex-1"
+							className="button flex-1 tc"
 							onClick={(e) => {
 								e.preventDefault();
 							}}>

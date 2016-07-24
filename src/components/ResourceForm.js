@@ -30,8 +30,8 @@ class ResourceForm extends Component {
 	render() {
 		return (
 			<div className="flex-1 overflow-auto">
-				<div className="flex box without-bottom-padding">
-					<div className="flex-1">
+				<div className="flex pa3 pb0">
+					<div className="flex-1 mr3">
 						{this.props.nested === false ?
 							<div>
 								<div className="input-label">{'Name'}</div>
@@ -72,7 +72,7 @@ class ResourceForm extends Component {
 					</div>
 					{!this.props.nested ?
 						<div className="flex-1 flex">
-							<div className="flex-1 flex flex-vertical large-left-margin">
+							<div className="flex-1 flex flex-column">
 								<div className="flex-0 input-label">{'Supported methods'}</div>
 								<div className="flex-0 flex">
 									<label className="flex-1 checkbox-wrap">
@@ -162,10 +162,10 @@ class ResourceForm extends Component {
 				{this.state.resource.model.map((model, i) => {
 					return (
 						<div key={i}
-							className="box without-bottom-padding with-bottom-border">
+							className="pa3 pb0 bb">
 							<div key={model.id || model.uuid}
 								className="flex model-input-group">
-								<div className="flex-1 large-right-margin">
+								<div className="flex-1 mr3">
 									<div className="input-label flex">
 										<span className="flex-1">{'Key name'}</span>
 										<a href=""
@@ -190,7 +190,7 @@ class ResourceForm extends Component {
 										<option value={true}>{'Yes'}</option>
 									</select>
 								</div>
-								<div className="flex-1 overflow-hidden large-right-margin">
+								<div className="flex-1 overflow-hidden">
 									<div className="input-label flex-1">
 										<span className="flex-1">{'Type'}</span>
 									</div>

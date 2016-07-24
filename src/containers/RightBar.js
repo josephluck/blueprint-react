@@ -34,13 +34,13 @@ class RightBar extends Component {
 		}
 
 		return (
-			<div className={`right-bar flex ${rightBarClass}`}>
-				<div className="documentation-left-nav flex flex-vertical">
-					<div className="section-title flex flex-0">
+			<div className={`flex right-bar ${rightBarClass}`}>
+				<div className="documentation-left-nav flex flex-column">
+					<div className="flex flex-0 pa3">
 						<span className="flex-1">
 							{'Documentaton'}
 						</span>
-						<a className="large-left-margin"
+						<a className="ml3"
 							href=""
 							onClick={(e) => {
 								e.preventDefault();
@@ -49,15 +49,15 @@ class RightBar extends Component {
 							{'Close'}
 						</a>
 					</div>
-					<div className="flex flex-vertical">
+					<div className="flex flex-column">
 						<div className="flex-1 overflow-auto">
-							<div className="list-item">
+							<div className="pa3">
 								<div>{`Create ${this.props.resource.name}`}</div>
 							</div>
 						</div>
 					</div>
-					<div className="list flex flex-0">
-						<div className="list-item with-bottom-padding flex text-align-center">
+					<div className="flex flex-0">
+						<div className="flex pa3 text-align-center">
 							<a href=""
 								className="button flex-1"
 								onClick={(e) => {

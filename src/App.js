@@ -19,16 +19,15 @@ class App extends Component {
 	render() {
 		return (
 			<div className="app-container">
-				<div className="left-nav flex flex-vertical">
-					<div className="logo">
-						<span>{"B"}</span>
-					</div>
+				<div className="left-nav flex flex-column">
 					<ResourcesList />
 				</div>
 				{Store.get().resources.length > 0 ?
 					<div className="flex flex-1">
-						<div className="main-content flex flex-vertical">
-							<div className="flex">{this.props.children}</div>
+						<div className="main-content flex flex-column">
+							<div className="flex flex-1">
+								{this.props.children}
+							</div>
 						</div>
 						<RightBar />
 					</div>
