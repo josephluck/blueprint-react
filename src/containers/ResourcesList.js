@@ -53,21 +53,27 @@ class ResourcesList extends Component {
 						}).map((resource, i) => {
 							if (resource.id === parseInt(this.props.resource.id, 10)) {
 								return (
-									<div key={i} className="pa3 active">
-										<span>{this.props.resource.name}</span>
+									<div key={i}
+										className="pa3 pb0 active">
+										<span>
+											{this.props.resource.name}
+										</span>
 									</div>
 								);
 							}
 							return (
-								<div key={i} className="pa3">
-									<Link to={`/${resource.id}`}>{resource.name}</Link>
+								<div key={i}
+									className="pa3 pb0">
+									<Link to={`/${resource.id}`}>
+										{resource.name}
+									</Link>
 								</div>
 							);
 						})}
 					</div>
 				</div>
 				<div className="flex flex-0">
-					<div className="flex flex-1 pa3 text-align-center">
+					<div className="flex flex-1 pa3">
 						<a href=""
 							className="button flex-1 tc"
 							onClick={(e) => {

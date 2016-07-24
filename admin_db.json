@@ -65,36 +65,6 @@
           "presence": true
         }
       }
-    },
-    {
-      "type": "array",
-      "length": 5,
-      "name": "newResource",
-      "supportedMethods": {
-        "get": true,
-        "post": true,
-        "put": true,
-        "destroy": true
-      },
-      "supportedUtils": {
-        "filter": true,
-        "pagination": true,
-        "sort": true
-      },
-      "model": [
-        {
-          "uuid": "742ad247-4b60-4daf-8082-d01abbf2efb9",
-          "type": "predefined",
-          "fakerSubCategory": "",
-          "fakerCategory": "",
-          "fakerParams": {},
-          "resource": {},
-          "predefinedType": "string",
-          "predefinedValue": "",
-          "required": true
-        }
-      ],
-      "id": 2
     }
   ]
 }

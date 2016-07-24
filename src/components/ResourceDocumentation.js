@@ -71,22 +71,22 @@ class ResourceDocumentation extends Component {
 				<div className="flex-1 overflow-hidden flex-column">
 					{this.props.resource.supportedMethods.post ?
 						<div className="flex-1 flex">
-							<div className="flex-1 extra-large-bottom-padding border-bottom">
+							<div className="flex-1 pb6">
 								<div className="section-title">
 									{`Create ${this.props.resource.name}`}
 								</div>
-								<div className="box">
+								<div className="pa3">
 									<div>
 										{this.props.resource.model.map((parameter, i) => {
 											return (
 												<div key={i}
-													className="flex flex-1 large-bottom-margin">
-													<div className="flex-2 overflow-hidden text-align-right">
-														<div className="wrap-text monospace bottom-padding">
+													className="flex flex-1 mb3">
+													<div className="flex-2 overflow-hidden tr">
+														<div className="ww-break-word monospace mb3">
 															{parameter.key}
 														</div>
 													</div>
-													<div className="flex-3 large-left-margin">
+													<div className="flex-3 ml3">
 														{this.getModelParameterConstraints(parameter)}
 														{" "}
 														{parameter.documentationDescription}
@@ -97,33 +97,33 @@ class ResourceDocumentation extends Component {
 									</div>
 								</div>
 							</div>
-							<div className="flex-1 overflow-hidden documentation-code-examples extra-large-bottom-padding">
+							<div className="flex-1 overflow-hidden documentation-code-examples pb6">
 								<div className="section-title invisible">
 									{`Create ${this.props.resource.name}`}
 								</div>
-								<div className="box">
-									<div className="bottom-margin">
+								<div className="pa3">
+									<div className="pb2">
 										{"Request method & url"}
 									</div>
-									<div className="large-bottom-margin">
+									<div className="mb3">
 										<code>
 											{`POST /${this.props.resource.name}`}
 										</code>
 									</div>
 
-									<div className="bottom-margin">
+									<div className="pb2">
 										{"Request body"}
 									</div>
-									<div className="large-bottom-margin">
+									<div className="mb3">
 										<Highlight className="javascript">
 											{JSON.stringify(requestExample, null, 2)}
 										</Highlight>
 									</div>
 
-									<div className="bottom-margin">
+									<div className="pb2">
 										{"Response body"}
 									</div>
-									<div className="large-bottom-margin">
+									<div className="mb3">
 										<Highlight className="javascript">
 											{JSON.stringify(responseExample, null, 2)}
 										</Highlight>

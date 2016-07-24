@@ -162,7 +162,7 @@ class ResourceForm extends Component {
 				{this.state.resource.model.map((model, i) => {
 					return (
 						<div key={i}
-							className="pa3 pb0 bb">
+							className="pa3">
 							<div key={model.id || model.uuid}
 								className="flex model-input-group">
 								<div className="flex-1 mr3">
