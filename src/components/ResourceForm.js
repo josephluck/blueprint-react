@@ -197,7 +197,7 @@ class ResourceForm extends Component {
 									<select value={model.type}
 										onChange={(e) => {
 											ResourceStore.handleModelChange(model, 'type', e.target.value);
-											this.handleModelTypeChanged(model, e.target.value);
+											ResourceStore.handleModelTypeChanged(model, e.target.value);
 										}}>
 										<option value={'predefined'}>
 											{'Pre-defined'}
@@ -219,7 +219,7 @@ class ResourceForm extends Component {
 											<select value={model.predefinedType}
 												onChange={(e) => {
 													ResourceStore.handleModelChange(model, 'predefinedType', e.target.value);
-													this.handleModelPredefinedTypeChange(model, e.target.value);
+													ResourceStore.handleModelPredefinedTypeChange(model, e.target.value);
 												}}>
 												<option value="string">{'String'}</option>
 												<option value="number">{'Number'}</option>

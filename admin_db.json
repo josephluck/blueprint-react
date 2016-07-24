@@ -13,6 +13,40 @@
       "supportedUtils": {},
       "model": [
         {
+          "uuid": "f7616125-e28c-4411-a556-d578921dfb99",
+          "type": "object",
+          "fakerSubCategory": "",
+          "fakerCategory": "",
+          "fakerParams": {},
+          "resource": {
+            "type": "array",
+            "length": 5,
+            "model": [
+              {
+                "uuid": "e26be33e-1d48-451b-a326-da0f2eb51c19",
+                "type": "random",
+                "fakerSubCategory": "product",
+                "fakerCategory": "commerce",
+                "fakerParams": {},
+                "resource": {},
+                "predefinedType": "string",
+                "predefinedValue": "",
+                "required": false,
+                "key": "keyName",
+                "selectedFakerSubCategory": {
+                  "name": "Product",
+                  "value": "product",
+                  "params": []
+                }
+              }
+            ]
+          },
+          "predefinedType": "string",
+          "predefinedValue": "",
+          "required": false,
+          "key": "nestedObject"
+        },
+        {
           "uuid": "fe597003-4fe5-4496-a7e9-a3c50dac09d6",
           "type": "random",
           "fakerSubCategory": "price",
