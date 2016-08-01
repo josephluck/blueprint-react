@@ -2,8 +2,8 @@
   "resources": [
     {
       "type": "array",
-      "length": 10,
-      "name": "newResource",
+      "length": 500,
+      "name": "customers",
       "supportedMethods": {
         "get": true,
         "post": true,
@@ -13,10 +13,49 @@
       "supportedUtils": {},
       "model": [
         {
+          "uuid": "b6587eb9-6777-451c-b69c-9a82e3cc85ac",
+          "type": "random",
+          "fakerSubCategory": "firstName",
+          "fakerCategory": "name",
+          "fakerParams": {
+            "gender": ""
+          },
+          "resource": {},
+          "predefinedType": "string",
+          "predefinedValue": "",
+          "required": false,
+          "key": "name",
+          "selectedFakerSubCategory": {
+            "name": "First name",
+            "value": "firstName",
+            "params": [
+              {
+                "name": "Gender",
+                "param": "gender",
+                "type": "select",
+                "options": [
+                  {
+                    "description": "Either",
+                    "value": ""
+                  },
+                  {
+                    "description": "Male",
+                    "value": "male"
+                  },
+                  {
+                    "description": "Female",
+                    "value": "female"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
           "uuid": "f7616125-e28c-4411-a556-d578921dfb99",
-          "type": "object",
-          "fakerSubCategory": "",
-          "fakerCategory": "",
+          "type": "random",
+          "fakerSubCategory": "title",
+          "fakerCategory": "name",
           "fakerParams": {},
           "resource": {
             "type": "array",
@@ -44,60 +83,18 @@
           "predefinedType": "string",
           "predefinedValue": "",
           "required": false,
-          "key": "nestedObject"
-        },
-        {
-          "uuid": "fe597003-4fe5-4496-a7e9-a3c50dac09d6",
-          "type": "random",
-          "fakerSubCategory": "price",
-          "fakerCategory": "commerce",
-          "fakerParams": {
-            "min": 100,
-            "max": 400,
-            "dec": 0,
-            "symbol": ""
-          },
-          "resource": {},
-          "predefinedType": "string",
-          "predefinedValue": "",
-          "required": true,
+          "key": "title",
           "selectedFakerSubCategory": {
-            "name": "Price",
-            "value": "price",
-            "params": [
-              {
-                "name": "Min value",
-                "param": "min",
-                "type": "input",
-                "inputType": "number"
-              },
-              {
-                "name": "Max value",
-                "param": "max",
-                "type": "input",
-                "inputType": "number"
-              },
-              {
-                "name": "Decimal places",
-                "param": "dec",
-                "type": "input",
-                "inputType": "number"
-              },
-              {
-                "name": "Symbol",
-                "param": "symbol",
-                "type": "input"
-              }
-            ]
-          },
-          "key": "price"
+            "name": "Title",
+            "value": "title",
+            "params": []
+          }
         }
       ],
       "id": 1,
       "validationConfig": {
-        "price": {
-          "presence": true
-        }
+        "name": {},
+        "title": {}
       }
     }
   ]

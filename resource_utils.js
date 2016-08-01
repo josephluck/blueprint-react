@@ -26,11 +26,11 @@ validate.validators.boolean = function(value, options, key, attributes) {
 }
 
 module.exports = {
-/*=============================================================================
-	Generate a full resource (array of models)
-	takes a description that defines what the resource looks like
-	including it's model and associated description
-=============================================================================*/
+	/*=============================================================================
+		Generate a full resource (array of models)
+		takes a description that defines what the resource looks like
+		including it's model and associated description
+	=============================================================================*/
 	generateResource: function(description, resources, isNestedResource) {
 		if (resources) {
 			_resources = resources;
@@ -54,9 +54,9 @@ module.exports = {
 		}
 	},
 
-/*=============================================================================
-	Returns a model object based on it's description
-=============================================================================*/
+	/*=============================================================================
+		Returns a model object based on it's description
+	=============================================================================*/
 	generateModel: function(description) {
 		var model = {};
 
@@ -68,11 +68,11 @@ module.exports = {
 		return model;
 	},
 
-/*=============================================================================
-	Returns a value for a properties key (for instance first_name)
-	Get's passed in the property description and delegates to utility functions
-	based on the properties type
-=============================================================================*/
+	/*=============================================================================
+		Returns a value for a properties key (for instance first_name)
+		Get's passed in the property description and delegates to utility functions
+		based on the properties type
+	=============================================================================*/
 	generatePropertyValue: function(property) {
 		if (property.type === 'random') {
 			return this.generateRandomValue(property);
@@ -89,10 +89,10 @@ module.exports = {
 		}
 	},
 
-/*=============================================================================
-	Returns a random value given a properties description
-	Uses faker.js (see docs for more info)
-=============================================================================*/
+	/*=============================================================================
+		Returns a random value given a properties description
+		Uses faker.js (see docs for more info)
+	=============================================================================*/
 	generateRandomValue: function(property) {
 		if (property.fakerCategory && property.fakerSubCategory) {
 			var args = [];
@@ -108,21 +108,21 @@ module.exports = {
 		}
 	},
 
-/*=============================================================================
-	Check whether a child resource has a model key that requests it's parent i.e:
+	/*=============================================================================
+		Check whether a child resource has a model key that requests it's parent i.e:
 
-	users_model : [{
-		type: 'childResource',
-		childResourceName: 'comments'
-	}];
-	comments_model: [{
-		type: 'childResource',
-		childResourceName: 'users'
-	}];
+		users_model : [{
+			type: 'childResource',
+			childResourceName: 'comments'
+		}];
+		comments_model: [{
+			type: 'childResource',
+			childResourceName: 'users'
+		}];
 
-	The above will fail since it'll cause an infinite loop of generateResource
-	calls.
-=============================================================================*/
+		The above will fail since it'll cause an infinite loop of generateResource
+		calls.
+	=============================================================================*/
 	childResourceContainsRecursiveParent: function(resourceName, childResource) {
 		for (var i = 0, x = childResource.model.length; i < x; i++) {
 			if (childResource.model[i].type === 'childResource') {
@@ -135,9 +135,9 @@ module.exports = {
 		return false
 	},
 
-/*=============================================================================
-	Get a random sub-set of an array
-=============================================================================*/
+	/*=============================================================================
+		Get a random sub-set of an array
+	=============================================================================*/
 	getRandomSample: function(array, count) {
     var indices = [];
     var result = new Array(count);
@@ -149,10 +149,10 @@ module.exports = {
     return result;
 	},
 
-/*=============================================================================
-	Generate a key's value from another resource i.e. a post has an author
-	where posts and users are resources
-=============================================================================*/
+	/*=============================================================================
+		Generate a key's value from another resource i.e. a post has an author
+		where posts and users are resources
+	=============================================================================*/
 	generateValueFromAnotherResource: function(property) {
 		for (var i = 0, x = _resources.length; i < x; i++) {
 			if (_resources[i].name === property.childResourceName) {
@@ -189,10 +189,10 @@ module.exports = {
 		}
 	},
 
-/*=============================================================================
-	Returns a full database object from the descriptions stored in the
-	admin DB
-=============================================================================*/
+	/*=============================================================================
+		Returns a full database object from the descriptions stored in the
+		admin DB
+	=============================================================================*/
 	generateDatabase: function(resources) {
 		_resources = resources;
 		var database = {};
@@ -205,17 +205,17 @@ module.exports = {
 		return database;
 	},
 
-/*=============================================================================
-	Validates a POST or PUT request against the model description if the key
-	is a required parameter.
-=============================================================================*/
+	/*=============================================================================
+		Validates a POST or PUT request against the model description if the key
+		is a required parameter.
+	=============================================================================*/
 	validateRequest: function(resource, request) {
 		return validate(request, resource.validationConfig);
 	},
 
-/*=============================================================================
-	Generate validation config (for validate.js) for a resource
-=============================================================================*/
+	/*=============================================================================
+		Generate validation config (for validate.js) for a resource
+	=============================================================================*/
 	generateValidationConfigForResource: function(resource) {
 		var validationConfig = {};
 
@@ -233,9 +233,9 @@ module.exports = {
 		return validationConfig;
 	},
 
-/*=============================================================================
-	Generate the validate.js requirements for a single model.
-=============================================================================*/
+	/*=============================================================================
+		Generate the validate.js requirements for a single model.
+	=============================================================================*/
 	getSingleRequestParameterValidationRequirements: function(parameter) {
 		var config = {};
 		var requiredType;

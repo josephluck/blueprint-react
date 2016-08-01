@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var path = require('path');
+var WebpackNotifierPlugin = require('webpack-notifier');
 
 module.exports = {
   entry: [
@@ -7,7 +8,7 @@ module.exports = {
     'webpack/hot/dev-server',
     'babel-polyfill',
     './src/index',
-    './less/main.less',
+    './less/index.less',
   ],
   output: {
     path: path.join(__dirname, 'build'),
@@ -15,39 +16,46 @@ module.exports = {
     publicPath: '/build/'
   },
   resolve: {
-    root: path.resolve('./src'),
+    root: [
+      path.join(__dirname, 'src')
+    ],
     extensions: ['', '.js']
   },
   devtool: 'eval-source-map',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
+    new WebpackNotifierPlugin({title: 'Blueprint'})
   ],
   module: {
-    loaders: [
-      {
-        test: /\.jsx?$/,
-        loader: ['babel'],
-        query: {
-          cacheDirectory: true,
-          plugins: ['transform-decorators-legacy'],
-          presets: ['es2015', 'stage-0', 'react']
+      loaders: [
+        {
+          test: /\.js?$/,
+          loader: ['babel'],
+          query: {
+            cacheDirectory: true,
+            plugins: ['transform-decorators-legacy'],
+            presets: ['es2015', 'stage-0', 'react']
+          },
+          include: [
+            path.join(__dirname, 'src')
+          ]
         },
-        include: path.join(__dirname, 'src')
-      },
-      {
-        test: /\.less$/,
-        loader: "style!css!autoprefixer!less"
-      },
-    ],
-    preLoaders: [
-      {
-        test: /\.js$/,
-        loaders: ['eslint'],
-        include: [new RegExp(path.join(__dirname, 'src'))]
-      }
-    ]
-  },
+        {
+          test: /\.less$/,
+          loader: "style!css!autoprefixer!less"
+        },
+      ],
+      preLoaders: [
+        {
+          test: /\.js$/,
+          loaders: ['eslint'],
+          include: [
+            new RegExp(path.join(__dirname, 'src'))
+          ]
+        }
+      ]
+    },
   eslint: {
     configFile: './.eslintrc'
   }

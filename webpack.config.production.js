@@ -1,28 +1,27 @@
 var webpack = require('webpack');
 var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var WebpackNotifierPlugin = require('webpack-notifier');
 
 module.exports = {
   entry: [
     'babel-polyfill',
-    './scripts/index',
-    './less/main.less',
+    './src/index',
+    './less/index.less',
   ],
   output: {
-    path: path.join(__dirname, 'static'),
+    path: path.join(__dirname, 'build'),
     filename: 'bundle.js',
-    publicPath: '/static/'
+    publicPath: '/build/'
   },
   resolve: {
-    root: path.resolve('./scripts'),
-    // alias: {
-    //   'react': 'react-lite',
-    //   'react-dom': 'react-lite'
-    // },
+    root: [
+      path.join(__dirname, 'src')
+    ],
     extensions: ['', '.js']
   },
-  // devtool: 'eval-source-map', // Dev with debugger
-  devtool: 'source-map', // Production
+  devtool: 'eval-source-map', // Dev with debugger
+  // devtool: 'source-map', // Production
   plugins: [
     new webpack.NoErrorsPlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
@@ -37,19 +36,22 @@ module.exports = {
         warnings: false
       }
     }),
-    new ExtractTextPlugin("style.css", {allChunks: false})
+    new ExtractTextPlugin("style.css", {allChunks: false}),
+    new WebpackNotifierPlugin({title: 'Blueprint build'}),
   ],
   module: {
     loaders: [
       {
-        test: /\.jsx?$/,
+        test: /\.js?$/,
         loader: ['babel'],
         query: {
           cacheDirectory: true,
           plugins: ['transform-decorators-legacy'],
           presets: ['es2015', 'stage-0', 'react']
         },
-        include: path.join(__dirname, 'scripts')
+        include: [
+          path.join(__dirname, 'src')
+        ]
       },
       {
         test: /\.less$/,

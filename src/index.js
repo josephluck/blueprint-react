@@ -3,7 +3,7 @@ import {render} from 'react-dom';
 import {browserHistory, Router, Route} from 'react-router';
 
 // App/Login
-import App from './App';
+import App from 'App';
 import Resource from 'containers/Resource';
 import ResourceEdit from 'containers/ResourceEdit';
 import NestedResourceNavigation from 'containers/NestedResourceNavigation';
