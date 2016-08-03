@@ -1,10 +1,5 @@
 // Declare variables here for global use
 
-
-// Refactor this file so that server.js is
-// only concered with the two node.js servers
-// and the front-end server will be handled separately
-
 // F deployment, the two admin server will serve
 // the bundle.js front-end app from build/bundle.js
 // so that this application can be deployed as a simple node
@@ -126,24 +121,7 @@ var startDatabaseServer = function() {
 	});
 }
 
-// /*=============================================================================
-// 	Start up the admin front-end for managing resources and settings
-// =============================================================================*/
-// var startFrontEndServer = function() {
-// 	new WebpackDevServer(webpack(webpackConfig), {
-// 	  publicPath: webpackConfig.output.publicPath,
-// 	  hot: true,
-// 	  historyApiFallback: true
-// 	}).listen(1402, 'localhost', (err) => {
-// 	  if (err) {
-// 	    console.log(err);
-// 	  }
-// 	  console.log('Frontend server running at: http://localhost:1402');
-// 	});
-// }
-
 /*=============================================================================
 	Bootstrap
 =============================================================================*/
 startAdminServer();
-// startFrontEndServer();

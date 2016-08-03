@@ -12,7 +12,7 @@ fs.readdirSync('node_modules')
   });
 
 module.exports = {
-  entry: './server.js',
+  entry: './backend/index.js',
   target: 'node',
   output: {
     path: path.join(__dirname, 'build'),
@@ -50,6 +50,10 @@ module.exports = {
       {
         test: /\.less$/,
         loader: "style!css!autoprefixer!less"
+      },
+      {
+        test: /\.json$/,
+        loader: "json"
       },
     ],
     preLoaders: [
