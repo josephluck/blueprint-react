@@ -17,7 +17,8 @@ module.exports = {
   },
   resolve: {
     root: [
-      path.join(__dirname, 'src')
+      path.join(__dirname, 'src'),
+      path.join(__dirname, 'backend')
     ],
     extensions: ['', '.js']
   },
@@ -28,34 +29,35 @@ module.exports = {
     new WebpackNotifierPlugin({title: 'Blueprint'})
   ],
   module: {
-      loaders: [
-        {
-          test: /\.js?$/,
-          loader: ['babel'],
-          query: {
-            cacheDirectory: true,
-            plugins: ['transform-decorators-legacy'],
-            presets: ['es2015', 'stage-0', 'react']
-          },
-          include: [
-            path.join(__dirname, 'src')
-          ]
+    loaders: [
+      {
+        test: /\.js?$/,
+        loader: ['babel'],
+        query: {
+          cacheDirectory: true,
+          plugins: ['transform-decorators-legacy'],
+          presets: ['es2015', 'stage-0', 'react']
         },
-        {
-          test: /\.less$/,
-          loader: "style!css!autoprefixer!less"
-        },
-      ],
-      preLoaders: [
-        {
-          test: /\.js$/,
-          loaders: ['eslint'],
-          include: [
-            new RegExp(path.join(__dirname, 'src'))
-          ]
-        }
-      ]
-    },
+        include: [
+          path.join(__dirname, 'src'),
+          path.join(__dirname, 'backend')
+        ]
+      },
+      {
+        test: /\.less$/,
+        loader: "style!css!autoprefixer!less"
+      },
+    ],
+    preLoaders: [
+      {
+        test: /\.js$/,
+        loaders: ['eslint'],
+        include: [
+          new RegExp(path.join(__dirname, 'src'))
+        ]
+      }
+    ]
+  },
   eslint: {
     configFile: './.eslintrc'
   }

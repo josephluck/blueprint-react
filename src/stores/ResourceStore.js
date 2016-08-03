@@ -1,7 +1,7 @@
 import Store from 'stores/Store';
 import Api from 'utils/Api';
 import {browserHistory} from 'react-router';
-import ResourceUtils from '../../resource_utils.js';
+import ResourceUtils from '../../backend/ResourceUtils.js';
 
 import ResourcesStore from 'stores/ResourcesStore';
 

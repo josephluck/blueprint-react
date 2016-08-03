@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Highlight from 'react-highlight';
-import ResourceUtils from '../../resource_utils.js';
+import ResourceUtils from '../../backend/ResourceUtils.js';
 
 class ResourceDocumentation extends Component {
 	constructor(props) {

@@ -16,7 +16,8 @@ module.exports = {
   },
   resolve: {
     root: [
-      path.join(__dirname, 'src')
+      path.join(__dirname, 'src'),
+      path.join(__dirname, 'backend')
     ],
     extensions: ['', '.js']
   },
@@ -50,7 +51,8 @@ module.exports = {
           presets: ['es2015', 'stage-0', 'react']
         },
         include: [
-          path.join(__dirname, 'src')
+          path.join(__dirname, 'src'),
+          path.join(__dirname, 'backend')
         ]
       },
       {

@@ -2,7 +2,7 @@
   "resources": [
     {
       "type": "array",
-      "length": 500,
+      "length": 5,
       "name": "customers",
       "supportedMethods": {
         "get": true,

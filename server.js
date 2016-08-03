@@ -1,13 +1,31 @@
 // Declare variables here for global use
+
+
+// Refactor this file so that server.js is
+// only concered with the two node.js servers
+// and the front-end server will be handled separately
+
+// F deployment, the two admin server will serve
+// the bundle.js front-end app from build/bundle.js
+// so that this application can be deployed as a simple node
+// application.
+
+// We need to work out how the two json servers can be
+// slimmed down into one json server handling both the admin
+// and public apis
+
+// Refactor server code in to separate files, making
+// good use of ES2016 import / export code.
+
+// Remove references to Faker.js since this is an implementation
+// detail.
+
+
 var http = require('request');
 var jsonServer = require('json-server');
 var bodyParser = require('body-parser');
-var webpack = require('webpack');
-var WebpackDevServer = require('webpack-dev-server');
-var webpackConfig = require('./webpack.config');
-var resourceUtils = require('./resource_utils');
+var resourceUtils = require('./backend/ResourceUtils').default;
 var dataRouter;
-// var _resources;
 
 /*=============================================================================
 	When resources are updated, restart the database server
@@ -24,7 +42,6 @@ var databaseServerUpdaterMiddleware = function (req, res, next) {
   	setTimeout(() => {
   		http('http://localhost:1401/resources', (error, response, body) => {
   			var resources = JSON.parse(body);
-  			// _resources = JSON.parse(body);
   			console.log("Database updated at: http://localhost:1400");
   			dataRouter.db.setState(resourceUtils.generateDatabase(resources));
   		});
@@ -49,7 +66,7 @@ var startAdminServer = function() {
 	});
 }
 
-var resourceMethodHelperMiddleware = function (req, res, next) {
+var resourceMethodHelperMiddleware = function (req, res, next, resources) {
 	// Check that the method is supported by the configuration
 	// first get the resource description in question and then
 	// check that the method is supported before passing it to
@@ -100,7 +117,7 @@ var startDatabaseServer = function() {
 	  dataServer.use(bodyParser.json());
 	  dataServer.use(jsonServer.defaults());
 
-	  dataServer.use(resourceMethodHelperMiddleware);
+	  dataServer.use(resourceMethodHelperMiddleware.bind(resources));
 
 	  dataServer.use(dataRouter);
 	  dataServer.listen(1400, function () {
@@ -109,24 +126,24 @@ var startDatabaseServer = function() {
 	});
 }
 
-/*=============================================================================
-	Start up the admin front-end for managing resources and settings
-=============================================================================*/
-var startFrontEndServer = function() {
-	new WebpackDevServer(webpack(webpackConfig), {
-	  publicPath: webpackConfig.output.publicPath,
-	  hot: true,
-	  historyApiFallback: true
-	}).listen(1402, 'localhost', (err) => {
-	  if (err) {
-	    console.log(err);
-	  }
-	  console.log('Frontend server running at: http://localhost:1402');
-	});
-}
+// /*=============================================================================
+// 	Start up the admin front-end for managing resources and settings
+// =============================================================================*/
+// var startFrontEndServer = function() {
+// 	new WebpackDevServer(webpack(webpackConfig), {
+// 	  publicPath: webpackConfig.output.publicPath,
+// 	  hot: true,
+// 	  historyApiFallback: true
+// 	}).listen(1402, 'localhost', (err) => {
+// 	  if (err) {
+// 	    console.log(err);
+// 	  }
+// 	  console.log('Frontend server running at: http://localhost:1402');
+// 	});
+// }
 
 /*=============================================================================
 	Bootstrap
 =============================================================================*/
 startAdminServer();
-startFrontEndServer();
+// startFrontEndServer();
