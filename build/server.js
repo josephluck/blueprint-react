@@ -2,41 +2,41 @@ require("source-map-support").install();
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			exports: {},
 /******/ 			id: moduleId,
 /******/ 			loaded: false
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.loaded = true;
-
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
 /******/ })
@@ -45,55 +45,590 @@ require("source-map-support").install();
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\n\nvar _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // Declare letiables here for global use\n\n// F deployment, the two admin server will serve\n// the bundle.js front-end app from build/bundle.js\n// so that this application can be deployed as a simple node\n// application.\n\n// We need to work out how the two json servers can be\n// slimmed down into one json server handling both the admin\n// and public apis\n\n// Refactor server code in to separate files, making\n// good use of ES2016 import / export code.\n\n// Remove references to Faker.js since this is an implementation\n// detail.\n\nvar _request = __webpack_require__(1);\n\nvar _request2 = _interopRequireDefault(_request);\n\nvar _jsonServer = __webpack_require__(2);\n\nvar _jsonServer2 = _interopRequireDefault(_jsonServer);\n\nvar _bodyParser = __webpack_require__(3);\n\nvar _bodyParser2 = _interopRequireDefault(_bodyParser);\n\nvar _ResourceUtils = __webpack_require__(4);\n\nvar _ResourceUtils2 = _interopRequireDefault(_ResourceUtils);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nvar adminDb = __webpack_require__(8);\nvar dataRouter = void 0;\n\nvar Server = function () {\n\tfunction Server() {\n\t\t_classCallCheck(this, Server);\n\t}\n\n\t_createClass(Server, [{\n\t\tkey: 'startAdminServer',\n\n\n\t\t/*=============================================================================\n  \tRun the admin database (to store resource descriptions)\n  =============================================================================*/\n\t\tvalue: function startAdminServer() {\n\t\t\tvar _this = this;\n\n\t\t\tthis.adminServer = _jsonServer2.default.create();\n\t\t\tthis.adminRouter = _jsonServer2.default.router(adminDb);\n\n\t\t\tthis.adminServer.use(_jsonServer2.default.defaults());\n\t\t\tthis.adminServer.use(this.databaseServerUpdaterMiddleware);\n\t\t\tthis.adminServer.use(this.adminRouter);\n\n\t\t\tthis.adminServer.listen(1401, function () {\n\t\t\t\tconsole.log('Admin database running at: http://localhost:1401');\n\t\t\t\t_this.startDatabaseServer();\n\t\t\t});\n\t\t}\n\n\t\t/*=============================================================================\n  \tStart up the database API (one that will be consumed by client's\n  \tfront-end projects).\n  \tUses JSON server (see docs for more info)\n  =============================================================================*/\n\n\t}, {\n\t\tkey: 'startDatabaseServer',\n\t\tvalue: function startDatabaseServer() {\n\t\t\tvar _this2 = this;\n\n\t\t\t(0, _request2.default)('http://localhost:1401/resources', function (error, response, body) {\n\t\t\t\tvar resources = JSON.parse(body);\n\t\t\t\tvar database = _ResourceUtils2.default.generateDatabase(resources);\n\t\t\t\t_this2.dataServer = _jsonServer2.default.create();\n\t\t\t\tdataRouter = _jsonServer2.default.router(database);\n\n\t\t\t\t_this2.dataServer.use(_bodyParser2.default.json());\n\t\t\t\t_this2.dataServer.use(_jsonServer2.default.defaults());\n\t\t\t\t_this2.dataServer.use(_this2.resourceMethodHelperMiddleware.bind(resources));\n\t\t\t\t_this2.dataServer.use(dataRouter);\n\n\t\t\t\t_this2.dataServer.listen(1400, function () {\n\t\t\t\t\tconsole.log('Database running at: http://localhost:1400');\n\t\t\t\t});\n\t\t\t});\n\t\t}\n\t}, {\n\t\tkey: 'resourceMethodHelperMiddleware',\n\t\tvalue: function resourceMethodHelperMiddleware(req, res, next, resources) {\n\t\t\t// Check that the method is supported by the configuration\n\t\t\t// first get the resource description in question and then\n\t\t\t// check that the method is supported before passing it to\n\t\t\t// json server. Otherwise throw a 405 method not allowed\n\t\t\tvar requestedResourceName = req.originalUrl.split('/')[1];\n\t\t\tvar requestedResourceDescription = resources.find(function (resource) {\n\t\t\t\treturn resource.name === requestedResourceName;\n\t\t\t});\n\n\t\t\tif (requestedResourceDescription) {\n\t\t\t\tif (req.method === 'GET' && requestedResourceDescription.supportedMethods.get) {\n\t\t\t\t\tnext();\n\t\t\t\t} else if (req.method === 'POST' && requestedResourceDescription.supportedMethods.post) {\n\t\t\t\t\tvar validationErrors = _ResourceUtils2.default.validateRequest(requestedResourceDescription, req.body);\n\t\t\t\t\tif (validationErrors) {\n\t\t\t\t\t\tres.status(400).send(validationErrors);\n\t\t\t\t\t} else {\n\t\t\t\t\t\tnext();\n\t\t\t\t\t}\n\t\t\t\t} else if (req.method === 'PUT' && requestedResourceDescription.supportedMethods.put) {\n\t\t\t\t\tnext();\n\t\t\t\t} else if (req.method === 'DELETE' && requestedResourceDescription.supportedMethods.destroy) {\n\t\t\t\t\tnext();\n\t\t\t\t} else {\n\t\t\t\t\tres.status(405).send('Method isn\\'t supported for this resource');\n\t\t\t\t}\n\t\t\t} else {\n\t\t\t\t// The resource doesn't exist but JSON server will handle the response for us\n\t\t\t\tnext();\n\t\t\t}\n\t\t}\n\n\t\t/*=============================================================================\n  \tWhen resources are updated, restart the database server\n  =============================================================================*/\n\n\t}, {\n\t\tkey: 'databaseServerUpdaterMiddleware',\n\t\tvalue: function databaseServerUpdaterMiddleware(req, res, next) {\n\t\t\t// Pass immediately on to JSON server\n\t\t\tnext();\n\n\t\t\t// Stop and start the JSON server\n\t\t\tif (req.method === 'POST' || req.method === 'PUT' || req.method === 'DELETE') {\n\t\t\t\tsetTimeout(function () {\n\t\t\t\t\t(0, _request2.default)('http://localhost:1401/resources', function (error, response, body) {\n\t\t\t\t\t\tconsole.log('Database updated at: http://localhost:1400');\n\t\t\t\t\t\tvar resources = JSON.parse(body);\n\t\t\t\t\t\tvar database = _ResourceUtils2.default.generateDatabase(resources);\n\t\t\t\t\t\tdataRouter.db.setState(database);\n\t\t\t\t\t});\n\t\t\t\t}, 2000);\n\t\t\t}\n\t\t}\n\t}, {\n\t\tkey: 'start',\n\t\tvalue: function start() {\n\t\t\tthis.startAdminServer();\n\t\t}\n\t}]);\n\n\treturn Server;\n}();\n\nvar server = new Server();\nserver.start();\nexports.default = server;//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9iYWNrZW5kL2luZGV4LmpzP2E3YWQiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFpQkE7Ozs7QUFDQTs7OztBQUNBOzs7O0FBQ0E7Ozs7Ozs7O0FBQ0EsSUFBTSxVQUFVLG9CQUFRLENBQVIsQ0FBaEI7QUFDQSxJQUFJLG1CQUFKOztJQUVNLE07Ozs7Ozs7Ozs7OztxQ0FNYztBQUFBOztBQUNsQixRQUFLLFdBQUwsR0FBbUIscUJBQVcsTUFBWCxFQUFuQjtBQUNBLFFBQUssV0FBTCxHQUFtQixxQkFBVyxNQUFYLENBQWtCLE9BQWxCLENBQW5COztBQUVBLFFBQUssV0FBTCxDQUFpQixHQUFqQixDQUFxQixxQkFBVyxRQUFYLEVBQXJCO0FBQ0EsUUFBSyxXQUFMLENBQWlCLEdBQWpCLENBQXFCLEtBQUssK0JBQTFCO0FBQ0EsUUFBSyxXQUFMLENBQWlCLEdBQWpCLENBQXFCLEtBQUssV0FBMUI7O0FBRUEsUUFBSyxXQUFMLENBQWlCLE1BQWpCLENBQXdCLElBQXhCLEVBQThCLFlBQU07QUFDbkMsWUFBUSxHQUFSLENBQVksa0RBQVo7QUFDQSxVQUFLLG1CQUFMO0FBQ0EsSUFIRDtBQUlBOzs7Ozs7Ozs7O3dDQU9xQjtBQUFBOztBQUNyQiwwQkFBSyxpQ0FBTCxFQUF3QyxVQUFDLEtBQUQsRUFBUSxRQUFSLEVBQWtCLElBQWxCLEVBQTJCO0FBQ2xFLFFBQUksWUFBWSxLQUFLLEtBQUwsQ0FBVyxJQUFYLENBQWhCO0FBQ0EsUUFBSSxXQUFXLHdCQUFjLGdCQUFkLENBQStCLFNBQS9CLENBQWY7QUFDQSxXQUFLLFVBQUwsR0FBa0IscUJBQVcsTUFBWCxFQUFsQjtBQUNBLGlCQUFhLHFCQUFXLE1BQVgsQ0FBa0IsUUFBbEIsQ0FBYjs7QUFFQSxXQUFLLFVBQUwsQ0FBZ0IsR0FBaEIsQ0FBb0IscUJBQVcsSUFBWCxFQUFwQjtBQUNBLFdBQUssVUFBTCxDQUFnQixHQUFoQixDQUFvQixxQkFBVyxRQUFYLEVBQXBCO0FBQ0EsV0FBSyxVQUFMLENBQWdCLEdBQWhCLENBQW9CLE9BQUssOEJBQUwsQ0FBb0MsSUFBcEMsQ0FBeUMsU0FBekMsQ0FBcEI7QUFDQSxXQUFLLFVBQUwsQ0FBZ0IsR0FBaEIsQ0FBb0IsVUFBcEI7O0FBRUEsV0FBSyxVQUFMLENBQWdCLE1BQWhCLENBQXVCLElBQXZCLEVBQTZCLFlBQVk7QUFDeEMsYUFBUSxHQUFSLENBQVksNENBQVo7QUFDQSxLQUZEO0FBR0EsSUFkRDtBQWVBOzs7aURBRThCLEcsRUFBSyxHLEVBQUssSSxFQUFNLFMsRUFBVzs7Ozs7QUFLekQsT0FBSSx3QkFBd0IsSUFBSSxXQUFKLENBQWdCLEtBQWhCLENBQXNCLEdBQXRCLEVBQTJCLENBQTNCLENBQTVCO0FBQ0EsT0FBSSwrQkFBK0IsVUFBVSxJQUFWLENBQWUsVUFBQyxRQUFELEVBQWM7QUFDL0QsV0FBTyxTQUFTLElBQVQsS0FBa0IscUJBQXpCO0FBQ0EsSUFGa0MsQ0FBbkM7O0FBSUEsT0FBSSw0QkFBSixFQUFrQztBQUNqQyxRQUFJLElBQUksTUFBSixLQUFlLEtBQWYsSUFBd0IsNkJBQTZCLGdCQUE3QixDQUE4QyxHQUExRSxFQUErRTtBQUM5RTtBQUNBLEtBRkQsTUFFTyxJQUFJLElBQUksTUFBSixLQUFlLE1BQWYsSUFBeUIsNkJBQTZCLGdCQUE3QixDQUE4QyxJQUEzRSxFQUFpRjtBQUN2RixTQUFJLG1CQUFtQix3QkFBYyxlQUFkLENBQThCLDRCQUE5QixFQUE0RCxJQUFJLElBQWhFLENBQXZCO0FBQ0EsU0FBSSxnQkFBSixFQUFzQjtBQUNyQixVQUFJLE1BQUosQ0FBVyxHQUFYLEVBQWdCLElBQWhCLENBQXFCLGdCQUFyQjtBQUNBLE1BRkQsTUFFTztBQUNOO0FBQ0E7QUFDRCxLQVBNLE1BT0EsSUFBSSxJQUFJLE1BQUosS0FBZSxLQUFmLElBQXdCLDZCQUE2QixnQkFBN0IsQ0FBOEMsR0FBMUUsRUFBK0U7QUFDckY7QUFDQSxLQUZNLE1BRUEsSUFBSSxJQUFJLE1BQUosS0FBZSxRQUFmLElBQTJCLDZCQUE2QixnQkFBN0IsQ0FBOEMsT0FBN0UsRUFBc0Y7QUFDNUY7QUFDQSxLQUZNLE1BRUE7QUFDTixTQUFJLE1BQUosQ0FBVyxHQUFYLEVBQWdCLElBQWhCO0FBQ0E7QUFDRCxJQWpCRCxNQWlCTzs7QUFFTjtBQUNBO0FBQ0Q7Ozs7Ozs7O2tEQUsrQixHLEVBQUssRyxFQUFLLEksRUFBTTs7QUFFL0M7OztBQUdBLE9BQUksSUFBSSxNQUFKLEtBQWUsTUFBZixJQUNGLElBQUksTUFBSixLQUFlLEtBRGIsSUFFRixJQUFJLE1BQUosS0FBZSxRQUZqQixFQUUyQjtBQUMxQixlQUFXLFlBQU07QUFDaEIsNEJBQUssaUNBQUwsRUFBd0MsVUFBQyxLQUFELEVBQVEsUUFBUixFQUFrQixJQUFsQixFQUEyQjtBQUNsRSxjQUFRLEdBQVIsQ0FBWSw0Q0FBWjtBQUNBLFVBQUksWUFBWSxLQUFLLEtBQUwsQ0FBVyxJQUFYLENBQWhCO0FBQ0EsVUFBSSxXQUFXLHdCQUFjLGdCQUFkLENBQStCLFNBQS9CLENBQWY7QUFDQSxpQkFBVyxFQUFYLENBQWMsUUFBZCxDQUF1QixRQUF2QjtBQUNBLE1BTEQ7QUFNQSxLQVBELEVBT0csSUFQSDtBQVFBO0FBQ0Q7OzswQkFFTztBQUNQLFFBQUssZ0JBQUw7QUFDQTs7Ozs7O0FBR0YsSUFBTSxTQUFTLElBQUksTUFBSixFQUFmO0FBQ0EsT0FBTyxLQUFQO2tCQUNlLE0iLCJmaWxlIjoiMC5qcyIsInNvdXJjZXNDb250ZW50IjpbIi8vIERlY2xhcmUgbGV0aWFibGVzIGhlcmUgZm9yIGdsb2JhbCB1c2VcblxuLy8gRiBkZXBsb3ltZW50LCB0aGUgdHdvIGFkbWluIHNlcnZlciB3aWxsIHNlcnZlXG4vLyB0aGUgYnVuZGxlLmpzIGZyb250LWVuZCBhcHAgZnJvbSBidWlsZC9idW5kbGUuanNcbi8vIHNvIHRoYXQgdGhpcyBhcHBsaWNhdGlvbiBjYW4gYmUgZGVwbG95ZWQgYXMgYSBzaW1wbGUgbm9kZVxuLy8gYXBwbGljYXRpb24uXG5cbi8vIFdlIG5lZWQgdG8gd29yayBvdXQgaG93IHRoZSB0d28ganNvbiBzZXJ2ZXJzIGNhbiBiZVxuLy8gc2xpbW1lZCBkb3duIGludG8gb25lIGpzb24gc2VydmVyIGhhbmRsaW5nIGJvdGggdGhlIGFkbWluXG4vLyBhbmQgcHVibGljIGFwaXNcblxuLy8gUmVmYWN0b3Igc2VydmVyIGNvZGUgaW4gdG8gc2VwYXJhdGUgZmlsZXMsIG1ha2luZ1xuLy8gZ29vZCB1c2Ugb2YgRVMyMDE2IGltcG9ydCAvIGV4cG9ydCBjb2RlLlxuXG4vLyBSZW1vdmUgcmVmZXJlbmNlcyB0byBGYWtlci5qcyBzaW5jZSB0aGlzIGlzIGFuIGltcGxlbWVudGF0aW9uXG4vLyBkZXRhaWwuXG5cbmltcG9ydCBodHRwIGZyb20gJ3JlcXVlc3QnO1xuaW1wb3J0IEpzb25TZXJ2ZXIgZnJvbSAnanNvbi1zZXJ2ZXInO1xuaW1wb3J0IEJvZHlQYXJzZXIgZnJvbSAnYm9keS1wYXJzZXInO1xuaW1wb3J0IFJlc291cmNlVXRpbHMgZnJvbSAnUmVzb3VyY2VVdGlscyc7XG5jb25zdCBhZG1pbkRiID0gcmVxdWlyZSgnLi9hZG1pbkRiLmpzb24nKTtcbmxldCBkYXRhUm91dGVyO1xuXG5jbGFzcyBTZXJ2ZXIge1xuXHRkYXRhUm91dGVyOiB7fTtcblxuXHQvKj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09XG5cdFx0UnVuIHRoZSBhZG1pbiBkYXRhYmFzZSAodG8gc3RvcmUgcmVzb3VyY2UgZGVzY3JpcHRpb25zKVxuXHQ9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PSovXG5cdHN0YXJ0QWRtaW5TZXJ2ZXIoKSB7XG5cdFx0dGhpcy5hZG1pblNlcnZlciA9IEpzb25TZXJ2ZXIuY3JlYXRlKCk7XG5cdFx0dGhpcy5hZG1pblJvdXRlciA9IEpzb25TZXJ2ZXIucm91dGVyKGFkbWluRGIpO1xuXG5cdFx0dGhpcy5hZG1pblNlcnZlci51c2UoSnNvblNlcnZlci5kZWZhdWx0cygpKTtcblx0XHR0aGlzLmFkbWluU2VydmVyLnVzZSh0aGlzLmRhdGFiYXNlU2VydmVyVXBkYXRlck1pZGRsZXdhcmUpO1xuXHRcdHRoaXMuYWRtaW5TZXJ2ZXIudXNlKHRoaXMuYWRtaW5Sb3V0ZXIpO1xuXG5cdFx0dGhpcy5hZG1pblNlcnZlci5saXN0ZW4oMTQwMSwgKCkgPT4ge1xuXHRcdFx0Y29uc29sZS5sb2coJ0FkbWluIGRhdGFiYXNlIHJ1bm5pbmcgYXQ6IGh0dHA6Ly9sb2NhbGhvc3Q6MTQwMScpO1xuXHRcdFx0dGhpcy5zdGFydERhdGFiYXNlU2VydmVyKCk7XG5cdFx0fSk7XG5cdH1cblxuXHQvKj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09XG5cdFx0U3RhcnQgdXAgdGhlIGRhdGFiYXNlIEFQSSAob25lIHRoYXQgd2lsbCBiZSBjb25zdW1lZCBieSBjbGllbnQnc1xuXHRcdGZyb250LWVuZCBwcm9qZWN0cykuXG5cdFx0VXNlcyBKU09OIHNlcnZlciAoc2VlIGRvY3MgZm9yIG1vcmUgaW5mbylcblx0PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0qL1xuXHRzdGFydERhdGFiYXNlU2VydmVyKCkge1xuXHRcdGh0dHAoJ2h0dHA6Ly9sb2NhbGhvc3Q6MTQwMS9yZXNvdXJjZXMnLCAoZXJyb3IsIHJlc3BvbnNlLCBib2R5KSA9PiB7XG5cdFx0XHRsZXQgcmVzb3VyY2VzID0gSlNPTi5wYXJzZShib2R5KTtcblx0XHRcdGxldCBkYXRhYmFzZSA9IFJlc291cmNlVXRpbHMuZ2VuZXJhdGVEYXRhYmFzZShyZXNvdXJjZXMpO1xuXHRcdFx0dGhpcy5kYXRhU2VydmVyID0gSnNvblNlcnZlci5jcmVhdGUoKTtcblx0XHRcdGRhdGFSb3V0ZXIgPSBKc29uU2VydmVyLnJvdXRlcihkYXRhYmFzZSk7XG5cblx0XHRcdHRoaXMuZGF0YVNlcnZlci51c2UoQm9keVBhcnNlci5qc29uKCkpO1xuXHRcdFx0dGhpcy5kYXRhU2VydmVyLnVzZShKc29uU2VydmVyLmRlZmF1bHRzKCkpO1xuXHRcdFx0dGhpcy5kYXRhU2VydmVyLnVzZSh0aGlzLnJlc291cmNlTWV0aG9kSGVscGVyTWlkZGxld2FyZS5iaW5kKHJlc291cmNlcykpO1xuXHRcdFx0dGhpcy5kYXRhU2VydmVyLnVzZShkYXRhUm91dGVyKTtcblxuXHRcdFx0dGhpcy5kYXRhU2VydmVyLmxpc3RlbigxNDAwLCBmdW5jdGlvbiAoKSB7XG5cdFx0XHRcdGNvbnNvbGUubG9nKCdEYXRhYmFzZSBydW5uaW5nIGF0OiBodHRwOi8vbG9jYWxob3N0OjE0MDAnKTtcblx0XHRcdH0pO1xuXHRcdH0pO1xuXHR9XG5cblx0cmVzb3VyY2VNZXRob2RIZWxwZXJNaWRkbGV3YXJlKHJlcSwgcmVzLCBuZXh0LCByZXNvdXJjZXMpIHtcblx0XHQvLyBDaGVjayB0aGF0IHRoZSBtZXRob2QgaXMgc3VwcG9ydGVkIGJ5IHRoZSBjb25maWd1cmF0aW9uXG5cdFx0Ly8gZmlyc3QgZ2V0IHRoZSByZXNvdXJjZSBkZXNjcmlwdGlvbiBpbiBxdWVzdGlvbiBhbmQgdGhlblxuXHRcdC8vIGNoZWNrIHRoYXQgdGhlIG1ldGhvZCBpcyBzdXBwb3J0ZWQgYmVmb3JlIHBhc3NpbmcgaXQgdG9cblx0XHQvLyBqc29uIHNlcnZlci4gT3RoZXJ3aXNlIHRocm93IGEgNDA1IG1ldGhvZCBub3QgYWxsb3dlZFxuXHRcdGxldCByZXF1ZXN0ZWRSZXNvdXJjZU5hbWUgPSByZXEub3JpZ2luYWxVcmwuc3BsaXQoJy8nKVsxXTtcblx0XHRsZXQgcmVxdWVzdGVkUmVzb3VyY2VEZXNjcmlwdGlvbiA9IHJlc291cmNlcy5maW5kKChyZXNvdXJjZSkgPT4ge1xuXHRcdFx0cmV0dXJuIHJlc291cmNlLm5hbWUgPT09IHJlcXVlc3RlZFJlc291cmNlTmFtZTtcblx0XHR9KTtcblxuXHRcdGlmIChyZXF1ZXN0ZWRSZXNvdXJjZURlc2NyaXB0aW9uKSB7XG5cdFx0XHRpZiAocmVxLm1ldGhvZCA9PT0gJ0dFVCcgJiYgcmVxdWVzdGVkUmVzb3VyY2VEZXNjcmlwdGlvbi5zdXBwb3J0ZWRNZXRob2RzLmdldCkge1xuXHRcdFx0XHRuZXh0KCk7XG5cdFx0XHR9IGVsc2UgaWYgKHJlcS5tZXRob2QgPT09ICdQT1NUJyAmJiByZXF1ZXN0ZWRSZXNvdXJjZURlc2NyaXB0aW9uLnN1cHBvcnRlZE1ldGhvZHMucG9zdCkge1xuXHRcdFx0XHRsZXQgdmFsaWRhdGlvbkVycm9ycyA9IFJlc291cmNlVXRpbHMudmFsaWRhdGVSZXF1ZXN0KHJlcXVlc3RlZFJlc291cmNlRGVzY3JpcHRpb24sIHJlcS5ib2R5KTtcblx0XHRcdFx0aWYgKHZhbGlkYXRpb25FcnJvcnMpIHtcblx0XHRcdFx0XHRyZXMuc3RhdHVzKDQwMCkuc2VuZCh2YWxpZGF0aW9uRXJyb3JzKTtcblx0XHRcdFx0fSBlbHNlIHtcblx0XHRcdFx0XHRuZXh0KCk7XG5cdFx0XHRcdH1cblx0XHRcdH0gZWxzZSBpZiAocmVxLm1ldGhvZCA9PT0gJ1BVVCcgJiYgcmVxdWVzdGVkUmVzb3VyY2VEZXNjcmlwdGlvbi5zdXBwb3J0ZWRNZXRob2RzLnB1dCkge1xuXHRcdFx0XHRuZXh0KCk7XG5cdFx0XHR9IGVsc2UgaWYgKHJlcS5tZXRob2QgPT09ICdERUxFVEUnICYmIHJlcXVlc3RlZFJlc291cmNlRGVzY3JpcHRpb24uc3VwcG9ydGVkTWV0aG9kcy5kZXN0cm95KSB7XG5cdFx0XHRcdG5leHQoKTtcblx0XHRcdH0gZWxzZSB7XG5cdFx0XHRcdHJlcy5zdGF0dXMoNDA1KS5zZW5kKGBNZXRob2QgaXNuJ3Qgc3VwcG9ydGVkIGZvciB0aGlzIHJlc291cmNlYCk7XG5cdFx0XHR9XG5cdFx0fSBlbHNlIHtcblx0XHRcdC8vIFRoZSByZXNvdXJjZSBkb2Vzbid0IGV4aXN0IGJ1dCBKU09OIHNlcnZlciB3aWxsIGhhbmRsZSB0aGUgcmVzcG9uc2UgZm9yIHVzXG5cdFx0XHRuZXh0KCk7XG5cdFx0fVxuXHR9XG5cblx0Lyo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PVxuXHRcdFdoZW4gcmVzb3VyY2VzIGFyZSB1cGRhdGVkLCByZXN0YXJ0IHRoZSBkYXRhYmFzZSBzZXJ2ZXJcblx0PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0qL1xuXHRkYXRhYmFzZVNlcnZlclVwZGF0ZXJNaWRkbGV3YXJlKHJlcSwgcmVzLCBuZXh0KSB7XG5cdFx0Ly8gUGFzcyBpbW1lZGlhdGVseSBvbiB0byBKU09OIHNlcnZlclxuXHRcdG5leHQoKTtcblxuXHRcdC8vIFN0b3AgYW5kIHN0YXJ0IHRoZSBKU09OIHNlcnZlclxuXHRcdGlmIChyZXEubWV0aG9kID09PSAnUE9TVCcgfHxcblx0XHRcdFx0cmVxLm1ldGhvZCA9PT0gJ1BVVCcgfHxcblx0XHRcdFx0cmVxLm1ldGhvZCA9PT0gJ0RFTEVURScpIHtcblx0XHRcdHNldFRpbWVvdXQoKCkgPT4ge1xuXHRcdFx0XHRodHRwKCdodHRwOi8vbG9jYWxob3N0OjE0MDEvcmVzb3VyY2VzJywgKGVycm9yLCByZXNwb25zZSwgYm9keSkgPT4ge1xuXHRcdFx0XHRcdGNvbnNvbGUubG9nKCdEYXRhYmFzZSB1cGRhdGVkIGF0OiBodHRwOi8vbG9jYWxob3N0OjE0MDAnKTtcblx0XHRcdFx0XHRsZXQgcmVzb3VyY2VzID0gSlNPTi5wYXJzZShib2R5KTtcblx0XHRcdFx0XHRsZXQgZGF0YWJhc2UgPSBSZXNvdXJjZVV0aWxzLmdlbmVyYXRlRGF0YWJhc2UocmVzb3VyY2VzKTtcblx0XHRcdFx0XHRkYXRhUm91dGVyLmRiLnNldFN0YXRlKGRhdGFiYXNlKTtcblx0XHRcdFx0fSk7XG5cdFx0XHR9LCAyMDAwKTtcblx0XHR9XG5cdH1cblxuXHRzdGFydCgpIHtcblx0XHR0aGlzLnN0YXJ0QWRtaW5TZXJ2ZXIoKTtcblx0fVxufVxuXG5jb25zdCBzZXJ2ZXIgPSBuZXcgU2VydmVyKCk7XG5zZXJ2ZXIuc3RhcnQoKTtcbmV4cG9ydCBkZWZhdWx0IHNlcnZlcjtcblxuXG5cblxuLyoqIFdFQlBBQ0sgRk9PVEVSICoqXG4gKiogLi9iYWNrZW5kL2luZGV4LmpzXG4gKiovIl0sInNvdXJjZVJvb3QiOiIifQ==");
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // Declare letiables here for global use
+	
+	// F deployment, the two admin server will serve
+	// the bundle.js front-end app from build/bundle.js
+	// so that this application can be deployed as a simple node
+	// application.
+	
+	// We need to work out how the two json servers can be
+	// slimmed down into one json server handling both the admin
+	// and public apis
+	
+	// Refactor server code in to separate files, making
+	// good use of ES2016 import / export code.
+	
+	// Remove references to Faker.js since this is an implementation
+	// detail.
+	
+	// Implement testing
+	
+	var _request = __webpack_require__(1);
+	
+	var _request2 = _interopRequireDefault(_request);
+	
+	var _jsonServer = __webpack_require__(2);
+	
+	var _jsonServer2 = _interopRequireDefault(_jsonServer);
+	
+	var _bodyParser = __webpack_require__(3);
+	
+	var _bodyParser2 = _interopRequireDefault(_bodyParser);
+	
+	var _ResourceUtils = __webpack_require__(4);
+	
+	var _ResourceUtils2 = _interopRequireDefault(_ResourceUtils);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	// Path to adminDb.json relative to the build folder
+	var pathToAdminPersistentStorage = './backend/adminDb.json';
+	var dataRouter = void 0;
+	
+	var Server = function () {
+		function Server() {
+			_classCallCheck(this, Server);
+		}
+	
+		_createClass(Server, [{
+			key: 'startAdminServer',
+	
+	
+			/*=============================================================================
+	  	Run the admin database (to store resource descriptions)
+	  =============================================================================*/
+			value: function startAdminServer() {
+				var _this = this;
+	
+				this.adminServer = _jsonServer2.default.create();
+				this.adminRouter = _jsonServer2.default.router(pathToAdminPersistentStorage);
+				var jsonServerMiddleware = _jsonServer2.default.defaults();
+	
+				this.adminServer.use(jsonServerMiddleware);
+				this.adminServer.use(this.databaseServerUpdaterMiddleware);
+				this.adminServer.use(this.adminRouter);
+	
+				this.adminServer.listen(1401, function () {
+					console.log('Admin database running at: http://localhost:1401');
+					_this.startDatabaseServer();
+				});
+			}
+	
+			/*=============================================================================
+	  	Start up the database API (one that will be consumed by client's
+	  	front-end projects).
+	  	Uses JSON server (see docs for more info)
+	  =============================================================================*/
+	
+		}, {
+			key: 'startDatabaseServer',
+			value: function startDatabaseServer() {
+				var _this2 = this;
+	
+				(0, _request2.default)('http://localhost:1401/resources', function (error, response, body) {
+					var resources = JSON.parse(body);
+					var database = _ResourceUtils2.default.generateDatabase(resources);
+					_this2.dataServer = _jsonServer2.default.create();
+					dataRouter = _jsonServer2.default.router(database);
+	
+					_this2.dataServer.use(_bodyParser2.default.json());
+					_this2.dataServer.use(_jsonServer2.default.defaults());
+					_this2.dataServer.use(_this2.resourceMethodHelperMiddleware.bind(resources));
+					_this2.dataServer.use(dataRouter);
+	
+					_this2.dataServer.listen(1400, function () {
+						console.log('Database running at: http://localhost:1400');
+					});
+				});
+			}
+		}, {
+			key: 'resourceMethodHelperMiddleware',
+			value: function resourceMethodHelperMiddleware(req, res, next, resources) {
+				// Check that the method is supported by the configuration
+				// first get the resource description in question and then
+				// check that the method is supported before passing it to
+				// json server. Otherwise throw a 405 method not allowed
+				var requestedResourceName = req.originalUrl.split('/')[1];
+				var requestedResourceDescription = resources.find(function (resource) {
+					return resource.name === requestedResourceName;
+				});
+	
+				if (requestedResourceDescription) {
+					if (req.method === 'GET' && requestedResourceDescription.supportedMethods.get) {
+						next();
+					} else if (req.method === 'POST' && requestedResourceDescription.supportedMethods.post) {
+						var validationErrors = _ResourceUtils2.default.validateRequest(requestedResourceDescription, req.body);
+						if (validationErrors) {
+							res.status(400).send(validationErrors);
+						} else {
+							next();
+						}
+					} else if (req.method === 'PUT' && requestedResourceDescription.supportedMethods.put) {
+						next();
+					} else if (req.method === 'DELETE' && requestedResourceDescription.supportedMethods.destroy) {
+						next();
+					} else {
+						res.status(405).send('Method isn\'t supported for this resource');
+					}
+				} else {
+					// The resource doesn't exist but JSON server will handle the response for us
+					next();
+				}
+			}
+	
+			/*=============================================================================
+	  	When resources are updated, restart the database server
+	  =============================================================================*/
+	
+		}, {
+			key: 'databaseServerUpdaterMiddleware',
+			value: function databaseServerUpdaterMiddleware(req, res, next) {
+				// Pass immediately on to JSON server
+				next();
+	
+				// Stop and start the JSON server
+				if (req.method === 'POST' || req.method === 'PUT' || req.method === 'DELETE') {
+					setTimeout(function () {
+						(0, _request2.default)('http://localhost:1401/resources', function (error, response, body) {
+							console.log('Database updated at: http://localhost:1400');
+							var resources = JSON.parse(body);
+							var database = _ResourceUtils2.default.generateDatabase(resources);
+							dataRouter.db.setState(database);
+						});
+					}, 2000);
+				}
+			}
+		}, {
+			key: 'start',
+			value: function start() {
+				this.startAdminServer();
+			}
+		}]);
+	
+		return Server;
+	}();
+	
+	var server = new Server();
+	server.start();
+	exports.default = server;
 
 /***/ },
 /* 1 */
 /***/ function(module, exports) {
 
-	eval("module.exports = require(\"request\");//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vZXh0ZXJuYWwgXCJyZXF1ZXN0XCI/NDYzZCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSIsImZpbGUiOiIxLmpzIiwic291cmNlc0NvbnRlbnQiOlsibW9kdWxlLmV4cG9ydHMgPSByZXF1aXJlKFwicmVxdWVzdFwiKTtcblxuXG4vKioqKioqKioqKioqKioqKipcbiAqKiBXRUJQQUNLIEZPT1RFUlxuICoqIGV4dGVybmFsIFwicmVxdWVzdFwiXG4gKiogbW9kdWxlIGlkID0gMVxuICoqIG1vZHVsZSBjaHVua3MgPSAwXG4gKiovIl0sInNvdXJjZVJvb3QiOiIifQ==");
+	module.exports = require("request");
 
 /***/ },
 /* 2 */
 /***/ function(module, exports) {
 
-	eval("module.exports = require(\"json-server\");//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vZXh0ZXJuYWwgXCJqc29uLXNlcnZlclwiP2I5MDEiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEiLCJmaWxlIjoiMi5qcyIsInNvdXJjZXNDb250ZW50IjpbIm1vZHVsZS5leHBvcnRzID0gcmVxdWlyZShcImpzb24tc2VydmVyXCIpO1xuXG5cbi8qKioqKioqKioqKioqKioqKlxuICoqIFdFQlBBQ0sgRk9PVEVSXG4gKiogZXh0ZXJuYWwgXCJqc29uLXNlcnZlclwiXG4gKiogbW9kdWxlIGlkID0gMlxuICoqIG1vZHVsZSBjaHVua3MgPSAwXG4gKiovIl0sInNvdXJjZVJvb3QiOiIifQ==");
+	module.exports = require("json-server");
 
 /***/ },
 /* 3 */
 /***/ function(module, exports) {
 
-	eval("module.exports = require(\"body-parser\");//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vZXh0ZXJuYWwgXCJib2R5LXBhcnNlclwiPzQ2NTciXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEiLCJmaWxlIjoiMy5qcyIsInNvdXJjZXNDb250ZW50IjpbIm1vZHVsZS5leHBvcnRzID0gcmVxdWlyZShcImJvZHktcGFyc2VyXCIpO1xuXG5cbi8qKioqKioqKioqKioqKioqKlxuICoqIFdFQlBBQ0sgRk9PVEVSXG4gKiogZXh0ZXJuYWwgXCJib2R5LXBhcnNlclwiXG4gKiogbW9kdWxlIGlkID0gM1xuICoqIG1vZHVsZSBjaHVua3MgPSAwXG4gKiovIl0sInNvdXJjZVJvb3QiOiIifQ==");
+	module.exports = require("body-parser");
 
 /***/ },
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\n\nvar _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();\n\nvar _faker = __webpack_require__(5);\n\nvar _faker2 = _interopRequireDefault(_faker);\n\nvar _validate = __webpack_require__(6);\n\nvar _validate2 = _interopRequireDefault(_validate);\n\nvar _moment = __webpack_require__(7);\n\nvar _moment2 = _interopRequireDefault(_moment);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\n/*=============================================================================\n\tSet some options for date validation\n=============================================================================*/\n_validate2.default.extend(_validate2.default.validators.datetime, {\n\tparse: function parse(value) {\n\t\treturn +_moment2.default.utc(value);\n\t},\n\tformat: function format(value, options) {\n\t\tvar format = options.dateOnly ? 'YYYY-MM-DD' : 'YYYY-MM-DD hh:mm:ss';\n\t\treturn _moment2.default.utc(value).format(format);\n\t}\n});\n\n/*=============================================================================\n\tAdd new validators\n=============================================================================*/\n_validate2.default.validators.boolean = function (value) {\n\tif (value !== false && value !== true) {\n\t\treturn 'must be true or false';\n\t}\n};\n\nvar ResourceUtils = function () {\n\tfunction ResourceUtils() {\n\t\t_classCallCheck(this, ResourceUtils);\n\t}\n\n\t_createClass(ResourceUtils, [{\n\t\tkey: 'generateResource',\n\n\t\t/*=============================================================================\n  \tGenerate a full resource (array of models)\n  \ttakes a description that defines what the resource looks like\n  \tincluding it's model and associated description\n  =============================================================================*/\n\t\tvalue: function generateResource(description, resources, isNestedResource) {\n\t\t\tif (resources) {\n\t\t\t\tthis.resources = resources;\n\t\t\t}\n\n\t\t\tif (description.type === 'array') {\n\t\t\t\tvar resource = [];\n\t\t\t\tfor (var i = 0, x = description.length; i < x; i++) {\n\t\t\t\t\tvar model = this.generateModel(description.model);\n\t\t\t\t\tif (isNestedResource !== true) {\n\t\t\t\t\t\tmodel.id = i + 1;\n\t\t\t\t\t}\n\t\t\t\t\tresource.push(model);\n\t\t\t\t}\n\n\t\t\t\treturn resource;\n\t\t\t}\n\t\t\treturn this.generateModel(description.model);\n\t\t}\n\n\t\t/*=============================================================================\n  \tReturns a model object based on it's description\n  =============================================================================*/\n\n\t}, {\n\t\tkey: 'generateModel',\n\t\tvalue: function generateModel(description) {\n\t\t\tvar model = {};\n\n\t\t\tfor (var i = 0, x = description.length; i < x; i++) {\n\t\t\t\tvar key = description[i].key;\n\t\t\t\tmodel[key] = this.generatePropertyValue(description[i]);\n\t\t\t}\n\n\t\t\treturn model;\n\t\t}\n\n\t\t/*=============================================================================\n  \tReturns a value for a properties key (for instance first_name)\n  \tGet's passed in the property description and delegates to utility functions\n  \tbased on the properties type\n  =============================================================================*/\n\n\t}, {\n\t\tkey: 'generatePropertyValue',\n\t\tvalue: function generatePropertyValue(property) {\n\t\t\tif (property.type === 'random') {\n\t\t\t\treturn this.generateRandomValue(property);\n\t\t\t} else if (property.type === 'childResource') {\n\t\t\t\treturn this.generateValueFromAnotherResource(property);\n\t\t\t} else if (property.type === 'object') {\n\t\t\t\tif (property.resource && property.resource.type) {\n\t\t\t\t\treturn this.generateResource(property.resource, null, true);\n\t\t\t\t}\n\t\t\t\treturn null;\n\t\t\t} else if (property.type === 'predefined') {\n\t\t\t\treturn property.predefinedValue;\n\t\t\t}\n\t\t}\n\n\t\t/*=============================================================================\n  \tReturns a random value given a properties description\n  \tUses faker.js (see docs for more info)\n  =============================================================================*/\n\n\t}, {\n\t\tkey: 'generateRandomValue',\n\t\tvalue: function generateRandomValue(property) {\n\t\t\tif (property.fakerCategory && property.fakerSubCategory) {\n\t\t\t\tvar args = [];\n\t\t\t\tif (property.fakerParams) {\n\t\t\t\t\tvar keys = Object.keys(property.fakerParams);\n\t\t\t\t\targs = keys.map(function (key) {\n\t\t\t\t\t\treturn property.fakerParams[key];\n\t\t\t\t\t});\n\t\t\t\t}\n\t\t\t\treturn _faker2.default[property.fakerCategory][property.fakerSubCategory].apply(null, args);\n\t\t\t}\n\t\t\treturn null;\n\t\t}\n\n\t\t/*=============================================================================\n  \tCheck whether a child resource has a model key that requests it's parent i.e:\n  \t\tusers_model : [{\n  \t\ttype: 'childResource',\n  \t\tchildResourceName: 'comments'\n  \t}];\n  \tcomments_model: [{\n  \t\ttype: 'childResource',\n  \t\tchildResourceName: 'users'\n  \t}];\n  \t\tThe above will fail since it'll cause an infinite loop of generateResource\n  \tcalls.\n  =============================================================================*/\n\n\t}, {\n\t\tkey: 'doesChildResourceContainsRecursiveParent',\n\t\tvalue: function doesChildResourceContainsRecursiveParent(resourceName, childResource) {\n\t\t\tfor (var i = 0, x = childResource.model.length; i < x; i++) {\n\t\t\t\tif (childResource.model[i].type === 'childResource') {\n\t\t\t\t\tif (childResource.model[i].name === resourceName) {\n\t\t\t\t\t\treturn true;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t\treturn false;\n\t\t}\n\n\t\t/*=============================================================================\n  \tGet a random sub-set of an array\n  =============================================================================*/\n\n\t}, {\n\t\tkey: 'getRandomSample',\n\t\tvalue: function getRandomSample(array, count) {\n\t\t\tvar indices = [];\n\t\t\tvar result = new Array(count);\n\t\t\tfor (var i = 0; i < count; i++) {\n\t\t\t\tvar j = Math.floor(Math.random() * (array.length - i) + i);\n\t\t\t\tresult[i] = !array[indices[j] ? j : indices[j]];\n\t\t\t\tindices[j] = !indices[i] ? i : indices[i];\n\t\t\t}\n\t\t\treturn result;\n\t\t}\n\n\t\t/*=============================================================================\n  \tGenerate a key's value from another resource i.e. a post has an author\n  \twhere posts and users are resources\n  =============================================================================*/\n\n\t}, {\n\t\tkey: 'generateValueFromAnotherResource',\n\t\tvalue: function generateValueFromAnotherResource(property) {\n\t\t\tvar resourceDescription = void 0;\n\t\t\tfor (var i = 0, x = this.resources.length; i < x; i++) {\n\t\t\t\tif (this.resources[i].name === property.childResourceName) {\n\t\t\t\t\tresourceDescription = this.resources[i];\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tif (resourceDescription) {\n\t\t\t\tvar childResourceContainsRecursiveParent = this.doesChildResourceContainsRecursiveParent(property.childResourceName, resourceDescription);\n\t\t\t\tif (childResourceContainsRecursiveParent) {\n\t\t\t\t\treturn 'ERROR, ' + property.childResourceName + ' is a recursive key';\n\t\t\t\t}\n\t\t\t\t// Refactor this line below so it doesn't generate the resource\n\t\t\t\t// but is the prevously-generated resource.\n\t\t\t\tvar resource = this.generateResource(resourceDescription);\n\n\t\t\t\tif (property.childResourceMethod === 'array') {\n\t\t\t\t\tif (property.childResourceLimit) {\n\t\t\t\t\t\tvar limit = parseFloat(property.childResourceLimit);\n\t\t\t\t\t\tif (limit > resource.length) {\n\t\t\t\t\t\t\treturn resource;\n\t\t\t\t\t\t}\n\t\t\t\t\t\treturn this.getRandomSample(resource, limit);\n\t\t\t\t\t}\n\t\t\t\t\treturn resource;\n\t\t\t\t} else if (property.childResourceMethod === 'object') {\n\t\t\t\t\treturn resource[Math.floor(Math.random() * resource.length)];\n\t\t\t\t} else if (property.childResourceMethod === 'id') {\n\t\t\t\t\treturn resource[Math.floor(Math.random() * resource.length)].id;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\t/*=============================================================================\n  \tReturns a full database object from the descriptions stored in the\n  \tadmin DB\n  =============================================================================*/\n\n\t}, {\n\t\tkey: 'generateDatabase',\n\t\tvalue: function generateDatabase(resources) {\n\t\t\tthis.resources = resources;\n\t\t\tvar database = {};\n\n\t\t\tfor (var i = 0, x = resources.length; i < x; i++) {\n\t\t\t\tvar resource = resources[i];\n\t\t\t\tdatabase[resource.name] = this.generateResource(resource);\n\t\t\t}\n\n\t\t\treturn database;\n\t\t}\n\n\t\t/*=============================================================================\n  \tValidates a POST or PUT request against the model description if the key\n  \tis a required parameter.\n  =============================================================================*/\n\n\t}, {\n\t\tkey: 'validateRequest',\n\t\tvalue: function validateRequest(resource, request) {\n\t\t\treturn (0, _validate2.default)(request, resource.validationConfig);\n\t\t}\n\n\t\t/*=============================================================================\n  \tGenerate validation config (for validate.js) for a resource\n  =============================================================================*/\n\n\t}, {\n\t\tkey: 'generateValidationConfigForResource',\n\t\tvalue: function generateValidationConfigForResource(resource) {\n\t\t\tvar _this = this;\n\n\t\t\tvar validationConfig = {};\n\n\t\t\t// Generate a validate.js configuraton from the model description\n\t\t\tresource.model.map(function (parameter) {\n\t\t\t\tif (parameter.type === 'childResource') {\n\t\t\t\t\t// Handle a nested resource and validate it\n\t\t\t\t} else if (parameter.type === 'object') {\n\t\t\t\t\t// Handle a nested object / array and validate it\n\t\t\t\t} else {\n\t\t\t\t\tvalidationConfig[parameter.key] = _this.getSingleRequestParameterValidationRequirements(parameter);\n\t\t\t\t}\n\t\t\t});\n\n\t\t\treturn validationConfig;\n\t\t}\n\n\t\t/*=============================================================================\n  \tGenerate the validate.js requirements for a single model.\n  =============================================================================*/\n\n\t}, {\n\t\tkey: 'getSingleRequestParameterValidationRequirements',\n\t\tvalue: function getSingleRequestParameterValidationRequirements(parameter) {\n\t\t\tvar config = {};\n\n\t\t\tif (parameter.required) {\n\t\t\t\tconfig.presence = true;\n\t\t\t}\n\n\t\t\tif (parameter.type === 'predefined') {\n\t\t\t\t// Handle predefined values\n\t\t\t} else if (parameter.type === 'random') {\n\t\t\t\tvar exampleValue = this.generateRandomValue(parameter);\n\t\t\t\tvar isBoolean = typeof exampleValue === 'boolean';\n\t\t\t\tvar isString = typeof exampleValue === 'string';\n\n\t\t\t\t// Date validation (range)\n\t\t\t\tif (parameter.fakerCategory === 'date') {\n\t\t\t\t\tvar dateType = parameter.fakerSubCategory;\n\t\t\t\t\tvar fakerParams = parameter.fakerParams;\n\t\t\t\t\tif (dateType === 'between') {\n\t\t\t\t\t\tconfig.datetime = {};\n\t\t\t\t\t\tif (fakerParams.from) {\n\t\t\t\t\t\t\tconfig.datetime.earliest = fakerParams.from;\n\t\t\t\t\t\t}\n\t\t\t\t\t\tif (fakerParams.to) {\n\t\t\t\t\t\t\tconfig.datetime.latest = fakerParams.to;\n\t\t\t\t\t\t}\n\t\t\t\t\t} else if (dateType === 'future') {\n\t\t\t\t\t\tconfig.datetime = {};\n\t\t\t\t\t\tif (fakerParams.refDate) {\n\t\t\t\t\t\t\tconfig.datetime.earliest = fakerParams.refDate;\n\t\t\t\t\t\t}\n\t\t\t\t\t\tif (fakerParams.years) {\n\t\t\t\t\t\t\t//\n\t\t\t\t\t\t\t// NOTE: Refactor this so it works when this is run so it's always looking at todays date\n\t\t\t\t\t\t\t// Consider storing latest as the string 'today' and checking for that string when\n\t\t\t\t\t\t\t// validation is run\n\t\t\t\t\t\t\t//\n\n\t\t\t\t\t\t\tvar refDate = fakerParams.refDate || new Date();\n\t\t\t\t\t\t\tconfig.datetime.latest = (0, _moment2.default)(refDate).add(fakerParams.years, 'years').format('YYYY-MM-DD');\n\t\t\t\t\t\t}\n\t\t\t\t\t} else if (dateType === 'past') {\n\t\t\t\t\t\tconfig.datetime = {};\n\t\t\t\t\t\tif (fakerParams.refDate) {\n\t\t\t\t\t\t\tconfig.datetime.latest = fakerParams.refDate;\n\t\t\t\t\t\t}\n\t\t\t\t\t\tif (fakerParams.years) {\n\t\t\t\t\t\t\tconfig.datetime.earliest = (0, _moment2.default)(fakerParams.refDate).subtract(fakerParams.years, 'years').format('YYYY-MM-DD');\n\t\t\t\t\t\t}\n\t\t\t\t\t} else if (dateType === 'month') {\n\t\t\t\t\t\tif (parameter.fakerSubCategory === 'month') {\n\t\t\t\t\t\t\tconfig.inclusion = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'November', 'December'];\n\t\t\t\t\t\t}\n\t\t\t\t\t} else {\n\t\t\t\t\t\t// Else it's just a random date, no min or max needed\n\t\t\t\t\t\tconfig.datetime = true;\n\t\t\t\t\t}\n\t\t\t\t} else if (parameter.fakerSubCategory === 'email') {\n\t\t\t\t\tconfig.email = true;\n\t\t\t\t} else if (parameter.fakerSubCategory === 'url') {\n\t\t\t\t\tconfig.url = true;\n\t\t\t\t} else if (isString && parameter.fakerSubCategory === 'arrayElement') {\n\t\t\t\t\t// We have to check if array is an array of strings since validate.js doesn't support\n\t\t\t\t\t// nested objects. TODO: write a validator that supports deepEqual of nested objects.\n\t\t\t\t\tconfig.inclusion = parameter.fakerParams.json;\n\t\t\t\t} else if (isBoolean) {\n\t\t\t\t\tconfig.boolean = true;\n\t\t\t\t} else if (parameter.fakerSubCategory === 'number') {\n\t\t\t\t\tconfig.numericality = true;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\treturn config;\n\t\t}\n\t}]);\n\n\treturn ResourceUtils;\n}();\n\nexports.default = new ResourceUtils();//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9iYWNrZW5kL1Jlc291cmNlVXRpbHMuanM/MWQyYiJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7OztBQUFBOzs7O0FBQ0E7Ozs7QUFDQTs7Ozs7Ozs7Ozs7QUFLQSxtQkFBUyxNQUFULENBQWdCLG1CQUFTLFVBQVQsQ0FBb0IsUUFBcEMsRUFBOEM7QUFDNUMsUUFBTyxlQUFVLEtBQVYsRUFBaUI7QUFDdEIsU0FBTyxDQUFDLGlCQUFPLEdBQVAsQ0FBVyxLQUFYLENBQVI7QUFDRCxFQUgyQztBQUk1QyxTQUFRLGdCQUFVLEtBQVYsRUFBaUIsT0FBakIsRUFBMEI7QUFDaEMsTUFBSSxTQUFTLFFBQVEsUUFBUixHQUFtQixZQUFuQixHQUFrQyxxQkFBL0M7QUFDQSxTQUFPLGlCQUFPLEdBQVAsQ0FBVyxLQUFYLEVBQWtCLE1BQWxCLENBQXlCLE1BQXpCLENBQVA7QUFDRDtBQVAyQyxDQUE5Qzs7Ozs7QUFhQSxtQkFBUyxVQUFULENBQW9CLE9BQXBCLEdBQThCLFVBQVUsS0FBVixFQUFpQjtBQUM5QyxLQUFJLFVBQVUsS0FBVixJQUFtQixVQUFVLElBQWpDLEVBQXVDO0FBQ3RDLFNBQU8sdUJBQVA7QUFDQTtBQUNELENBSkQ7O0lBTU0sYTs7Ozs7Ozs7Ozs7OzttQ0FNWSxXLEVBQWEsUyxFQUFXLGdCLEVBQWtCO0FBQzFELE9BQUksU0FBSixFQUFlO0FBQ2QsU0FBSyxTQUFMLEdBQWlCLFNBQWpCO0FBQ0E7O0FBRUQsT0FBSSxZQUFZLElBQVosS0FBcUIsT0FBekIsRUFBa0M7QUFDakMsUUFBSSxXQUFXLEVBQWY7QUFDQSxTQUFLLElBQUksSUFBSSxDQUFSLEVBQVcsSUFBSSxZQUFZLE1BQWhDLEVBQXdDLElBQUksQ0FBNUMsRUFBK0MsR0FBL0MsRUFBb0Q7QUFDbkQsU0FBSSxRQUFRLEtBQUssYUFBTCxDQUFtQixZQUFZLEtBQS9CLENBQVo7QUFDQSxTQUFJLHFCQUFxQixJQUF6QixFQUErQjtBQUM5QixZQUFNLEVBQU4sR0FB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dEI7QUFDQTtBQUNEOztBQUVELFVBQU8sTUFBUDtBQUNBOzs7Ozs7a0JBR2EsSUFBSSxhQUFKLEUiLCJmaWxlIjoiNC5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBmYWtlciBmcm9tICdmYWtlcic7XG5pbXBvcnQgdmFsaWRhdGUgZnJvbSAndmFsaWRhdGUuanMnO1xuaW1wb3J0IG1vbWVudCBmcm9tICdtb21lbnQnO1xuXG4vKj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09XG5cdFNldCBzb21lIG9wdGlvbnMgZm9yIGRhdGUgdmFsaWRhdGlvblxuPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0qL1xudmFsaWRhdGUuZXh0ZW5kKHZhbGlkYXRlLnZhbGlkYXRvcnMuZGF0ZXRpbWUsIHtcbiAgcGFyc2U6IGZ1bmN0aW9uICh2YWx1ZSkge1xuICAgIHJldHVybiArbW9tZW50LnV0Yyh2YWx1ZSk7XG4gIH0sXG4gIGZvcm1hdDogZnVuY3Rpb24gKHZhbHVlLCBvcHRpb25zKSB7XG4gICAgbGV0IGZvcm1hdCA9IG9wdGlvbnMuZGF0ZU9ubHkgPyAnWVlZWS1NTS1ERCcgOiAnWVlZWS1NTS1ERCBoaDptbTpzcyc7XG4gICAgcmV0dXJuIG1vbWVudC51dGModmFsdWUpLmZvcm1hdChmb3JtYXQpO1xuICB9XG59KTtcblxuLyo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PVxuXHRBZGQgbmV3IHZhbGlkYXRvcnNcbj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Ki9cbnZhbGlkYXRlLnZhbGlkYXRvcnMuYm9vbGVhbiA9IGZ1bmN0aW9uICh2YWx1ZSkge1xuXHRpZiAodmFsdWUgIT09IGZhbHNlICYmIHZhbHVlICE9PSB0cnVlKSB7XG5cdFx0cmV0dXJuICdtdXN0IGJlIHRydWUgb3IgZmFsc2UnO1xuXHR9XG59O1xuXG5jbGFzcyBSZXNvdXJjZVV0aWxzIHtcblx0Lyo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PVxuXHRcdEdlbmVyYXRlIGEgZnVsbCByZXNvdXJjZSAoYXJyYXkgb2YgbW9kZWxzKVxuXHRcdHRha2VzIGEgZGVzY3JpcHRpb24gdGhhdCBkZWZpbmVzIHdoYXQgdGhlIHJlc291cmNlIGxvb2tzIGxpa2Vcblx0XHRpbmNsdWRpbmcgaXQncyBtb2RlbCBhbmQgYXNzb2NpYXRlZCBkZXNjcmlwdGlvblxuXHQ9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PSovXG5cdGdlbmVyYXRlUmVzb3VyY2UoZGVzY3JpcHRpb24sIHJlc291cmNlcywgaXNOZXN0ZWRSZXNvdXJjZSkge1xuXHRcdGlmIChyZXNvdXJjZXMpIHtcblx0XHRcdHRoaXMucmVzb3VyY2VzID0gcmVzb3VyY2VzO1xuXHRcdH1cblxuXHRcdGlmIChkZXNjcmlwdGlvbi50eXBlID09PSAnYXJyYXknKSB7XG5cdFx0XHRsZXQgcmVzb3VyY2UgPSBbXTtcblx0XHRcdGZvciAobGV0IGkgPSAwLCB4ID0gZGVzY3JpcHRpb24ubGVuZ3RoOyBpIDwgeDsgaSsrKSB7XG5cdFx0XHRcdGxldCBtb2RlbCA9IHRoaXMuZ2VuZXJhdGVNb2RlbChkZXNjcmlwdGlvbi5tb2RlbCk7XG5cdFx0XHRcdGlmIChpc05lc3RlZFJlc291cmNlICE9PSB0cnVlKSB7XG5cdFx0XHRcdFx0bW9kZWwuaWQgPSBpICsgMTtcblx0XHRcdFx0fVxuXHRcdFx0XHRyZXNvdXJjZS5wdXNoKG1vZGVsKTtcblx0XHRcdH1cblxuXHRcdFx0cmV0dXJuIHJlc291cmNlO1xuXHRcdH1cblx0XHRyZXR1cm4gdGhpcy5nZW5lcmF0ZU1vZGVsKGRlc2NyaXB0aW9uLm1vZGVsKTtcblx0fVxuXG5cdC8qPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT1cblx0XHRSZXR1cm5zIGEgbW9kZWwgb2JqZWN0IGJhc2VkIG9uIGl0J3MgZGVzY3JpcHRpb25cblx0PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0qL1xuXHRnZW5lcmF0ZU1vZGVsKGRlc2NyaXB0aW9uKSB7XG5cdFx0bGV0IG1vZGVsID0ge307XG5cblx0XHRmb3IgKGxldCBpID0gMCwgeCA9IGRlc2NyaXB0aW9uLmxlbmd0aDsgaSA8IHg7IGkrKykge1xuXHRcdFx0bGV0IGtleSA9IGRlc2NyaXB0aW9uW2ldLmtleTtcblx0XHRcdG1vZGVsW2tleV0gPSB0aGlzLmdlbmVyYXRlUHJvcGVydHlWYWx1ZShkZXNjcmlwdGlvbltpXSk7XG5cdFx0fVxuXG5cdFx0cmV0dXJuIG1vZGVsO1xuXHR9XG5cblx0Lyo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PVxuXHRcdFJldHVybnMgYSB2YWx1ZSBmb3IgYSBwcm9wZXJ0aWVzIGtleSAoZm9yIGluc3RhbmNlIGZpcnN0X25hbWUpXG5cdFx0R2V0J3MgcGFzc2VkIGluIHRoZSBwcm9wZXJ0eSBkZXNjcmlwdGlvbiBhbmQgZGVsZWdhdGVzIHRvIHV0aWxpdHkgZnVuY3Rpb25zXG5cdFx0YmFzZWQgb24gdGhlIHByb3BlcnRpZXMgdHlwZVxuXHQ9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PSovXG5cdGdlbmVyYXRlUHJvcGVydHlWYWx1ZShwcm9wZXJ0eSkge1xuXHRcdGlmIChwcm9wZXJ0eS50eXBlID09PSAncmFuZG9tJykge1xuXHRcdFx0cmV0dXJuIHRoaXMuZ2VuZXJhdGVSYW5kb21WYWx1ZShwcm9wZXJ0eSk7XG5cdFx0fSBlbHNlIGlmIChwcm9wZXJ0eS50eXBlID09PSAnY2hpbGRSZXNvdXJjZScpIHtcblx0XHRcdHJldHVybiB0aGlzLmdlbmVyYXRlVmFsdWVGcm9tQW5vdGhlclJlc291cmNlKHByb3BlcnR5KTtcblx0XHR9IGVsc2UgaWYgKHByb3BlcnR5LnR5cGUgPT09ICdvYmplY3QnKSB7XG5cdFx0XHRpZiAocHJvcGVydHkucmVzb3VyY2UgJiYgcHJvcGVydHkucmVzb3VyY2UudHlwZSkge1xuXHRcdFx0XHRyZXR1cm4gdGhpcy5nZW5lcmF0ZVJlc291cmNlKHByb3BlcnR5LnJlc291cmNlLCBudWxsLCB0cnVlKTtcblx0XHRcdH1cblx0XHRcdHJldHVybiBudWxsO1xuXHRcdH0gZWxzZSBpZiAocHJvcGVydHkudHlwZSA9PT0gJ3ByZWRlZmluZWQnKSB7XG5cdFx0XHRyZXR1cm4gcHJvcGVydHkucHJlZGVmaW5lZFZhbHVlO1xuXHRcdH1cblx0fVxuXG5cdC8qPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT1cblx0XHRSZXR1cm5zIGEgcmFuZG9tIHZhbHVlIGdpdmVuIGEgcHJvcGVydGllcyBkZXNjcmlwdGlvblxuXHRcdFVzZXMgZmFrZXIuanMgKHNlZSBkb2NzIGZvciBtb3JlIGluZm8pXG5cdD09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Ki9cblx0Z2VuZXJhdGVSYW5kb21WYWx1ZShwcm9wZXJ0eSkge1xuXHRcdGlmIChwcm9wZXJ0eS5mYWtlckNhdGVnb3J5ICYmIHByb3BlcnR5LmZha2VyU3ViQ2F0ZWdvcnkpIHtcblx0XHRcdGxldCBhcmdzID0gW107XG5cdFx0XHRpZiAocHJvcGVydHkuZmFrZXJQYXJhbXMpIHtcblx0XHRcdFx0bGV0IGtleXMgPSBPYmplY3Qua2V5cyhwcm9wZXJ0eS5mYWtlclBhcmFtcyk7XG5cdFx0XHRcdGFyZ3MgPSBrZXlzLm1hcCgoa2V5KSA9PiBwcm9wZXJ0eS5mYWtlclBhcmFtc1trZXldKTtcblx0XHRcdH1cblx0XHRcdHJldHVybiBmYWtlcltwcm9wZXJ0eS5mYWtlckNhdGVnb3J5XVtwcm9wZXJ0eS5mYWtlclN1YkNhdGVnb3J5XS5hcHBseShudWxsLCBhcmdzKTtcblx0XHR9XG5cdFx0cmV0dXJuIG51bGw7XG5cdH1cblxuXHQvKj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09XG5cdFx0Q2hlY2sgd2hldGhlciBhIGNoaWxkIHJlc291cmNlIGhhcyBhIG1vZGVsIGtleSB0aGF0IHJlcXVlc3RzIGl0J3MgcGFyZW50IGkuZTpcblxuXHRcdHVzZXJzX21vZGVsIDogW3tcblx0XHRcdHR5cGU6ICdjaGlsZFJlc291cmNlJyxcblx0XHRcdGNoaWxkUmVzb3VyY2VOYW1lOiAnY29tbWVudHMnXG5cdFx0fV07XG5cdFx0Y29tbWVudHNfbW9kZWw6IFt7XG5cdFx0XHR0eXBlOiAnY2hpbGRSZXNvdXJjZScsXG5cdFx0XHRjaGlsZFJlc291cmNlTmFtZTogJ3VzZXJzJ1xuXHRcdH1dO1xuXG5cdFx0VGhlIGFib3ZlIHdpbGwgZmFpbCBzaW5jZSBpdCdsbCBjYXVzZSBhbiBpbmZpbml0ZSBsb29wIG9mIGdlbmVyYXRlUmVzb3VyY2Vcblx0XHRjYWxscy5cblx0PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0qL1xuXHRkb2VzQ2hpbGRSZXNvdXJjZUNvbnRhaW5zUmVjdXJzaXZlUGFyZW50KHJlc291cmNlTmFtZSwgY2hpbGRSZXNvdXJjZSkge1xuXHRcdGZvciAobGV0IGkgPSAwLCB4ID0gY2hpbGRSZXNvdXJjZS5tb2RlbC5sZW5ndGg7IGkgPCB4OyBpKyspIHtcblx0XHRcdGlmIChjaGlsZFJlc291cmNlLm1vZGVsW2ldLnR5cGUgPT09ICdjaGlsZFJlc291cmNlJykge1xuXHRcdFx0XHRpZiAoY2hpbGRSZXNvdXJjZS5tb2RlbFtpXS5uYW1lID09PSByZXNvdXJjZU5hbWUpIHtcblx0XHRcdFx0XHRyZXR1cm4gdHJ1ZTtcblx0XHRcdFx0fVxuXHRcdFx0fVxuXHRcdH1cblx0XHRyZXR1cm4gZmFsc2U7XG5cdH1cblxuXHQvKj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09XG5cdFx0R2V0IGEgcmFuZG9tIHN1Yi1zZXQgb2YgYW4gYXJyYXlcblx0PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0qL1xuXHRnZXRSYW5kb21TYW1wbGUoYXJyYXksIGNvdW50KSB7XG4gICAgbGV0IGluZGljZXMgPSBbXTtcbiAgICBsZXQgcmVzdWx0ID0gbmV3IEFycmF5KGNvdW50KTtcbiAgICBmb3IgKGxldCBpID0gMDsgaSA8IGNvdW50OyBpKyspIHtcbiAgICAgIGxldCBqID0gTWF0aC5mbG9vcihNYXRoLnJhbmRvbSgpICogKGFycmF5Lmxlbmd0aCAtIGkpICsgaSk7XG4gICAgICByZXN1bHRbaV0gPSAhYXJyYXlbaW5kaWNlc1tqXSA/IGogOiBpbmRpY2VzW2pdXTtcbiAgICAgIGluZGljZXNbal0gPSAhaW5kaWNlc1tpXSA/IGkgOiBpbmRpY2VzW2ldO1xuICAgIH1cbiAgICByZXR1cm4gcmVzdWx0O1xuXHR9XG5cblx0Lyo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PVxuXHRcdEdlbmVyYXRlIGEga2V5J3MgdmFsdWUgZnJvbSBhbm90aGVyIHJlc291cmNlIGkuZS4gYSBwb3N0IGhhcyBhbiBhdXRob3Jcblx0XHR3aGVyZSBwb3N0cyBhbmQgdXNlcnMgYXJlIHJlc291cmNlc1xuXHQ9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PSovXG5cdGdlbmVyYXRlVmFsdWVGcm9tQW5vdGhlclJlc291cmNlKHByb3BlcnR5KSB7XG5cdFx0bGV0IHJlc291cmNlRGVzY3JpcHRpb247XG5cdFx0Zm9yIChsZXQgaSA9IDAsIHggPSB0aGlzLnJlc291cmNlcy5sZW5ndGg7IGkgPCB4OyBpKyspIHtcblx0XHRcdGlmICh0aGlzLnJlc291cmNlc1tpXS5uYW1lID09PSBwcm9wZXJ0eS5jaGlsZFJlc291cmNlTmFtZSkge1xuXHRcdFx0XHRyZXNvdXJjZURlc2NyaXB0aW9uID0gdGhpcy5yZXNvdXJjZXNbaV07XG5cdFx0XHRcdGJyZWFrO1xuXHRcdFx0fVxuXHRcdH1cblxuXHRcdGlmIChyZXNvdXJjZURlc2NyaXB0aW9uKSB7XG5cdFx0XHRsZXQgY2hpbGRSZXNvdXJjZUNvbnRhaW5zUmVjdXJzaXZlUGFyZW50ID0gdGhpcy5kb2VzQ2hpbGRSZXNvdXJjZUNvbnRhaW5zUmVjdXJzaXZlUGFyZW50KHByb3BlcnR5LmNoaWxkUmVzb3VyY2VOYW1lLCByZXNvdXJjZURlc2NyaXB0aW9uKTtcblx0XHRcdGlmIChjaGlsZFJlc291cmNlQ29udGFpbnNSZWN1cnNpdmVQYXJlbnQpIHtcblx0XHRcdFx0cmV0dXJuICdFUlJPUiwgJyArIHByb3BlcnR5LmNoaWxkUmVzb3VyY2VOYW1lICsgJyBpcyBhIHJlY3Vyc2l2ZSBrZXknO1xuXHRcdFx0fVxuXHRcdFx0Ly8gUmVmYWN0b3IgdGhpcyBsaW5lIGJlbG93IHNvIGl0IGRvZXNuJ3QgZ2VuZXJhdGUgdGhlIHJlc291cmNlXG5cdFx0XHQvLyBidXQgaXMgdGhlIHByZXZvdXNseS1nZW5lcmF0ZWQgcmVzb3VyY2UuXG5cdFx0XHRsZXQgcmVzb3VyY2UgPSB0aGlzLmdlbmVyYXRlUmVzb3VyY2UocmVzb3VyY2VEZXNjcmlwdGlvbik7XG5cblx0XHRcdGlmIChwcm9wZXJ0eS5jaGlsZFJlc291cmNlTWV0aG9kID09PSAnYXJyYXknKSB7XG5cdFx0XHRcdGlmIChwcm9wZXJ0eS5jaGlsZFJlc291cmNlTGltaXQpIHtcblx0XHRcdFx0XHRsZXQgbGltaXQgPSBwYXJzZUZsb2F0KHByb3BlcnR5LmNoaWxkUmVzb3VyY2VMaW1pdCk7XG5cdFx0XHRcdFx0aWYgKGxpbWl0ID4gcmVzb3VyY2UubGVuZ3RoKSB7XG5cdFx0XHRcdFx0XHRyZXR1cm4gcmVzb3VyY2U7XG5cdFx0XHRcdFx0fVxuXHRcdFx0XHRcdHJldHVybiB0aGlzLmdldFJhbmRvbVNhbXBsZShyZXNvdXJjZSwgbGltaXQpO1xuXHRcdFx0XHR9XG5cdFx0XHRcdHJldHVybiByZXNvdXJjZTtcblx0XHRcdH0gZWxzZSBpZiAocHJvcGVydHkuY2hpbGRSZXNvdXJjZU1ldGhvZCA9PT0gJ29iamVjdCcpIHtcblx0XHRcdFx0cmV0dXJuIHJlc291cmNlW01hdGguZmxvb3IoKE1hdGgucmFuZG9tKCkgKiByZXNvdXJjZS5sZW5ndGgpKV07XG5cdFx0XHR9IGVsc2UgaWYgKHByb3BlcnR5LmNoaWxkUmVzb3VyY2VNZXRob2QgPT09ICdpZCcpIHtcblx0XHRcdFx0cmV0dXJuIHJlc291cmNlW01hdGguZmxvb3IoKE1hdGgucmFuZG9tKCkgKiByZXNvdXJjZS5sZW5ndGgpKV0uaWQ7XG5cdFx0XHR9XG5cdFx0fVxuXHR9XG5cblx0Lyo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PVxuXHRcdFJldHVybnMgYSBmdWxsIGRhdGFiYXNlIG9iamVjdCBmcm9tIHRoZSBkZXNjcmlwdGlvbnMgc3RvcmVkIGluIHRoZVxuXHRcdGFkbWluIERCXG5cdD09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Ki9cblx0Z2VuZXJhdGVEYXRhYmFzZShyZXNvdXJjZXMpIHtcblx0XHR0aGlzLnJlc291cmNlcyA9IHJlc291cmNlcztcblx0XHRsZXQgZGF0YWJhc2UgPSB7fTtcblxuXHRcdGZvciAobGV0IGkgPSAwLCB4ID0gcmVzb3VyY2VzLmxlbmd0aDsgaSA8IHg7IGkrKykge1xuXHRcdFx0bGV0IHJlc291cmNlID0gcmVzb3VyY2VzW2ldO1xuXHRcdFx0ZGF0YWJhc2VbcmVzb3VyY2UubmFtZV0gPSB0aGlzLmdlbmVyYXRlUmVzb3VyY2UocmVzb3VyY2UpO1xuXHRcdH1cblxuXHRcdHJldHVybiBkYXRhYmFzZTtcblx0fVxuXG5cdC8qPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT1cblx0XHRWYWxpZGF0ZXMgYSBQT1NUIG9yIFBVVCByZXF1ZXN0IGFnYWluc3QgdGhlIG1vZGVsIGRlc2NyaXB0aW9uIGlmIHRoZSBrZXlcblx0XHRpcyBhIHJlcXVpcmVkIHBhcmFtZXRlci5cblx0PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0qL1xuXHR2YWxpZGF0ZVJlcXVlc3QocmVzb3VyY2UsIHJlcXVlc3QpIHtcblx0XHRyZXR1cm4gdmFsaWRhdGUocmVxdWVzdCwgcmVzb3VyY2UudmFsaWRhdGlvbkNvbmZpZyk7XG5cdH1cblxuXHQvKj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09XG5cdFx0R2VuZXJhdGUgdmFsaWRhdGlvbiBjb25maWcgKGZvciB2YWxpZGF0ZS5qcykgZm9yIGEgcmVzb3VyY2Vcblx0PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0qL1xuXHRnZW5lcmF0ZVZhbGlkYXRpb25Db25maWdGb3JSZXNvdXJjZShyZXNvdXJjZSkge1xuXHRcdGxldCB2YWxpZGF0aW9uQ29uZmlnID0ge307XG5cblx0XHQvLyBHZW5lcmF0ZSBhIHZhbGlkYXRlLmpzIGNvbmZpZ3VyYXRvbiBmcm9tIHRoZSBtb2RlbCBkZXNjcmlwdGlvblxuXHRcdHJlc291cmNlLm1vZGVsLm1hcCgocGFyYW1ldGVyKSA9PiB7XG5cdFx0XHRpZiAocGFyYW1ldGVyLnR5cGUgPT09ICdjaGlsZFJlc291cmNlJykge1xuXHRcdFx0XHQvLyBIYW5kbGUgYSBuZXN0ZWQgcmVzb3VyY2UgYW5kIHZhbGlkYXRlIGl0XG5cdFx0XHR9IGVsc2UgaWYgKHBhcmFtZXRlci50eXBlID09PSAnb2JqZWN0Jykge1xuXHRcdFx0XHQvLyBIYW5kbGUgYSBuZXN0ZWQgb2JqZWN0IC8gYXJyYXkgYW5kIHZhbGlkYXRlIGl0XG5cdFx0XHR9IGVsc2Uge1xuXHRcdFx0XHR2YWxpZGF0aW9uQ29uZmlnW3BhcmFtZXRlci5rZXldID0gdGhpcy5nZXRTaW5nbGVSZXF1ZXN0UGFyYW1ldGVyVmFsaWRhdGlvblJlcXVpcmVtZW50cyhwYXJhbWV0ZXIpO1xuXHRcdFx0fVxuXHRcdH0pO1xuXG5cdFx0cmV0dXJuIHZhbGlkYXRpb25Db25maWc7XG5cdH1cblxuXHQvKj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09XG5cdFx0R2VuZXJhdGUgdGhlIHZhbGlkYXRlLmpzIHJlcXVpcmVtZW50cyBmb3IgYSBzaW5nbGUgbW9kZWwuXG5cdD09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Ki9cblx0Z2V0U2luZ2xlUmVxdWVzdFBhcmFtZXRlclZhbGlkYXRpb25SZXF1aXJlbWVudHMocGFyYW1ldGVyKSB7XG5cdFx0bGV0IGNvbmZpZyA9IHt9O1xuXG5cdFx0aWYgKHBhcmFtZXRlci5yZXF1aXJlZCkge1xuXHRcdFx0Y29uZmlnLnByZXNlbmNlID0gdHJ1ZTtcblx0XHR9XG5cblx0XHRpZiAocGFyYW1ldGVyLnR5cGUgPT09ICdwcmVkZWZpbmVkJykge1xuXHRcdFx0Ly8gSGFuZGxlIHByZWRlZmluZWQgdmFsdWVzXG5cdFx0fSBlbHNlIGlmIChwYXJhbWV0ZXIudHlwZSA9PT0gJ3JhbmRvbScpIHtcblx0XHRcdGxldCBleGFtcGxlVmFsdWUgPSB0aGlzLmdlbmVyYXRlUmFuZG9tVmFsdWUocGFyYW1ldGVyKTtcblx0XHRcdGxldCBpc0Jvb2xlYW4gPSB0eXBlb2YgKGV4YW1wbGVWYWx1ZSkgPT09ICdib29sZWFuJztcblx0XHRcdGxldCBpc1N0cmluZyA9IHR5cGVvZiAoZXhhbXBsZVZhbHVlKSA9PT0gJ3N0cmluZyc7XG5cblx0XHRcdC8vIERhdGUgdmFsaWRhdGlvbiAocmFuZ2UpXG5cdFx0XHRpZiAocGFyYW1ldGVyLmZha2VyQ2F0ZWdvcnkgPT09ICdkYXRlJykge1xuXHRcdFx0XHRsZXQgZGF0ZVR5cGUgPSBwYXJhbWV0ZXIuZmFrZXJTdWJDYXRlZ29yeTtcblx0XHRcdFx0bGV0IGZha2VyUGFyYW1zID0gcGFyYW1ldGVyLmZha2VyUGFyYW1zO1xuXHRcdFx0XHRpZiAoZGF0ZVR5cGUgPT09ICdiZXR3ZWVuJykge1xuXHRcdFx0XHRcdGNvbmZpZy5kYXRldGltZSA9IHt9O1xuXHRcdFx0XHRcdGlmIChmYWtlclBhcmFtcy5mcm9tKSB7XG5cdFx0XHRcdFx0XHRjb25maWcuZGF0ZXRpbWUuZWFybGllc3QgPSBmYWtlclBhcmFtcy5mcm9tO1xuXHRcdFx0XHRcdH1cblx0XHRcdFx0XHRpZiAoZmFrZXJQYXJhbXMudG8pIHtcblx0XHRcdFx0XHRcdGNvbmZpZy5kYXRldGltZS5sYXRlc3QgPSBmYWtlclBhcmFtcy50bztcblx0XHRcdFx0XHR9XG5cdFx0XHRcdH0gZWxzZSBpZiAoZGF0ZVR5cGUgPT09ICdmdXR1cmUnKSB7XG5cdFx0XHRcdFx0Y29uZmlnLmRhdGV0aW1lID0ge307XG5cdFx0XHRcdFx0aWYgKGZha2VyUGFyYW1zLnJlZkRhdGUpIHtcblx0XHRcdFx0XHRcdGNvbmZpZy5kYXRldGltZS5lYXJsaWVzdCA9IGZha2VyUGFyYW1zLnJlZkRhdGU7XG5cdFx0XHRcdFx0fVxuXHRcdFx0XHRcdGlmIChmYWtlclBhcmFtcy55ZWFycykge1xuXHRcdFx0XHRcdFx0Ly9cblx0XHRcdFx0XHRcdC8vIE5PVEU6IFJlZmFjdG9yIHRoaXMgc28gaXQgd29ya3Mgd2hlbiB0aGlzIGlzIHJ1biBzbyBpdCdzIGFsd2F5cyBsb29raW5nIGF0IHRvZGF5cyBkYXRlXG5cdFx0XHRcdFx0XHQvLyBDb25zaWRlciBzdG9yaW5nIGxhdGVzdCBhcyB0aGUgc3RyaW5nICd0b2RheScgYW5kIGNoZWNraW5nIGZvciB0aGF0IHN0cmluZyB3aGVuXG5cdFx0XHRcdFx0XHQvLyB2YWxpZGF0aW9uIGlzIHJ1blxuXHRcdFx0XHRcdFx0Ly9cblxuXHRcdFx0XHRcdFx0bGV0IHJlZkRhdGUgPSBmYWtlclBhcmFtcy5yZWZEYXRlIHx8IG5ldyBEYXRlKCk7XG5cdFx0XHRcdFx0XHRjb25maWcuZGF0ZXRpbWUubGF0ZXN0ID0gbW9tZW50KHJlZkRhdGUpLmFkZChmYWtlclBhcmFtcy55ZWFycywgJ3llYXJzJykuZm9ybWF0KCdZWVlZLU1NLUREJyk7XG5cdFx0XHRcdFx0fVxuXHRcdFx0XHR9IGVsc2UgaWYgKGRhdGVUeXBlID09PSAncGFzdCcpIHtcblx0XHRcdFx0XHRjb25maWcuZGF0ZXRpbWUgPSB7fTtcblx0XHRcdFx0XHRpZiAoZmFrZXJQYXJhbXMucmVmRGF0ZSkge1xuXHRcdFx0XHRcdFx0Y29uZmlnLmRhdGV0aW1lLmxhdGVzdCA9IGZha2VyUGFyYW1zLnJlZkRhdGU7XG5cdFx0XHRcdFx0fVxuXHRcdFx0XHRcdGlmIChmYWtlclBhcmFtcy55ZWFycykge1xuXHRcdFx0XHRcdFx0Y29uZmlnLmRhdGV0aW1lLmVhcmxpZXN0ID0gbW9tZW50KGZha2VyUGFyYW1zLnJlZkRhdGUpLnN1YnRyYWN0KGZha2VyUGFyYW1zLnllYXJzLCAneWVhcnMnKS5mb3JtYXQoJ1lZWVktTU0tREQnKTtcblx0XHRcdFx0XHR9XG5cdFx0XHRcdH0gZWxzZSBpZiAoZGF0ZVR5cGUgPT09ICdtb250aCcpIHtcblx0XHRcdFx0XHRpZiAocGFyYW1ldGVyLmZha2VyU3ViQ2F0ZWdvcnkgPT09ICdtb250aCcpIHtcblx0XHRcdFx0XHRcdGNvbmZpZy5pbmNsdXNpb24gPSBbJ0phbnVhcnknLCAnRmVicnVhcnknLCAnTWFyY2gnLCAnQXByaWwnLCAnTWF5JywgJ0p1bmUnLCAnSnVseScsICdBdWd1c3QnLCAnU2VwdGVtYmVyJywgJ05vdmVtYmVyJywgJ0RlY2VtYmVyJ107XG5cdFx0XHRcdFx0fVxuXHRcdFx0XHR9IGVsc2Uge1xuXHRcdFx0XHRcdC8vIEVsc2UgaXQncyBqdXN0IGEgcmFuZG9tIGRhdGUsIG5vIG1pbiBvciBtYXggbmVlZGVkXG5cdFx0XHRcdFx0Y29uZmlnLmRhdGV0aW1lID0gdHJ1ZTtcblx0XHRcdFx0fVxuXHRcdFx0fSBlbHNlIGlmIChwYXJhbWV0ZXIuZmFrZXJTdWJDYXRlZ29yeSA9PT0gJ2VtYWlsJykge1xuXHRcdFx0XHRjb25maWcuZW1haWwgPSB0cnVlO1xuXHRcdFx0fSBlbHNlIGlmIChwYXJhbWV0ZXIuZmFrZXJTdWJDYXRlZ29yeSA9PT0gJ3VybCcpIHtcblx0XHRcdFx0Y29uZmlnLnVybCA9IHRydWU7XG5cdFx0XHR9IGVsc2UgaWYgKGlzU3RyaW5nICYmIHBhcmFtZXRlci5mYWtlclN1YkNhdGVnb3J5ID09PSAnYXJyYXlFbGVtZW50Jykge1xuXHRcdFx0XHQvLyBXZSBoYXZlIHRvIGNoZWNrIGlmIGFycmF5IGlzIGFuIGFycmF5IG9mIHN0cmluZ3Mgc2luY2UgdmFsaWRhdGUuanMgZG9lc24ndCBzdXBwb3J0XG5cdFx0XHRcdC8vIG5lc3RlZCBvYmplY3RzLiBUT0RPOiB3cml0ZSBhIHZhbGlkYXRvciB0aGF0IHN1cHBvcnRzIGRlZXBFcXVhbCBvZiBuZXN0ZWQgb2JqZWN0cy5cblx0XHRcdFx0Y29uZmlnLmluY2x1c2lvbiA9IHBhcmFtZXRlci5mYWtlclBhcmFtcy5qc29uO1xuXHRcdFx0fSBlbHNlIGlmIChpc0Jvb2xlYW4pIHtcblx0XHRcdFx0Y29uZmlnLmJvb2xlYW4gPSB0cnVlO1xuXHRcdFx0fSBlbHNlIGlmIChwYXJhbWV0ZXIuZmFrZXJTdWJDYXRlZ29yeSA9PT0gJ251bWJlcicpIHtcblx0XHRcdFx0Y29uZmlnLm51bWVyaWNhbGl0eSA9IHRydWU7XG5cdFx0XHR9XG5cdFx0fVxuXG5cdFx0cmV0dXJuIGNvbmZpZztcblx0fVxufVxuXG5leHBvcnQgZGVmYXVsdCBuZXcgUmVzb3VyY2VVdGlscygpO1xuXG5cblxuLyoqIFdFQlBBQ0sgRk9PVEVSICoqXG4gKiogLi9iYWNrZW5kL1Jlc291cmNlVXRpbHMuanNcbiAqKi8iXSwic291cmNlUm9vdCI6IiJ9");
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _faker = __webpack_require__(5);
+	
+	var _faker2 = _interopRequireDefault(_faker);
+	
+	var _validate = __webpack_require__(6);
+	
+	var _validate2 = _interopRequireDefault(_validate);
+	
+	var _moment = __webpack_require__(7);
+	
+	var _moment2 = _interopRequireDefault(_moment);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	/*=============================================================================
+		Set some options for date validation
+	=============================================================================*/
+	_validate2.default.extend(_validate2.default.validators.datetime, {
+		parse: function parse(value) {
+			return +_moment2.default.utc(value);
+		},
+		format: function format(value, options) {
+			var format = options.dateOnly ? 'YYYY-MM-DD' : 'YYYY-MM-DD hh:mm:ss';
+			return _moment2.default.utc(value).format(format);
+		}
+	});
+	
+	/*=============================================================================
+		Add new validators
+	=============================================================================*/
+	_validate2.default.validators.boolean = function (value) {
+		if (value !== false && value !== true) {
+			return 'must be true or false';
+		}
+	};
+	
+	var ResourceUtils = function () {
+		function ResourceUtils() {
+			_classCallCheck(this, ResourceUtils);
+		}
+	
+		_createClass(ResourceUtils, [{
+			key: 'generateResource',
+	
+			/*=============================================================================
+	  	Generate a full resource (array of models)
+	  	takes a description that defines what the resource looks like
+	  	including it's model and associated description
+	  =============================================================================*/
+			value: function generateResource(description, resources, isNestedResource) {
+				if (resources) {
+					this.resources = resources;
+				}
+	
+				if (description.type === 'array') {
+					var resource = [];
+					for (var i = 0, x = description.length; i < x; i++) {
+						var model = this.generateModel(description.model);
+						if (isNestedResource !== true) {
+							model.id = i + 1;
+						}
+						resource.push(model);
+					}
+	
+					return resource;
+				}
+				return this.generateModel(description.model);
+			}
+	
+			/*=============================================================================
+	  	Returns a model object based on it's description
+	  =============================================================================*/
+	
+		}, {
+			key: 'generateModel',
+			value: function generateModel(description) {
+				var model = {};
+	
+				for (var i = 0, x = description.length; i < x; i++) {
+					var key = description[i].key;
+					model[key] = this.generatePropertyValue(description[i]);
+				}
+	
+				return model;
+			}
+	
+			/*=============================================================================
+	  	Returns a value for a properties key (for instance first_name)
+	  	Get's passed in the property description and delegates to utility functions
+	  	based on the properties type
+	  =============================================================================*/
+	
+		}, {
+			key: 'generatePropertyValue',
+			value: function generatePropertyValue(property) {
+				if (property.type === 'random') {
+					return this.generateRandomValue(property);
+				} else if (property.type === 'childResource') {
+					return this.generateValueFromAnotherResource(property);
+				} else if (property.type === 'object') {
+					if (property.resource && property.resource.type) {
+						return this.generateResource(property.resource, null, true);
+					}
+					return null;
+				} else if (property.type === 'predefined') {
+					return property.predefinedValue;
+				}
+			}
+	
+			/*=============================================================================
+	  	Returns a random value given a properties description
+	  	Uses faker.js (see docs for more info)
+	  =============================================================================*/
+	
+		}, {
+			key: 'generateRandomValue',
+			value: function generateRandomValue(property) {
+				if (property.fakerCategory && property.fakerSubCategory) {
+					var args = [];
+					if (property.fakerParams) {
+						var keys = Object.keys(property.fakerParams);
+						args = keys.map(function (key) {
+							return property.fakerParams[key];
+						});
+					}
+					return _faker2.default[property.fakerCategory][property.fakerSubCategory].apply(null, args);
+				}
+				return null;
+			}
+	
+			/*=============================================================================
+	  	Check whether a child resource has a model key that requests it's parent i.e:
+	  		users_model : [{
+	  		type: 'childResource',
+	  		childResourceName: 'comments'
+	  	}];
+	  	comments_model: [{
+	  		type: 'childResource',
+	  		childResourceName: 'users'
+	  	}];
+	  		The above will fail since it'll cause an infinite loop of generateResource
+	  	calls.
+	  =============================================================================*/
+	
+		}, {
+			key: 'doesChildResourceContainsRecursiveParent',
+			value: function doesChildResourceContainsRecursiveParent(resourceName, childResource) {
+				for (var i = 0, x = childResource.model.length; i < x; i++) {
+					if (childResource.model[i].type === 'childResource') {
+						if (childResource.model[i].name === resourceName) {
+							return true;
+						}
+					}
+				}
+				return false;
+			}
+	
+			/*=============================================================================
+	  	Get a random sub-set of an array
+	  =============================================================================*/
+	
+		}, {
+			key: 'getRandomSample',
+			value: function getRandomSample(array, count) {
+				var indices = [];
+				var result = new Array(count);
+				for (var i = 0; i < count; i++) {
+					var j = Math.floor(Math.random() * (array.length - i) + i);
+					result[i] = !array[indices[j] ? j : indices[j]];
+					indices[j] = !indices[i] ? i : indices[i];
+				}
+				return result;
+			}
+	
+			/*=============================================================================
+	  	Generate a key's value from another resource i.e. a post has an author
+	  	where posts and users are resources
+	  =============================================================================*/
+	
+		}, {
+			key: 'generateValueFromAnotherResource',
+			value: function generateValueFromAnotherResource(property) {
+				var resourceDescription = void 0;
+				for (var i = 0, x = this.resources.length; i < x; i++) {
+					if (this.resources[i].name === property.childResourceName) {
+						resourceDescription = this.resources[i];
+						break;
+					}
+				}
+	
+				if (resourceDescription) {
+					var childResourceContainsRecursiveParent = this.doesChildResourceContainsRecursiveParent(property.childResourceName, resourceDescription);
+					if (childResourceContainsRecursiveParent) {
+						return 'ERROR, ' + property.childResourceName + ' is a recursive key';
+					}
+					// Refactor this line below so it doesn't generate the resource
+					// but is the prevously-generated resource.
+					var resource = this.generateResource(resourceDescription);
+	
+					if (property.childResourceMethod === 'array') {
+						if (property.childResourceLimit) {
+							var limit = parseFloat(property.childResourceLimit);
+							if (limit > resource.length) {
+								return resource;
+							}
+							return this.getRandomSample(resource, limit);
+						}
+						return resource;
+					} else if (property.childResourceMethod === 'object') {
+						return resource[Math.floor(Math.random() * resource.length)];
+					} else if (property.childResourceMethod === 'id') {
+						return resource[Math.floor(Math.random() * resource.length)].id;
+					}
+				}
+			}
+	
+			/*=============================================================================
+	  	Returns a full database object from the descriptions stored in the
+	  	admin DB
+	  =============================================================================*/
+	
+		}, {
+			key: 'generateDatabase',
+			value: function generateDatabase(resources) {
+				this.resources = resources;
+				var database = {};
+	
+				for (var i = 0, x = resources.length; i < x; i++) {
+					var resource = resources[i];
+					database[resource.name] = this.generateResource(resource);
+				}
+	
+				return database;
+			}
+	
+			/*=============================================================================
+	  	Validates a POST or PUT request against the model description if the key
+	  	is a required parameter.
+	  =============================================================================*/
+	
+		}, {
+			key: 'validateRequest',
+			value: function validateRequest(resource, request) {
+				return (0, _validate2.default)(request, resource.validationConfig);
+			}
+	
+			/*=============================================================================
+	  	Generate validation config (for validate.js) for a resource
+	  =============================================================================*/
+	
+		}, {
+			key: 'generateValidationConfigForResource',
+			value: function generateValidationConfigForResource(resource) {
+				var _this = this;
+	
+				var validationConfig = {};
+	
+				// Generate a validate.js configuraton from the model description
+				resource.model.map(function (parameter) {
+					if (parameter.type === 'childResource') {
+						// Handle a nested resource and validate it
+					} else if (parameter.type === 'object') {
+						// Handle a nested object / array and validate it
+					} else {
+						validationConfig[parameter.key] = _this.getSingleRequestParameterValidationRequirements(parameter);
+					}
+				});
+	
+				return validationConfig;
+			}
+	
+			/*=============================================================================
+	  	Generate the validate.js requirements for a single model.
+	  =============================================================================*/
+	
+		}, {
+			key: 'getSingleRequestParameterValidationRequirements',
+			value: function getSingleRequestParameterValidationRequirements(parameter) {
+				var config = {};
+	
+				if (parameter.required) {
+					config.presence = true;
+				}
+	
+				if (parameter.type === 'predefined') {
+					// Handle predefined values
+				} else if (parameter.type === 'random') {
+					var exampleValue = this.generateRandomValue(parameter);
+					var isBoolean = typeof exampleValue === 'boolean';
+					var isString = typeof exampleValue === 'string';
+	
+					// Date validation (range)
+					if (parameter.fakerCategory === 'date') {
+						var dateType = parameter.fakerSubCategory;
+						var fakerParams = parameter.fakerParams;
+						if (dateType === 'between') {
+							config.datetime = {};
+							if (fakerParams.from) {
+								config.datetime.earliest = fakerParams.from;
+							}
+							if (fakerParams.to) {
+								config.datetime.latest = fakerParams.to;
+							}
+						} else if (dateType === 'future') {
+							config.datetime = {};
+							if (fakerParams.refDate) {
+								config.datetime.earliest = fakerParams.refDate;
+							}
+							if (fakerParams.years) {
+								//
+								// NOTE: Refactor this so it works when this is run so it's always looking at todays date
+								// Consider storing latest as the string 'today' and checking for that string when
+								// validation is run
+								//
+	
+								var refDate = fakerParams.refDate || new Date();
+								config.datetime.latest = (0, _moment2.default)(refDate).add(fakerParams.years, 'years').format('YYYY-MM-DD');
+							}
+						} else if (dateType === 'past') {
+							config.datetime = {};
+							if (fakerParams.refDate) {
+								config.datetime.latest = fakerParams.refDate;
+							}
+							if (fakerParams.years) {
+								config.datetime.earliest = (0, _moment2.default)(fakerParams.refDate).subtract(fakerParams.years, 'years').format('YYYY-MM-DD');
+							}
+						} else if (dateType === 'month') {
+							if (parameter.fakerSubCategory === 'month') {
+								config.inclusion = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'November', 'December'];
+							}
+						} else {
+							// Else it's just a random date, no min or max needed
+							config.datetime = true;
+						}
+					} else if (parameter.fakerSubCategory === 'email') {
+						config.email = true;
+					} else if (parameter.fakerSubCategory === 'url') {
+						config.url = true;
+					} else if (isString && parameter.fakerSubCategory === 'arrayElement') {
+						// We have to check if array is an array of strings since validate.js doesn't support
+						// nested objects. TODO: write a validator that supports deepEqual of nested objects.
+						config.inclusion = parameter.fakerParams.json;
+					} else if (isBoolean) {
+						config.boolean = true;
+					} else if (parameter.fakerSubCategory === 'number') {
+						config.numericality = true;
+					}
+				}
+	
+				return config;
+			}
+		}]);
+	
+		return ResourceUtils;
+	}();
+	
+	exports.default = new ResourceUtils();
 
 /***/ },
 /* 5 */
 /***/ function(module, exports) {
 
-	eval("module.exports = require(\"faker\");//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vZXh0ZXJuYWwgXCJmYWtlclwiPzY2ZmUiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEiLCJmaWxlIjoiNS5qcyIsInNvdXJjZXNDb250ZW50IjpbIm1vZHVsZS5leHBvcnRzID0gcmVxdWlyZShcImZha2VyXCIpO1xuXG5cbi8qKioqKioqKioqKioqKioqKlxuICoqIFdFQlBBQ0sgRk9PVEVSXG4gKiogZXh0ZXJuYWwgXCJmYWtlclwiXG4gKiogbW9kdWxlIGlkID0gNVxuICoqIG1vZHVsZSBjaHVua3MgPSAwXG4gKiovIl0sInNvdXJjZVJvb3QiOiIifQ==");
+	module.exports = require("faker");
 
 /***/ },
 /* 6 */
 /***/ function(module, exports) {
 
-	eval("module.exports = require(\"validate.js\");//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vZXh0ZXJuYWwgXCJ2YWxpZGF0ZS5qc1wiPzE3ZmEiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEiLCJmaWxlIjoiNi5qcyIsInNvdXJjZXNDb250ZW50IjpbIm1vZHVsZS5leHBvcnRzID0gcmVxdWlyZShcInZhbGlkYXRlLmpzXCIpO1xuXG5cbi8qKioqKioqKioqKioqKioqKlxuICoqIFdFQlBBQ0sgRk9PVEVSXG4gKiogZXh0ZXJuYWwgXCJ2YWxpZGF0ZS5qc1wiXG4gKiogbW9kdWxlIGlkID0gNlxuICoqIG1vZHVsZSBjaHVua3MgPSAwXG4gKiovIl0sInNvdXJjZVJvb3QiOiIifQ==");
+	module.exports = require("validate.js");
 
 /***/ },
 /* 7 */
 /***/ function(module, exports) {
 
-	eval("module.exports = require(\"moment\");//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vZXh0ZXJuYWwgXCJtb21lbnRcIj9hODhkIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBIiwiZmlsZSI6IjcuanMiLCJzb3VyY2VzQ29udGVudCI6WyJtb2R1bGUuZXhwb3J0cyA9IHJlcXVpcmUoXCJtb21lbnRcIik7XG5cblxuLyoqKioqKioqKioqKioqKioqXG4gKiogV0VCUEFDSyBGT09URVJcbiAqKiBleHRlcm5hbCBcIm1vbWVudFwiXG4gKiogbW9kdWxlIGlkID0gN1xuICoqIG1vZHVsZSBjaHVua3MgPSAwXG4gKiovIl0sInNvdXJjZVJvb3QiOiIifQ==");
-
-/***/ },
-/* 8 */
-/***/ function(module, exports) {
-
-	eval("module.exports = {\n\t\"resources\": [\n\t\t{\n\t\t\t\"type\": \"array\",\n\t\t\t\"length\": 5,\n\t\t\t\"name\": \"customers\",\n\t\t\t\"supportedMethods\": {\n\t\t\t\t\"get\": true,\n\t\t\t\t\"post\": true,\n\t\t\t\t\"put\": true,\n\t\t\t\t\"destroy\": true\n\t\t\t},\n\t\t\t\"supportedUtils\": {},\n\t\t\t\"model\": [\n\t\t\t\t{\n\t\t\t\t\t\"uuid\": \"b6587eb9-6777-451c-b69c-9a82e3cc85ac\",\n\t\t\t\t\t\"type\": \"random\",\n\t\t\t\t\t\"fakerSubCategory\": \"firstName\",\n\t\t\t\t\t\"fakerCategory\": \"name\",\n\t\t\t\t\t\"fakerParams\": {\n\t\t\t\t\t\t\"gender\": \"\"\n\t\t\t\t\t},\n\t\t\t\t\t\"resource\": {},\n\t\t\t\t\t\"predefinedType\": \"string\",\n\t\t\t\t\t\"predefinedValue\": \"\",\n\t\t\t\t\t\"required\": false,\n\t\t\t\t\t\"key\": \"name\",\n\t\t\t\t\t\"selectedFakerSubCategory\": {\n\t\t\t\t\t\t\"name\": \"First name\",\n\t\t\t\t\t\t\"value\": \"firstName\",\n\t\t\t\t\t\t\"params\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"name\": \"Gender\",\n\t\t\t\t\t\t\t\t\"param\": \"gender\",\n\t\t\t\t\t\t\t\t\"type\": \"select\",\n\t\t\t\t\t\t\t\t\"options\": [\n\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\"description\": \"Either\",\n\t\t\t\t\t\t\t\t\t\t\"value\": \"\"\n\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\"description\": \"Male\",\n\t\t\t\t\t\t\t\t\t\t\"value\": \"male\"\n\t\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\"description\": \"Female\",\n\t\t\t\t\t\t\t\t\t\t\"value\": \"female\"\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t]\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"uuid\": \"f7616125-e28c-4411-a556-d578921dfb99\",\n\t\t\t\t\t\"type\": \"random\",\n\t\t\t\t\t\"fakerSubCategory\": \"title\",\n\t\t\t\t\t\"fakerCategory\": \"name\",\n\t\t\t\t\t\"fakerParams\": {},\n\t\t\t\t\t\"resource\": {\n\t\t\t\t\t\t\"type\": \"array\",\n\t\t\t\t\t\t\"length\": 5,\n\t\t\t\t\t\t\"model\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"uuid\": \"e26be33e-1d48-451b-a326-da0f2eb51c19\",\n\t\t\t\t\t\t\t\t\"type\": \"random\",\n\t\t\t\t\t\t\t\t\"fakerSubCategory\": \"product\",\n\t\t\t\t\t\t\t\t\"fakerCategory\": \"commerce\",\n\t\t\t\t\t\t\t\t\"fakerParams\": {},\n\t\t\t\t\t\t\t\t\"resource\": {},\n\t\t\t\t\t\t\t\t\"predefinedType\": \"string\",\n\t\t\t\t\t\t\t\t\"predefinedValue\": \"\",\n\t\t\t\t\t\t\t\t\"required\": false,\n\t\t\t\t\t\t\t\t\"key\": \"keyName\",\n\t\t\t\t\t\t\t\t\"selectedFakerSubCategory\": {\n\t\t\t\t\t\t\t\t\t\"name\": \"Product\",\n\t\t\t\t\t\t\t\t\t\"value\": \"product\",\n\t\t\t\t\t\t\t\t\t\"params\": []\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t},\n\t\t\t\t\t\"predefinedType\": \"string\",\n\t\t\t\t\t\"predefinedValue\": \"\",\n\t\t\t\t\t\"required\": false,\n\t\t\t\t\t\"key\": \"title\",\n\t\t\t\t\t\"selectedFakerSubCategory\": {\n\t\t\t\t\t\t\"name\": \"Title\",\n\t\t\t\t\t\t\"value\": \"title\",\n\t\t\t\t\t\t\"params\": []\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"id\": 1,\n\t\t\t\"validationConfig\": {\n\t\t\t\t\"name\": {},\n\t\t\t\t\"title\": {}\n\t\t\t}\n\t\t}\n\t]\n};//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9iYWNrZW5kL2FkbWluRGIuanNvbj84Mjc0Il0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxJQUFJO0FBQ0osdUJBQXVCO0FBQ3ZCO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxNQUFNO0FBQ04sbUJBQW1CO0FBQ25CO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsVUFBVTtBQUNWO0FBQ0E7QUFDQTtBQUNBLFVBQVU7QUFDVjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsS0FBSztBQUNMO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxzQkFBc0I7QUFDdEI7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EseUJBQXlCO0FBQ3pCLHNCQUFzQjtBQUN0QjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsTUFBTTtBQUNOO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsY0FBYztBQUNkO0FBQ0E7QUFDQTtBQUNBO0FBQ0EiLCJmaWxlIjoiOC5qcyIsInNvdXJjZXNDb250ZW50IjpbIm1vZHVsZS5leHBvcnRzID0ge1xuXHRcInJlc291cmNlc1wiOiBbXG5cdFx0e1xuXHRcdFx0XCJ0eXBlXCI6IFwiYXJyYXlcIixcblx0XHRcdFwibGVuZ3RoXCI6IDUsXG5cdFx0XHRcIm5hbWVcIjogXCJjdXN0b21lcnNcIixcblx0XHRcdFwic3VwcG9ydGVkTWV0aG9kc1wiOiB7XG5cdFx0XHRcdFwiZ2V0XCI6IHRydWUsXG5cdFx0XHRcdFwicG9zdFwiOiB0cnVlLFxuXHRcdFx0XHRcInB1dFwiOiB0cnVlLFxuXHRcdFx0XHRcImRlc3Ryb3lcIjogdHJ1ZVxuXHRcdFx0fSxcblx0XHRcdFwic3VwcG9ydGVkVXRpbHNcIjoge30sXG5cdFx0XHRcIm1vZGVsXCI6IFtcblx0XHRcdFx0e1xuXHRcdFx0XHRcdFwidXVpZFwiOiBcImI2NTg3ZWI5LTY3NzctNDUxYy1iNjljLTlhODJlM2NjODVhY1wiLFxuXHRcdFx0XHRcdFwidHlwZVwiOiBcInJhbmRvbVwiLFxuXHRcdFx0XHRcdFwiZmFrZXJTdWJDYXRlZ29yeVwiOiBcImZpcnN0TmFtZVwiLFxuXHRcdFx0XHRcdFwiZmFrZXJDYXRlZ29yeVwiOiBcIm5hbWVcIixcblx0XHRcdFx0XHRcImZha2VyUGFyYW1zXCI6IHtcblx0XHRcdFx0XHRcdFwiZ2VuZGVyXCI6IFwiXCJcblx0XHRcdFx0XHR9LFxuXHRcdFx0XHRcdFwicmVzb3VyY2VcIjoge30sXG5cdFx0XHRcdFx0XCJwcmVkZWZpbmVkVHlwZVwiOiBcInN0cmluZ1wiLFxuXHRcdFx0XHRcdFwicHJlZGVmaW5lZFZhbHVlXCI6IFwiXCIsXG5cdFx0XHRcdFx0XCJyZXF1aXJlZFwiOiBmYWxzZSxcblx0XHRcdFx0XHRcImtleVwiOiBcIm5hbWVcIixcblx0XHRcdFx0XHRcInNlbGVjdGVkRmFrZXJTdWJDYXRlZ29yeVwiOiB7XG5cdFx0XHRcdFx0XHRcIm5hbWVcIjogXCJGaXJzdCBuYW1lXCIsXG5cdFx0XHRcdFx0XHRcInZhbHVlXCI6IFwiZmlyc3ROYW1lXCIsXG5cdFx0XHRcdFx0XHRcInBhcmFtc1wiOiBbXG5cdFx0XHRcdFx0XHRcdHtcblx0XHRcdFx0XHRcdFx0XHRcIm5hbWVcIjogXCJHZW5kZXJcIixcblx0XHRcdFx0XHRcdFx0XHRcInBhcmFtXCI6IFwiZ2VuZGVyXCIsXG5cdFx0XHRcdFx0XHRcdFx0XCJ0eXBlXCI6IFwic2VsZWN0XCIsXG5cdFx0XHRcdFx0XHRcdFx0XCJvcHRpb25zXCI6IFtcblx0XHRcdFx0XHRcdFx0XHRcdHtcblx0XHRcdFx0XHRcdFx0XHRcdFx0XCJkZXNjcmlwdGlvblwiOiBcIkVpdGhlclwiLFxuXHRcdFx0XHRcdFx0XHRcdFx0XHRcInZhbHVlXCI6IFwiXCJcblx0XHRcdFx0XHRcdFx0XHRcdH0sXG5cdFx0XHRcdFx0XHRcdFx0XHR7XG5cdFx0XHRcdFx0XHRcdFx0XHRcdFwiZGVzY3JpcHRpb25cIjogXCJNYWxlXCIsXG5cdFx0XHRcdFx0XHRcdFx0XHRcdFwidmFsdWVcIjogXCJtYWxlXCJcblx0XHRcdFx0XHRcdFx0XHRcdH0sXG5cdFx0XHRcdFx0XHRcdFx0XHR7XG5cdFx0XHRcdFx0XHRcdFx0XHRcdFwiZGVzY3JpcHRpb25cIjogXCJGZW1hbGVcIixcblx0XHRcdFx0XHRcdFx0XHRcdFx0XCJ2YWx1ZVwiOiBcImZlbWFsZVwiXG5cdFx0XHRcdFx0XHRcdFx0XHR9XG5cdFx0XHRcdFx0XHRcdFx0XVxuXHRcdFx0XHRcdFx0XHR9XG5cdFx0XHRcdFx0XHRdXG5cdFx0XHRcdFx0fVxuXHRcdFx0XHR9LFxuXHRcdFx0XHR7XG5cdFx0XHRcdFx0XCJ1dWlkXCI6IFwiZjc2MTYxMjUtZTI4Yy00NDExLWE1NTYtZDU3ODkyMWRmYjk5XCIsXG5cdFx0XHRcdFx0XCJ0eXBlXCI6IFwicmFuZG9tXCIsXG5cdFx0XHRcdFx0XCJmYWtlclN1YkNhdGVnb3J5XCI6IFwidGl0bGVcIixcblx0XHRcdFx0XHRcImZha2VyQ2F0ZWdvcnlcIjogXCJuYW1lXCIsXG5cdFx0XHRcdFx0XCJmYWtlclBhcmFtc1wiOiB7fSxcblx0XHRcdFx0XHRcInJlc291cmNlXCI6IHtcblx0XHRcdFx0XHRcdFwidHlwZVwiOiBcImFycmF5XCIsXG5cdFx0XHRcdFx0XHRcImxlbmd0aFwiOiA1LFxuXHRcdFx0XHRcdFx0XCJtb2RlbFwiOiBbXG5cdFx0XHRcdFx0XHRcdHtcblx0XHRcdFx0XHRcdFx0XHRcInV1aWRcIjogXCJlMjZiZTMzZS0xZDQ4LTQ1MWItYTMyNi1kYTBmMmViNTFjMTlcIixcblx0XHRcdFx0XHRcdFx0XHRcInR5cGVcIjogXCJyYW5kb21cIixcblx0XHRcdFx0XHRcdFx0XHRcImZha2VyU3ViQ2F0ZWdvcnlcIjogXCJwcm9kdWN0XCIsXG5cdFx0XHRcdFx0XHRcdFx0XCJmYWtlckNhdGVnb3J5XCI6IFwiY29tbWVyY2VcIixcblx0XHRcdFx0XHRcdFx0XHRcImZha2VyUGFyYW1zXCI6IHt9LFxuXHRcdFx0XHRcdFx0XHRcdFwicmVzb3VyY2VcIjoge30sXG5cdFx0XHRcdFx0XHRcdFx0XCJwcmVkZWZpbmVkVHlwZVwiOiBcInN0cmluZ1wiLFxuXHRcdFx0XHRcdFx0XHRcdFwicHJlZGVmaW5lZFZhbHVlXCI6IFwiXCIsXG5cdFx0XHRcdFx0XHRcdFx0XCJyZXF1aXJlZFwiOiBmYWxzZSxcblx0XHRcdFx0XHRcdFx0XHRcImtleVwiOiBcImtleU5hbWVcIixcblx0XHRcdFx0XHRcdFx0XHRcInNlbGVjdGVkRmFrZXJTdWJDYXRlZ29yeVwiOiB7XG5cdFx0XHRcdFx0XHRcdFx0XHRcIm5hbWVcIjogXCJQcm9kdWN0XCIsXG5cdFx0XHRcdFx0XHRcdFx0XHRcInZhbHVlXCI6IFwicHJvZHVjdFwiLFxuXHRcdFx0XHRcdFx0XHRcdFx0XCJwYXJhbXNcIjogW11cblx0XHRcdFx0XHRcdFx0XHR9XG5cdFx0XHRcdFx0XHRcdH1cblx0XHRcdFx0XHRcdF1cblx0XHRcdFx0XHR9LFxuXHRcdFx0XHRcdFwicHJlZGVmaW5lZFR5cGVcIjogXCJzdHJpbmdcIixcblx0XHRcdFx0XHRcInByZWRlZmluZWRWYWx1ZVwiOiBcIlwiLFxuXHRcdFx0XHRcdFwicmVxdWlyZWRcIjogZmFsc2UsXG5cdFx0XHRcdFx0XCJrZXlcIjogXCJ0aXRsZVwiLFxuXHRcdFx0XHRcdFwic2VsZWN0ZWRGYWtlclN1YkNhdGVnb3J5XCI6IHtcblx0XHRcdFx0XHRcdFwibmFtZVwiOiBcIlRpdGxlXCIsXG5cdFx0XHRcdFx0XHRcInZhbHVlXCI6IFwidGl0bGVcIixcblx0XHRcdFx0XHRcdFwicGFyYW1zXCI6IFtdXG5cdFx0XHRcdFx0fVxuXHRcdFx0XHR9XG5cdFx0XHRdLFxuXHRcdFx0XCJpZFwiOiAxLFxuXHRcdFx0XCJ2YWxpZGF0aW9uQ29uZmlnXCI6IHtcblx0XHRcdFx0XCJuYW1lXCI6IHt9LFxuXHRcdFx0XHRcInRpdGxlXCI6IHt9XG5cdFx0XHR9XG5cdFx0fVxuXHRdXG59O1xuXG5cbi8qKioqKioqKioqKioqKioqKlxuICoqIFdFQlBBQ0sgRk9PVEVSXG4gKiogLi9iYWNrZW5kL2FkbWluRGIuanNvblxuICoqIG1vZHVsZSBpZCA9IDhcbiAqKiBtb2R1bGUgY2h1bmtzID0gMFxuICoqLyJdLCJzb3VyY2VSb290IjoiIn0=");
+	module.exports = require("moment");
 
 /***/ }
 /******/ ]);
+//# sourceMappingURL=server.js.map

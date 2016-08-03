@@ -15,11 +15,15 @@
 // Remove references to Faker.js since this is an implementation
 // detail.
 
+// Implement testing
+
 import http from 'request';
 import JsonServer from 'json-server';
 import BodyParser from 'body-parser';
 import ResourceUtils from 'ResourceUtils';
-const adminDb = require('./adminDb.json');
+
+// Path to adminDb.json relative to the build folder
+const pathToAdminPersistentStorage = './backend/adminDb.json';
 let dataRouter;
 
 class Server {
@@ -30,9 +34,10 @@ class Server {
 	=============================================================================*/
 	startAdminServer() {
 		this.adminServer = JsonServer.create();
-		this.adminRouter = JsonServer.router(adminDb);
+		this.adminRouter = JsonServer.router(pathToAdminPersistentStorage);
+		let jsonServerMiddleware = JsonServer.defaults();
 
-		this.adminServer.use(JsonServer.defaults());
+		this.adminServer.use(jsonServerMiddleware);
 		this.adminServer.use(this.databaseServerUpdaterMiddleware);
 		this.adminServer.use(this.adminRouter);
 
@@ -128,4 +133,3 @@ class Server {
 const server = new Server();
 server.start();
 export default server;
-

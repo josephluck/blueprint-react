@@ -25,7 +25,7 @@ module.exports = {
     ],
     extensions: ['', '.js']
   },
-  devtool: 'eval-source-map',
+  devtool: 'source-map',
   plugins: [
     new webpack.IgnorePlugin(/\.(css|less)$/),
     new webpack.BannerPlugin('require("source-map-support").install();', {
@@ -50,10 +50,6 @@ module.exports = {
       {
         test: /\.less$/,
         loader: "style!css!autoprefixer!less"
-      },
-      {
-        test: /\.json$/,
-        loader: "json"
       },
     ],
     preLoaders: [
