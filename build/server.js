@@ -76,7 +76,6 @@ require("source-map-support").install();
 	
 	// Path to adminDb.json relative to the root folder
 	var pathToAdminPersistentStorage = './backend/adminDb.json';
-	var dataRouter = void 0;
 	
 	var Server = function () {
 		function Server() {
@@ -97,7 +96,7 @@ require("source-map-support").install();
 				var jsonServerMiddleware = JsonServer.defaults();
 	
 				this.adminServer.use(jsonServerMiddleware);
-				this.adminServer.use(this.databaseServerUpdaterMiddleware);
+				this.adminServer.use(this.databaseServerUpdaterMiddleware.bind(this));
 				this.adminServer.use(this.adminRouter);
 	
 				this.adminServer.listen(1401, function () {
@@ -121,12 +120,12 @@ require("source-map-support").install();
 					var resources = JSON.parse(body);
 					var database = ResourceUtils.generateDatabase(resources);
 					_this2.dataServer = JsonServer.create();
-					dataRouter = JsonServer.router(database);
+					_this2.dataRouter = JsonServer.router(database);
 	
 					_this2.dataServer.use(BodyParser.json());
 					_this2.dataServer.use(JsonServer.defaults());
 					_this2.dataServer.use(_this2.resourceMethodHelperMiddleware.bind(resources));
-					_this2.dataServer.use(dataRouter);
+					_this2.dataServer.use(_this2.dataRouter);
 	
 					_this2.dataServer.listen(1400, function () {
 						console.log('Database running at: http://localhost:1400');
@@ -175,6 +174,8 @@ require("source-map-support").install();
 		}, {
 			key: 'databaseServerUpdaterMiddleware',
 			value: function databaseServerUpdaterMiddleware(req, res, next) {
+				var _this3 = this;
+	
 				// Pass immediately on to JSON server
 				next();
 	
@@ -185,7 +186,7 @@ require("source-map-support").install();
 							console.log('Database updated at: http://localhost:1400');
 							var resources = JSON.parse(body);
 							var database = ResourceUtils.generateDatabase(resources);
-							dataRouter.db.setState(database);
+							_this3.dataRouter.db.setState(database);
 						});
 					}, 2000);
 				}

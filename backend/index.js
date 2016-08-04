@@ -25,7 +25,6 @@ const ResourceUtils = require('./ResourceUtils');
 
 // Path to adminDb.json relative to the root folder
 const pathToAdminPersistentStorage = './backend/adminDb.json';
-let dataRouter;
 
 class Server {
 	/*=============================================================================
@@ -37,7 +36,7 @@ class Server {
 		let jsonServerMiddleware = JsonServer.defaults();
 
 		this.adminServer.use(jsonServerMiddleware);
-		this.adminServer.use(this.databaseServerUpdaterMiddleware);
+		this.adminServer.use(this.databaseServerUpdaterMiddleware.bind(this));
 		this.adminServer.use(this.adminRouter);
 
 		this.adminServer.listen(1401, () => {
@@ -56,12 +55,12 @@ class Server {
 			let resources = JSON.parse(body);
 			let database = ResourceUtils.generateDatabase(resources);
 			this.dataServer = JsonServer.create();
-			dataRouter = JsonServer.router(database);
+			this.dataRouter = JsonServer.router(database);
 
 			this.dataServer.use(BodyParser.json());
 			this.dataServer.use(JsonServer.defaults());
 			this.dataServer.use(this.resourceMethodHelperMiddleware.bind(resources));
-			this.dataServer.use(dataRouter);
+			this.dataServer.use(this.dataRouter);
 
 			this.dataServer.listen(1400, function () {
 				console.log('Database running at: http://localhost:1400');
@@ -118,7 +117,7 @@ class Server {
 					console.log('Database updated at: http://localhost:1400');
 					let resources = JSON.parse(body);
 					let database = ResourceUtils.generateDatabase(resources);
-					dataRouter.db.setState(database);
+					this.dataRouter.db.setState(database);
 				});
 			}, 2000);
 		}
