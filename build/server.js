@@ -46,12 +46,7 @@ require("source-map-support").install();
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // Declare letiables here for global use
+	// Declare letiables here for global use
 	
 	// F deployment, the two admin server will serve
 	// the bundle.js front-end app from build/bundle.js
@@ -70,27 +65,16 @@ require("source-map-support").install();
 	
 	// Implement testing
 	
-	var _request = __webpack_require__(1);
-	
-	var _request2 = _interopRequireDefault(_request);
-	
-	var _jsonServer = __webpack_require__(2);
-	
-	var _jsonServer2 = _interopRequireDefault(_jsonServer);
-	
-	var _bodyParser = __webpack_require__(3);
-	
-	var _bodyParser2 = _interopRequireDefault(_bodyParser);
-	
-	var _ResourceUtils = __webpack_require__(4);
-	
-	var _ResourceUtils2 = _interopRequireDefault(_ResourceUtils);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	// Path to adminDb.json relative to the build folder
+	var http = __webpack_require__(1);
+	var JsonServer = __webpack_require__(2);
+	var BodyParser = __webpack_require__(3);
+	var ResourceUtils = __webpack_require__(4);
+	
+	// Path to adminDb.json relative to the root folder
 	var pathToAdminPersistentStorage = './backend/adminDb.json';
 	var dataRouter = void 0;
 	
@@ -102,16 +86,15 @@ require("source-map-support").install();
 		_createClass(Server, [{
 			key: 'startAdminServer',
 	
-	
 			/*=============================================================================
 	  	Run the admin database (to store resource descriptions)
 	  =============================================================================*/
 			value: function startAdminServer() {
 				var _this = this;
 	
-				this.adminServer = _jsonServer2.default.create();
-				this.adminRouter = _jsonServer2.default.router(pathToAdminPersistentStorage);
-				var jsonServerMiddleware = _jsonServer2.default.defaults();
+				this.adminServer = JsonServer.create();
+				this.adminRouter = JsonServer.router(pathToAdminPersistentStorage);
+				var jsonServerMiddleware = JsonServer.defaults();
 	
 				this.adminServer.use(jsonServerMiddleware);
 				this.adminServer.use(this.databaseServerUpdaterMiddleware);
@@ -134,14 +117,14 @@ require("source-map-support").install();
 			value: function startDatabaseServer() {
 				var _this2 = this;
 	
-				(0, _request2.default)('http://localhost:1401/resources', function (error, response, body) {
+				http('http://localhost:1401/resources', function (error, response, body) {
 					var resources = JSON.parse(body);
-					var database = _ResourceUtils2.default.generateDatabase(resources);
-					_this2.dataServer = _jsonServer2.default.create();
-					dataRouter = _jsonServer2.default.router(database);
+					var database = ResourceUtils.generateDatabase(resources);
+					_this2.dataServer = JsonServer.create();
+					dataRouter = JsonServer.router(database);
 	
-					_this2.dataServer.use(_bodyParser2.default.json());
-					_this2.dataServer.use(_jsonServer2.default.defaults());
+					_this2.dataServer.use(BodyParser.json());
+					_this2.dataServer.use(JsonServer.defaults());
 					_this2.dataServer.use(_this2.resourceMethodHelperMiddleware.bind(resources));
 					_this2.dataServer.use(dataRouter);
 	
@@ -166,7 +149,7 @@ require("source-map-support").install();
 					if (req.method === 'GET' && requestedResourceDescription.supportedMethods.get) {
 						next();
 					} else if (req.method === 'POST' && requestedResourceDescription.supportedMethods.post) {
-						var validationErrors = _ResourceUtils2.default.validateRequest(requestedResourceDescription, req.body);
+						var validationErrors = ResourceUtils.validateRequest(requestedResourceDescription, req.body);
 						if (validationErrors) {
 							res.status(400).send(validationErrors);
 						} else {
@@ -198,10 +181,10 @@ require("source-map-support").install();
 				// Stop and start the JSON server
 				if (req.method === 'POST' || req.method === 'PUT' || req.method === 'DELETE') {
 					setTimeout(function () {
-						(0, _request2.default)('http://localhost:1401/resources', function (error, response, body) {
+						http('http://localhost:1401/resources', function (error, response, body) {
 							console.log('Database updated at: http://localhost:1400');
 							var resources = JSON.parse(body);
-							var database = _ResourceUtils2.default.generateDatabase(resources);
+							var database = ResourceUtils.generateDatabase(resources);
 							dataRouter.db.setState(database);
 						});
 					}, 2000);
@@ -219,7 +202,6 @@ require("source-map-support").install();
 	
 	var server = new Server();
 	server.start();
-	exports.default = server;
 
 /***/ },
 /* 1 */
@@ -245,45 +227,31 @@ require("source-map-support").install();
 
 	'use strict';
 	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _faker = __webpack_require__(5);
-	
-	var _faker2 = _interopRequireDefault(_faker);
-	
-	var _validate = __webpack_require__(6);
-	
-	var _validate2 = _interopRequireDefault(_validate);
-	
-	var _moment = __webpack_require__(7);
-	
-	var _moment2 = _interopRequireDefault(_moment);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var faker = __webpack_require__(5);
+	var validate = __webpack_require__(6);
+	var moment = __webpack_require__(7);
 	
 	/*=============================================================================
 		Set some options for date validation
 	=============================================================================*/
-	_validate2.default.extend(_validate2.default.validators.datetime, {
+	validate.extend(validate.validators.datetime, {
 		parse: function parse(value) {
-			return +_moment2.default.utc(value);
+			return +moment.utc(value);
 		},
 		format: function format(value, options) {
 			var format = options.dateOnly ? 'YYYY-MM-DD' : 'YYYY-MM-DD hh:mm:ss';
-			return _moment2.default.utc(value).format(format);
+			return moment.utc(value).format(format);
 		}
 	});
 	
 	/*=============================================================================
 		Add new validators
 	=============================================================================*/
-	_validate2.default.validators.boolean = function (value) {
+	validate.validators.boolean = function (value) {
 		if (value !== false && value !== true) {
 			return 'must be true or false';
 		}
@@ -378,7 +346,7 @@ require("source-map-support").install();
 							return property.fakerParams[key];
 						});
 					}
-					return _faker2.default[property.fakerCategory][property.fakerSubCategory].apply(null, args);
+					return faker[property.fakerCategory][property.fakerSubCategory].apply(null, args);
 				}
 				return null;
 			}
@@ -496,7 +464,7 @@ require("source-map-support").install();
 		}, {
 			key: 'validateRequest',
 			value: function validateRequest(resource, request) {
-				return (0, _validate2.default)(request, resource.validationConfig);
+				return validate(request, resource.validationConfig);
 			}
 	
 			/*=============================================================================
@@ -569,7 +537,7 @@ require("source-map-support").install();
 								//
 	
 								var refDate = fakerParams.refDate || new Date();
-								config.datetime.latest = (0, _moment2.default)(refDate).add(fakerParams.years, 'years').format('YYYY-MM-DD');
+								config.datetime.latest = moment(refDate).add(fakerParams.years, 'years').format('YYYY-MM-DD');
 							}
 						} else if (dateType === 'past') {
 							config.datetime = {};
@@ -577,7 +545,7 @@ require("source-map-support").install();
 								config.datetime.latest = fakerParams.refDate;
 							}
 							if (fakerParams.years) {
-								config.datetime.earliest = (0, _moment2.default)(fakerParams.refDate).subtract(fakerParams.years, 'years').format('YYYY-MM-DD');
+								config.datetime.earliest = moment(fakerParams.refDate).subtract(fakerParams.years, 'years').format('YYYY-MM-DD');
 							}
 						} else if (dateType === 'month') {
 							if (parameter.fakerSubCategory === 'month') {
@@ -609,7 +577,7 @@ require("source-map-support").install();
 		return ResourceUtils;
 	}();
 	
-	exports.default = new ResourceUtils();
+	module.exports = new ResourceUtils();
 
 /***/ },
 /* 5 */

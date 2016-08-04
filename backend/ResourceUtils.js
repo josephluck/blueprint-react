@@ -1,6 +1,7 @@
-import faker from 'faker';
-import validate from 'validate.js';
-import moment from 'moment';
+'use strict';
+const faker = require('faker');
+const validate = require('validate.js');
+const moment = require('moment');
 
 /*=============================================================================
 	Set some options for date validation
@@ -302,4 +303,4 @@ class ResourceUtils {
 	}
 }
 
-export default new ResourceUtils();
+module.exports = new ResourceUtils();

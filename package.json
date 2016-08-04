@@ -4,7 +4,7 @@
   "description": "Boilerplate for kick starting a React Project with ES6 (Babel) and Hot reloader using Webpack.",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently --kill-others 'node build/server.js' 'node webpackServer.js' 'webpack --watch'",
+    "dev": "concurrently --kill-others 'node backend/index.js' 'node webpackServer.js' 'webpack --watch'",
     "build": "concurrently --kill-others 'webpack --watch --config webpack.config.production.js' 'webpack --watch --config webpack.config.backend.js'"
   },
   "repository": {

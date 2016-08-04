@@ -1,3 +1,4 @@
+'use strict';
 // Declare letiables here for global use
 
 // F deployment, the two admin server will serve
@@ -17,18 +18,16 @@
 
 // Implement testing
 
-import http from 'request';
-import JsonServer from 'json-server';
-import BodyParser from 'body-parser';
-import ResourceUtils from 'ResourceUtils';
+const http = require('request');
+const JsonServer = require('json-server');
+const BodyParser = require('body-parser');
+const ResourceUtils = require('./ResourceUtils');
 
-// Path to adminDb.json relative to the build folder
+// Path to adminDb.json relative to the root folder
 const pathToAdminPersistentStorage = './backend/adminDb.json';
 let dataRouter;
 
 class Server {
-	dataRouter: {};
-
 	/*=============================================================================
 		Run the admin database (to store resource descriptions)
 	=============================================================================*/
@@ -132,4 +131,3 @@ class Server {
 
 const server = new Server();
 server.start();
-export default server;

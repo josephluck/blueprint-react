@@ -2,7 +2,7 @@
   "resources": [
     {
       "type": "array",
-      "length": 10,
+      "length": 5,
       "name": "customers",
       "supportedMethods": {
         "get": true,
@@ -24,7 +24,7 @@
           "predefinedType": "string",
           "predefinedValue": "",
           "required": false,
-          "key": "name",
+          "key": "enameeee",
           "selectedFakerSubCategory": {
             "name": "First name",
             "value": "firstName",
@@ -93,7 +93,7 @@
       ],
       "id": 1,
       "validationConfig": {
-        "name": {},
+        "enameeee": {},
         "title": {}
       }
     }
