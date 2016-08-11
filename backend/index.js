@@ -1,17 +1,7 @@
 'use strict';
-// Declare letiables here for global use
-
-// F deployment, the two admin server will serve
-// the bundle.js front-end app from build/bundle.js
-// so that this application can be deployed as a simple node
-// application.
-
 // We need to work out how the two json servers can be
 // slimmed down into one json server handling both the admin
 // and public apis
-
-// Refactor server code in to separate files, making
-// good use of ES2016 import / export code.
 
 // Remove references to Faker.js since this is an implementation
 // detail.

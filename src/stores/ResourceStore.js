@@ -13,6 +13,7 @@ class ResourceStore {
 		Store.initialize({
 			resource: {}
 		});
+		this.canSaveResource = true;
 	}
 
 	/*------------------------------------------------------
@@ -36,44 +37,55 @@ class ResourceStore {
 		Store.get().resource.reset(resource);
 	}
 
+	updateResource(resource) {
+		let updatedResource = Store.get().resource.reset(resource);
+		this.saveResource(updatedResource);
+	}
+
 	/*------------------------------------------------------
 		Save a resource to the server
 	------------------------------------------------------*/
 	saveResource(resourceFromStore) {
-		Store.get().set({resourceSaving: true});
+		if (this.canSaveResource) {
+			console.log('Called');
+			this.canSaveResource = false;
+			Store.get().set({resourceSaving: true});
 
-		let resource = resourceFromStore.toJS();
-		resource.model = resource.model.map((model) => {
-			if (model.fakerSubcategory === 'arrayElement' || model.fakerSubcategory === 'objectElement') {
-				model.fakerParams.json = JSON.parse(model.fakerParams.json);
-			}
-
-			return model;
-		});
-
-		resource.validationConfig = ResourceUtils.generateValidationConfigForResource(resource);
-
-		Api.put({
-			url: {
-				name: 'resource',
-				resourceId: resource.id
-			},
-			payload: resource
-		}).then((resp) => {
-			resource.model = resp.body.model.map((model) => {
+			let resource = resourceFromStore.toJS();
+			resource.model = resource.model.map((model) => {
 				if (model.fakerSubcategory === 'arrayElement' || model.fakerSubcategory === 'objectElement') {
-					model.fakerParams.json = JSON.stringify(model.fakerParams.json, null, 2);
+					model.fakerParams.json = JSON.parse(model.fakerParams.json);
 				}
 
 				return model;
 			});
 
-			Store.get().set({
-				resourceSaving: false,
-				resource: resource
+			resource.validationConfig = ResourceUtils.generateValidationConfigForResource(resource);
+
+			Api.put({
+				url: {
+					name: 'resource',
+					resourceId: resource.id
+				},
+				payload: resource
+			}).then((resp) => {
+				this.canSaveResource = true;
+				resource.model = resp.body.model.map((model) => {
+					if (model.fakerSubcategory === 'arrayElement' || model.fakerSubcategory === 'objectElement') {
+						model.fakerParams.json = JSON.stringify(model.fakerParams.json, null, 2);
+					}
+
+					return model;
+				});
+
+				Store.get().set({
+					resourceSaving: false,
+					resource: resource
+				});
+				ResourcesStore.updateResource(resource);
 			});
-			ResourcesStore.updateResource(resource);
-		});
+		}
+		return;
 	}
 
 	/*------------------------------------------------------
@@ -120,143 +132,6 @@ class ResourceStore {
 	------------------------------------------------------*/
 	removeModelKey(model, index) {
 		Store.get().resource.model.splice(index, 1);
-	}
-
-	/*------------------------------------------------------
-		Save a value on the resource that isn't in it's model
-		for instance, the resource name
-	------------------------------------------------------*/
-	saveValue(name, value) {
-		Store.get().resource.set(name, value);
-	}
-
-	/*------------------------------------------------------
-		Save CRUD abilities on the resource
-	------------------------------------------------------*/
-	setResourceCRUD(name) {
-		Store.get().resource.supportedMethods.set(name, !Store.get().resource.supportedMethods[name]);
-	}
-
-	/*------------------------------------------------------
-		Handle a model value's change. For instance the
-		key name of a model
-	------------------------------------------------------*/
-	handleModelChange(model, name, value) {
-		model.set(name, value);
-	}
-
-	/*------------------------------------------------------
-		When the model's type is changed, update its
-		attributes
-	------------------------------------------------------*/
-	handleModelTypeChanged(model, type) {
-		if (type === 'resource') {
-			model.set('childResource', {});
-		} else {
-			model.set('childResource', '');
-		}
-		if (type === 'object') {
-			model.resource.reset({
-				type: 'array',
-				length: 5,
-				model: [
-					{
-						uuid: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-							let r = Math.random() * 16 | 0;
-							let v = c === 'x' ? r : (r & 0x3 | 0x8);
-							return v.toString(16);
-						}),
-						type: 'predefined',
-						fakerSubCategory: '',
-						fakerCategory: '',
-						fakerParams: {},
-						resource: {},
-						predefinedType: 'string',
-						predefinedValue: '',
-						required: false
-					}
-				]
-			});
-		} else {
-			model.set('resource', {});
-		}
-	}
-
-	/*------------------------------------------------------
-		When changing the selected random category, reset
-		the sub category and any params related to the sub
-		category
-	------------------------------------------------------*/
-	setSelectedRandomCategory(model, value) {
-		model.set({
-			fakerCategory: value,
-			fakerSubCategory: '',
-			fakerParams: {}
-		});
-	}
-
-	/*------------------------------------------------------
-		When the sub category changes, reset the params
-	------------------------------------------------------*/
-	setSelectedRandomSubcategory(model, category) {
-		model.set({
-			selectedFakerSubCategory: category,
-			fakerSubCategory: category.value,
-			fakerParams: this.resetRandomParams(category)
-		});
-	}
-
-	/*------------------------------------------------------
-		When faker sub category params change
-	------------------------------------------------------*/
-	handleModelParamsChange(model, name, value) {
-		model.fakerParams.set(name, value);
-	}
-
-	/*------------------------------------------------------
-		Switch over the sub categories params and reset the
-		values to default values
-	------------------------------------------------------*/
-	resetRandomParams(selectedFakerSubCategory) {
-		let params = {};
-		selectedFakerSubCategory.params.map((param) => {
-			if (param.type === 'input') {
-				if (param.inputType === 'number') {
-					params[param.param] = 0;
-				} else if (param.inputType === 'date') {
-					params[param.param] = new Date();
-				} else {
-					params[param.param] = '';
-				}
-			} else if (param.type === 'select') {
-				params[param.param] = param.options[0].value;
-			} else if (param.type === 'editor') {
-				params[param.param] = '';
-			}
-		});
-		return params;
-	}
-
-	/*------------------------------------------------------
-		Set the predefined value of a predefined model
-	------------------------------------------------------*/
-	handleModelPredefinedTypeChange(model) {
-		model.reset({
-			predefinedValue: ''
-		});
-	}
-
-	/*------------------------------------------------------
-		If a child resource is chosen, set it based on it's
-		name
-	------------------------------------------------------*/
-	handleSelectedChildResource(model, resourceName) {
-		let resource = Store.get().resources.find((_resource) => {
-			return _resource.name === resourceName;
-		});
-
-		model.set('childResourceName', resource.name);
-		model.set('childResourceType', resource.type);
 	}
 }
 

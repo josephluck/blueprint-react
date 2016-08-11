@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "concurrently --kill-others 'node backend/index.js' 'node webpackServer.js' 'webpack --watch'",
-    "build": "concurrently --kill-others 'webpack --watch --config webpack.config.production.js' 'webpack --watch --config webpack.config.backend.js'"
+    "build": "concurrently --kill-others 'webpack --watch --config webpack.config.production.js'"
   },
   "repository": {
     "type": "git",

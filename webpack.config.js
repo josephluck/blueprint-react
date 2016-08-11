@@ -56,7 +56,8 @@ module.exports = {
           new RegExp(path.join(__dirname, 'src'))
         ]
       }
-    ]
+    ],
+    noParse: [/autoit.js/]
   },
   eslint: {
     configFile: './.eslintrc'

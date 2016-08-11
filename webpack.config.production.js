@@ -59,6 +59,7 @@ module.exports = {
         test: /\.less$/,
         loader: ExtractTextPlugin.extract("style-loader", "css-loader!autoprefixer-loader!less-loader")
       },
-    ]
+    ],
+    noParse: [/autoit.js/]
   }
 };
