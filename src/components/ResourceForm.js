@@ -158,6 +158,34 @@ class ResourceForm extends Component {
 		ResourceStore.updateResource(newState.resource);
 	}
 
+	addAnotherKey() {
+		let newState = this.state;
+		newState.resource.model.unshift({
+			uuid: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+				let r = Math.random() * 16 | 0;
+				let v = c === 'x' ? r : (r & 0x3 | 0x8);
+				return v.toString(16);
+			}),
+			type: 'predefined',
+			fakerSubCategory: '',
+			fakerCategory: '',
+			fakerParams: {},
+			resource: {},
+			predefinedType: 'string',
+			predefinedValue: '',
+			required: false
+		});
+		this.setState(newState);
+		ResourceStore.updateResource(newState.resource);
+	}
+
+	removeModelKey(model, index) {
+		let newState = this.state;
+		newState.resource.model.splice(index, 1);
+		this.setState(newState);
+		ResourceStore.updateResource(newState.resource);
+	}
+
 	render() {
 		return (
 			<div className="flex-1 overflow-auto">

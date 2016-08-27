@@ -3,7 +3,7 @@
     {
       "type": "array",
       "length": 10,
-      "name": "customers",
+      "name": "custom",
       "supportedMethods": {
         "get": true,
         "post": true,
@@ -96,6 +96,36 @@
         "name": {},
         "title": {}
       }
+    },
+    {
+      "type": "array",
+      "length": 5,
+      "name": "newResource",
+      "supportedMethods": {
+        "get": true,
+        "post": true,
+        "put": true,
+        "destroy": true
+      },
+      "supportedUtils": {
+        "filter": true,
+        "pagination": true,
+        "sort": true
+      },
+      "model": [
+        {
+          "uuid": "e254296f-eddd-4a68-8b16-bba1042be3f8",
+          "type": "predefined",
+          "fakerSubCategory": "",
+          "fakerCategory": "",
+          "fakerParams": {},
+          "resource": {},
+          "predefinedType": "string",
+          "predefinedValue": "",
+          "required": true
+        }
+      ],
+      "id": 2
     }
   ]
 }

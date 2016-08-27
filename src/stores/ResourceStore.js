@@ -2,6 +2,7 @@ import Store from 'stores/Store';
 import Api from 'utils/Api';
 import {browserHistory} from 'react-router';
 import ResourceUtils from '../../backend/ResourceUtils.js';
+import Utils from 'utils';
 
 import ResourcesStore from 'stores/ResourcesStore';
 
@@ -14,6 +15,7 @@ class ResourceStore {
 			resource: {}
 		});
 		this.canSaveResource = true;
+		this.saveResource = Utils.throttle(this.saveResource, 2000);
 	}
 
 	/*------------------------------------------------------
@@ -45,47 +47,42 @@ class ResourceStore {
 	/*------------------------------------------------------
 		Save a resource to the server
 	------------------------------------------------------*/
-	saveResource(resourceFromStore) {
-		if (this.canSaveResource) {
-			console.log('Called');
-			this.canSaveResource = false;
-			Store.get().set({resourceSaving: true});
+	saveResource(resourceToUpdate) {
+		console.log('Saved to DB');
+		Store.get().set({resourceSaving: true});
+		let resource = resourceToUpdate.toJS();
+		resource.model = resource.model.map((model) => {
+			if (model.fakerSubcategory === 'arrayElement' || model.fakerSubcategory === 'objectElement') {
+				model.fakerParams.json = JSON.parse(model.fakerParams.json);
+			}
 
-			let resource = resourceFromStore.toJS();
-			resource.model = resource.model.map((model) => {
+			return model;
+		});
+
+		resource.validationConfig = ResourceUtils.generateValidationConfigForResource(resource);
+
+		Api.put({
+			url: {
+				name: 'resource',
+				resourceId: resource.id
+			},
+			payload: resource
+		}).then((resp) => {
+			this.canSaveResource = true;
+			resource.model = resp.body.model.map((model) => {
 				if (model.fakerSubcategory === 'arrayElement' || model.fakerSubcategory === 'objectElement') {
-					model.fakerParams.json = JSON.parse(model.fakerParams.json);
+					model.fakerParams.json = JSON.stringify(model.fakerParams.json, null, 2);
 				}
 
 				return model;
 			});
 
-			resource.validationConfig = ResourceUtils.generateValidationConfigForResource(resource);
-
-			Api.put({
-				url: {
-					name: 'resource',
-					resourceId: resource.id
-				},
-				payload: resource
-			}).then((resp) => {
-				this.canSaveResource = true;
-				resource.model = resp.body.model.map((model) => {
-					if (model.fakerSubcategory === 'arrayElement' || model.fakerSubcategory === 'objectElement') {
-						model.fakerParams.json = JSON.stringify(model.fakerParams.json, null, 2);
-					}
-
-					return model;
-				});
-
-				Store.get().set({
-					resourceSaving: false,
-					resource: resource
-				});
-				ResourcesStore.updateResource(resource);
+			Store.get().set({
+				resourceSaving: false,
+				resource: resource
 			});
-		}
-		return;
+			ResourcesStore.updateResource(resource);
+		});
 	}
 
 	/*------------------------------------------------------
@@ -104,34 +101,6 @@ class ResourceStore {
 			Store.get().set({resourceSaving: false});
 			ResourcesStore.removeResource(resource.id);
 		});
-	}
-
-	/*------------------------------------------------------
-		Add a new model key to a resource
-	------------------------------------------------------*/
-	addAnotherKey() {
-		Store.get().resource.model.unshift({
-			uuid: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-				let r = Math.random() * 16 | 0;
-				let v = c === 'x' ? r : (r & 0x3 | 0x8);
-				return v.toString(16);
-			}),
-			type: 'predefined',
-			fakerSubCategory: '',
-			fakerCategory: '',
-			fakerParams: {},
-			resource: {},
-			predefinedType: 'string',
-			predefinedValue: '',
-			required: false
-		});
-	}
-
-	/*------------------------------------------------------
-		Remove a model key from the resource
-	------------------------------------------------------*/
-	removeModelKey(model, index) {
-		Store.get().resource.model.splice(index, 1);
 	}
 }
 

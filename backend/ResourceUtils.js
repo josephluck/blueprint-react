@@ -39,16 +39,20 @@ class ResourceUtils {
 		if (description.type === 'array') {
 			let resource = [];
 			for (let i = 0, x = description.length; i < x; i++) {
-				let model = this.generateModel(description.model);
-				if (isNestedResource !== true) {
-					model.id = i + 1;
+				if (description.model) {
+					let model = this.generateModel(description.model);
+					if (isNestedResource !== true) {
+						model.id = i + 1;
+					}
+					resource.push(model);
 				}
-				resource.push(model);
 			}
 
 			return resource;
 		}
-		return this.generateModel(description.model);
+		if (description.model) {
+			return this.generateModel(description.model);
+		}
 	}
 
 	/*=============================================================================
