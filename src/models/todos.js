@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   state: {
     /* initial values of state inside the model */
     todos: [
@@ -11,7 +11,7 @@ module.exports = {
         done: false
       },
       {
-        description: 'Make ca$h money',
+        description: 'Realise that React + Freezer is better',
         done: false
       }
     ]
