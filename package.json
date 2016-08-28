@@ -1,63 +1,27 @@
 {
-  "name": "react-es6-webpack-boilerplate",
-  "version": "4.0.0",
-  "description": "Boilerplate for kick starting a React Project with ES6 (Babel) and Hot reloader using Webpack.",
-  "main": "index.js",
-  "scripts": {
-    "dev": "budo src/routes.js --dir=src --onupdate 'standard | notify-error' --live -- -t babelify -t lessify",
-    "build": "browserify src/routes.js -o static/bundle.js -t [ babelify --presets [ es2015 ] ] -t lessify",
-    "server": "node server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/vasanthk/react-es6-webpack-boilerplate.git"
-  },
-  "keywords": [
-    "react",
-    "es6",
-    "babel",
-    "webpack"
-  ],
-  "author": "Vasanth Krishnamoorthy (http://www.vasanthk.com)",
+  "name": "blueprint",
+  "version": "0.0.0",
+  "description": "Created with choo-cli",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/vasanthk/react-es6-webpack-boilerplate/issues"
+  "scripts": {
+    "start": "budo ./client.js --pushstate --live --dir=. -- -g es2040",
+    "lint": "standard --verbose | snazzy",
+    "test": "npm run lint"
   },
-  "homepage": "https://github.com/vasanthk/react-es6-webpack-boilerplate",
   "dependencies": {
-    "body-parser": "^1.15.2",
-    "express": "^4.13.4",
-    "faker": "^3.1.0",
-    "json-server": "^0.8.14",
-    "moment": "^2.14.1",
-    "q": "^1.4.1",
-    "request": "^2.72.0",
-    "superagent": "^1.8.3",
-    "validate.js": "^0.10.0"
+    "choo": "^3.2.0"
   },
   "devDependencies": {
-    "autoprefixer-loader": "^3.2.0",
-    "babel-cli": "^6.10.1",
-    "babel-core": "^6.3.21",
-    "babel-eslint": "^5.0.0-beta6",
-    "babel-loader": "^6.2.0",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-plugin-transform-runtime": "^6.3.13",
-    "babel-polyfill": "^6.9.1",
-    "babel-preset-es2015": "^6.9.0",
-    "babel-preset-stage-0": "^6.5.0",
-    "babel-runtime": "^6.3.19",
-    "babelify": "^7.3.0",
-    "budo": "^8.3.0",
-    "css-loader": "^0.23.1",
-    "envify": "^3.4.0",
-    "eslint": "^0.21.2",
-    "extract-text-webpack-plugin": "^1.0.1",
-    "less": "^2.6.1",
-    "less-loader": "^2.2.2",
-    "lessify": "^1.0.1",
-    "notify-error": "^1.2.0",
-    "standard": "^7.1.2",
-    "style-loader": "^0.13.1"
+    "babel-preset-es2015": "^6.14.0",
+    "browserify": "^13.0.1",
+    "budo": "8.3.0",
+    "es2040": "1.2.2",
+    "snazzy": "^4.0.0",
+    "standard": "^7.1.2"
+  },
+  "standard": {
+    "ignore": [
+      "scripts"
+    ]
   }
 }

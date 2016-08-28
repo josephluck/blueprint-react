@@ -1,68 +1,55 @@
-## Introduction
+# blueprint [![built with choo v3](https://img.shields.io/badge/built%20with%20choo-v3-ffc3e4.svg?style=flat-square)](https://github.com/yoshuawuyts/choo)
 
-A tool for front-end developers to mock API endpoints easily.
+Choo-cli created a directory structure that [we've found to be optimal](https://github.com/yoshuawuyts/choo-handbook/blob/master/designing-for-reusability.md) for slim
+applications and reusability.
 
-## Features
-
-- Define resources (collection of models)
-- Define models (with keys of different types)
-- Generate random data for each model depending on configuration
-- Access resources over a simple RESTful API
-- GET, POST, PUT and DELETE requests are permitted
-
-## Example
-
-Define a `/users` endpoint that has the following resource description:
-
-- `type`: collection (makes this an array of models)
-- `name`: users (makes it available on the `/users` endpoint for GET, POST, PUT, DELETE)
-- `length`: 2 (number of randomly generated users)
-
-Each user has the following description:
-
-- `first_name`: random first name
-- `last_name`: random last name
-- `date_of_birth`: random date between 1980 and 1995
-- `address_line_1`: random number between 1 and 230
-- `address_line_2`: random street name
-- `town`: random town name
-- `county`: random county
-- `postcode`: random postcode
-- `deleted`: random boolean
-- `favourite_programming_language`: random value between ['javascript', 'python', 'ruby']
-
-Making a GET request to `/users` returns the following:
-
-```
-[
-  {
-    "first_name": "Maurine",
-    "last_name": "Jackson",
-    "address_line_1": 10,
-    "address_line_2": "Bartoletti Ways",
-    "town": "Borders",
-    "county": "Arkansas",
-    "postcode": "70121-2298",
-    "country": "Pitcairn Islands",
-    "date_of_birth": "2015-09-01T08:59:30.636Z",
-    "deleted": false,
-    "favourite_programming_language": "ruby",
-    "id": 1
-  },
-  {
-    "first_name": "Kaley",
-    "last_name": "Mittie",
-    "address_line_1": 18,
-    "address_line_2": "Camren Mount",
-    "town": "Borders",
-    "county": "Michigan",
-    "postcode": "12199-8508",
-    "country": "Iran",
-    "date_of_birth": "2015-10-07T06:29:02.414Z",
-    "deleted": true,
-    "favourite_programming_language": "python",
-    "id": 2
-  }
-]
+```txt
+assets/        images and fonts, if you have any
+elements/      standalone application-specific elements
+lib/           generalized components, should be moved out of project later
+models/        choo models
+pages/         views that are directly mounted on the router
+scripts/       shell scripts, to be interfaced with through `npm scripts`
+client.js      main application entry; programmatic manifest file
+package.json   manifest file
 ```
 
+You can use choo-cli to generate pieces of your project as you are developing.
+For example you can generate
+
+Pages
+```bash
+$ choo generate page my-page
+```
+
+Models
+```bash
+$ choo generate model my-model
+```
+
+Elements
+```bash
+$ choo generate element my-element
+```
+
+## npm scripts
+
+Choo-cli was made for generating choo projects and code, and leverages npm scripts
+for certain project task. So in our project a set of npm scripts have already
+been generated that perform various tasks such as testing/serving/building/etc.
+
+At any time you can review the complete list of `npm scripts` available by viewing
+[package.json](./package.json) or by running the following command:
+
+```
+$ npm run
+```
+
+Here is complete list the the commands and their function
+- start - start dev server at [localhost:8080](https://localhost:8080)
+- build - builds your project to deploy to a server
+- test - runs unit tests, for now it will just run linting.
+- lint - runs eslint against your code
+
+So for example you can run `npm start` to start a dev server. You can now see your
+app running at [localhost:8080](https://localhost:8080)

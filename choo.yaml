@@ -1,0 +1,4 @@
+projectName: blueprint
+template:
+  name: choo-cli
+  source: choo-cli
