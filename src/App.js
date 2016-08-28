@@ -5,7 +5,6 @@ import Store from 'stores/Store';
 import ResourcesStore from 'stores/ResourcesStore';
 
 import ResourcesList from 'containers/ResourcesList';
-import RightBar from 'containers/RightBar';
 
 class App extends Component {
 	constructor(props) {
@@ -29,7 +28,6 @@ class App extends Component {
 								{this.props.children}
 							</div>
 						</div>
-						<RightBar />
 					</div>
 				: null
 				}
@@ -39,7 +37,8 @@ class App extends Component {
 }
 
 App.propTypes = {
-	children: React.PropTypes.node
+	children: React.PropTypes.node,
+	params: React.PropTypes.object
 };
 
 export default cool(App, Store);

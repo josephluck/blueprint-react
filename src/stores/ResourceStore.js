@@ -24,19 +24,22 @@ class ResourceStore {
 	getResource({
 		resourceId
 	}) {
-		let resource = Store.get().resources.find((_resource) => {
-			return _resource.id === parseInt(resourceId, 10);
-		}).toJS();
-
-		resource.model = resource.model.map((model) => {
-			if (model.fakerSubcategory === 'arrayElement' || model.fakerSubcategory === 'objectElement') {
-				model.fakerParams.json = JSON.stringify(model.fakerParams.json, null, 2);
-			}
-
-			return model;
+		let foundResource = Store.get().resources.find((resourceInResources) => {
+			return resourceInResources.id === parseInt(resourceId, 10);
 		});
 
-		Store.get().resource.reset(resource);
+		if (foundResource) {
+			let editableResource = foundResource.toJS();
+			editableResource.model = editableResource.model.map((model) => {
+				if (model.fakerSubcategory === 'arrayElement' || model.fakerSubcategory === 'objectElement') {
+					model.fakerParams.json = JSON.stringify(model.fakerParams.json, null, 2);
+				}
+
+				return model;
+			});
+
+			Store.get().resource.reset(editableResource);
+		}
 	}
 
 	updateResource(resource) {

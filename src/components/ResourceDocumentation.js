@@ -64,8 +64,6 @@ class ResourceDocumentation extends Component {
 		let requestExample = this.getRequestExample(this.props.resource.model);
 		let responseExample = requestExample;
 
-		responseExample.id = 1;
-
 		return (
 			<div className="flex">
 				<div className="flex-1 overflow-hidden flex-column">

@@ -71,7 +71,8 @@ class ResourcesStore {
 					}
 				]
 			}
-		}).then((resource) => {
+		}).then((response) => {
+			const resource = response.body;
 			Store.get().resources.push(resource);
 			browserHistory.push(`/${resource.id}`);
 		});
