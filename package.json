@@ -6,7 +6,8 @@
   "scripts": {
     "start": "budo ./src/client.js --pushstate --live --dir=app -- -g es2040",
     "lint": "standard --verbose | snazzy",
-    "test": "ava **/*.test.js --watch"
+    "test": "nyc ava **/*.test.js --watch",
+    "report": "nyc report --reporter=html --watch"
   },
   "dependencies": {
     "choo": "^3.2.0"
@@ -19,6 +20,7 @@
     "budo": "8.3.0",
     "es2040": "1.2.2",
     "jsdom": "^9.4.2",
+    "nyc": "^8.1.0",
     "snazzy": "^4.0.0",
     "standard": "^7.1.2"
   },
@@ -27,16 +29,26 @@
       "scripts"
     ]
   },
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-0"
+    ],
+    "plugins": [
+      "transform-runtime"
+    ],
+    "ignore": "test.js",
+    "env": {
+      "development": {
+        "sourceMaps": "inline"
+      }
+    }
+  },
   "ava": {
     "require": [
       "./test-helper.js",
       "babel-register"
     ],
-    "babel": {
-      "presets": [
-        "es2015",
-        "stage-0"
-      ]
-    }
+    "babel": "inherit"
   }
 }
