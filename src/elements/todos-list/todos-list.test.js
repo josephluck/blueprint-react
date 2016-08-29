@@ -22,9 +22,7 @@ Test('TodosList should render', t => {
 			}
 		]
 	}
-	while (document.body.firstChild) {
-		document.body.removeChild(document.body.firstChild)
-	}
+	document.body.innerHTML = ''
 	document.body.appendChild(TodosListComponent(props))
 	const TodosListNode = document.querySelectorAll('.TodosList')
 	const TodosListTodosNodes = document.querySelectorAll('.TodosListItem')
@@ -53,9 +51,7 @@ Test('TodosList should accept a callback when a todo is clicked', t => {
 		],
 		onTodoClick: onTodoClickSpy
 	}
-	while (document.body.firstChild) {
-		document.body.removeChild(document.body.firstChild)
-	}
+	document.body.innerHTML = ''
 	document.body.appendChild(TodosListComponent(props))
 	const TodosListTodosNodes = document.querySelectorAll('.TodosListItem')
 	t.true(onTodoClickSpy.callCount === 0)

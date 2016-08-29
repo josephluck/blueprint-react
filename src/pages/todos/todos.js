@@ -1,15 +1,15 @@
 import render from 'choo/html'
-import AddNewTodoComponent from '../../elements/add-new-todo'
-import TodosListComponent from '../../elements/todos-list'
+import AddNewTodo from '../../elements/add-new-todo'
+import TodosList from '../../elements/todos-list'
 
 export default (state, prev, send) => {
-	const AddNewTodo = AddNewTodoComponent({
+	const AddNewTodoComponent = AddNewTodo({
 		inputValue: state.todos.newTodoValue,
 		onInputType: (value) => send('todos:storeNewTodoInputValue', {value}),
 		onAddNewTodo: (todoDescription) => send('todos:addNewTodo', {todoDescription})
 	})
 
-	const TodosList = TodosListComponent({
+	const TodosListComponent = TodosList({
 	  todos: state.todos.todos,
 	  onTodoClick: (todoIndex) => send('todos:toggleTodoDone', {todoIndex})
 	})
@@ -17,8 +17,8 @@ export default (state, prev, send) => {
 	return render `
 	  <main>
 	    <h1>Todos list</h1>
-	    ${AddNewTodo}
-	    ${TodosList}
+	    ${AddNewTodoComponent}
+	    ${TodosListComponent}
 	  </main>
 	`
 }

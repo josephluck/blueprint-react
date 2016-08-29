@@ -4,17 +4,25 @@ export default ({
 	inputValue = '',
 	onInputType,
 	onAddNewTodo
-}) => render `
-	<form class="AddNewTodo"
-		onsubmit=${(e) => {
-			e.preventDefault()
-			onAddNewTodo(inputValue)}
-		}}>
-		<input value=${inputValue}
-			oninput=${(e) => onInputType(e.target.value)} />
-		<button type="submit"
-			disabled=${inputValue.length === 0}>
-			Add todo
-		</button>
-	</form>
-`
+}) => {
+	const onInputChange = e => {
+		onInputType(e.target.value)
+	}
+	const onFormSubmit = e => {
+		e.preventDefault()
+		onAddNewTodo(inputValue)
+	}
+	const buttonIsDisabled = inputValue.length === 0
+
+	return render `
+		<form class="AddNewTodo"
+			onsubmit=${onFormSubmit}>
+			<input value=${inputValue}
+				oninput=${onInputChange} />
+			<button type="submit"
+				disabled=${buttonIsDisabled}>
+				Add todo
+			</button>
+		</form>
+	`
+}

@@ -1,3 +1,26 @@
+export const storeNewTodoInputValue = (payload, state) => {
+  let newState = state
+  newState.newTodoValue = payload.value
+  return newState
+}
+
+export const addNewTodo = (payload, state) => {
+  let newState = state
+  newState.newTodoValue = ''
+  newState.todos = [{
+    description: payload.todoDescription,
+    done: false
+  }].concat(newState.todos)
+  return newState
+}
+
+export const toggleTodoDone = (payload, state) => {
+  let newState = state
+  let todoBeingToggled = newState.todos[payload.todoIndex]
+  todoBeingToggled.done = !todoBeingToggled.done
+  return newState
+}
+
 export default {
   namespace: 'todos',
   state: {
@@ -18,26 +41,9 @@ export default {
     ]
   },
   reducers: {
-    storeNewTodoInputValue: (payload, state) => {
-      let newState = state
-      newState.newTodoValue = payload.value
-      return newState
-    },
-    addNewTodo: (payload, state) => {
-      let newState = state
-      newState.newTodoValue = ''
-      newState.todos = [{
-        description: payload.todoDescription,
-        done: false
-      }].concat(newState.todos)
-      return newState
-    },
-    toggleTodoDone: (payload, state) => {
-      let newState = state
-      let todoBeingToggled = newState.todos[payload.todoIndex]
-      todoBeingToggled.done = !todoBeingToggled.done
-      return newState
-    }
+    storeNewTodoInputValue,
+    addNewTodo,
+    toggleTodoDone
   },
   effects: {
     // asynchronous operations that don't modify state directly.
