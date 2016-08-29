@@ -1,6 +1,7 @@
 export default {
+  namespace: 'todos',
   state: {
-    /* initial values of state inside the model */
+    newTodoValue: '',
     todos: [
       {
         description: 'Learn Choo',
@@ -17,8 +18,26 @@ export default {
     ]
   },
   reducers: {
-    /* synchronous operations that modify state. Triggered by actions. Signature of (data, state). */
-    update: (action, state) => ({ title: action.value })
+    storeNewTodoInputValue: (payload, state) => {
+      let newState = state
+      newState.newTodoValue = payload.value
+      return newState
+    },
+    addNewTodo: (payload, state) => {
+      let newState = state
+      newState.newTodoValue = ''
+      newState.todos = [{
+        description: payload.todoDescription,
+        done: false
+      }].concat(newState.todos)
+      return newState
+    },
+    toggleTodoDone: (payload, state) => {
+      let newState = state
+      let todoBeingToggled = newState.todos[payload.todoIndex]
+      todoBeingToggled.done = !todoBeingToggled.done
+      return newState
+    }
   },
   effects: {
     // asynchronous operations that don't modify state directly.

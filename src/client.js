@@ -2,12 +2,12 @@ import Choo from 'choo'
 const App = Choo()
 
 import AppModel from './models/app'
-import todos from './models/todos'
+import TodosModel from './models/todos'
 App.model(AppModel)
-App.model(todos)
+App.model(TodosModel)
 
 import Home from './pages/home'
-import Todos from './pages/todos'
+import Todos from './pages/todos/todos'
 
 App.router((route) => [
   route('/', Home),
