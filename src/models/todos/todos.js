@@ -21,6 +21,12 @@ export const toggleTodoDone = (payload, state) => {
   return newState
 }
 
+export const removeAllDoneTodos = (payload, state) => {
+  let newState = state
+  newState.todos = newState.todos.filter(todo => !todo.done)
+  return newState
+}
+
 export default {
   namespace: 'todos',
   state: {
@@ -43,25 +49,10 @@ export default {
   reducers: {
     storeNewTodoInputValue,
     addNewTodo,
-    toggleTodoDone
+    toggleTodoDone,
+    removeAllDoneTodos
   },
-  effects: {
-    // asynchronous operations that don't modify state directly.
-    // Triggered by actions, can call actions. Signature of (data, state, send, done)
-    /*
-    myEffect: (data, state, send, done) => {
-      // do stuff
-    }
-    */
-  },
-  subscriptions: [
-    // asynchronous read-only operations that don't modify state directly.
-    // Can call actions. Signature of (send, done).
-    /*
-    (send, done) => {
-      // do stuff
-    }
-    */
-  ]
+  effects: {},
+  subscriptions: []
 }
 

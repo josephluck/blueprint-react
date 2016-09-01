@@ -2,7 +2,7 @@ import h from 'choo/html'
 
 export default ({
 	todos = [],
-	onTodoClick = () => {}
+	onTodoClick
 }) => h`
 	<div class="TodosList">
 		${todos.map((todo, todoIndex) => h`

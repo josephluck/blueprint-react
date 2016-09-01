@@ -7,7 +7,7 @@
     "start": "budo ./src/client.js --dir=. --pushstate --live -- -g es2040",
     "lint": "standard --verbose | snazzy",
     "test": "nyc ava **/*.test.js --watch",
-    "report": "nyc report --reporter=html --watch"
+    "report": "nyc report --reporter=html"
   },
   "dependencies": {
     "choo": "^3.2.0"
@@ -44,7 +44,7 @@
   "ava": {
     "require": [
       "./test-helper.js",
-      "babel-register"
+      "babel-core/register"
     ],
     "babel": "inherit"
   }

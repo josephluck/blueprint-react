@@ -1,6 +1,5 @@
 import Test from 'ava'
 import Sinon from 'sinon'
-
 import TodosListComponent from './todos-list'
 
 

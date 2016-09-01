@@ -1,10 +1,11 @@
 import Test from 'ava'
-
 import TodosModel from './todos'
+
 const {
 	storeNewTodoInputValue,
 	addNewTodo,
-	toggleTodoDone
+	toggleTodoDone,
+	removeAllDoneTodos
 } = TodosModel.reducers
 
 
@@ -77,4 +78,32 @@ Test('toggleTodoDone should switch the done flag of the given todo index', t => 
 	}
 	const actualNewState = toggleTodoDone(payload, currentState)
 	t.is(actualNewState.todos[0].done, true)
+})
+
+
+Test('removeAllDoneTodos should delete all the done todos', t => {
+	t.plan(2)
+	const currentState = {
+		todos: [
+			{
+				description: 'Todo one',
+				done: true
+			},
+			{
+				description: 'Todo two',
+				done: false
+			}
+		]
+	}
+	const expectedNewState = {
+		todos: [
+			{
+				description: 'Todo two',
+				done: true
+			}
+		]
+	}
+	const actualNewState = removeAllDoneTodos({}, currentState)
+	t.is(actualNewState.todos.length, 1)
+	t.is(actualNewState.todos[0].description, "Todo two")
 })

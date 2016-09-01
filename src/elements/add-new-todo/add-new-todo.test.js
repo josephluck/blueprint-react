@@ -1,7 +1,6 @@
 import Test from 'ava'
 import Sinon from 'sinon'
 import Simulate from 'simulant'
-
 import AddNewTodoComponent from './add-new-todo'
 
 

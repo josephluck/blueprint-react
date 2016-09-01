@@ -1,2 +1,2 @@
-import Todos from './Todos';
-export default Todos;
+import todos from './todos';
+export default todos;
