@@ -19,7 +19,7 @@ export default {
       newState.form[payload.key] = payload.value
       return newState
     },
-    loginSubmitted: (payload, state) => {
+    loginFormSubmitted: (payload, state) => {
       let newState = state
       newState.errors = {}
       newState.loading = true
@@ -42,8 +42,8 @@ export default {
     }
   },
   effects: {
-    attemptLogin: (payload, state, send, done) => {
-      send('login:loginSubmitted', {}, (err) => {
+    submitLoginForm: (payload, state, send, done) => {
+      send('login:loginFormSubmitted', {}, (err) => {
         if (err) return done(err)
       })
       Http({
@@ -73,6 +73,11 @@ export default {
             if (err) return done(err)
           })
           send('login:loginSuccess', body, (err) => {
+            if (err) return done(err)
+          })
+          send('location:redirect', {
+            uri: ''
+          }, (err) => {
             if (err) return done(err)
           })
         }

@@ -3,7 +3,7 @@ import render from 'choo/html'
 export default (state, prev, send) => {
 	const onSubmit = (e) => {
 		e.preventDefault();
-		send('login:attemptLogin', state)
+		send('login:submitLoginForm', state)
 	}
 	const component = render `
 		<div>

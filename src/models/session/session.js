@@ -1,11 +1,8 @@
-import Http from 'choo/http'
-import Api from '../../utils/api'
-
 export default {
   namespace: 'session',
   state: {
-    user: {},
-    token: null
+    userId: window.localStorage.getItem('userId'),
+    token: window.localStorage.getItem('token')
   },
   reducers: {
     setToken(payload, state) {
@@ -34,6 +31,19 @@ export default {
     }
   },
   effects: {
+    unauthenticated(payload, state, send, done) {
+      send('session:removeToken', {}, (err) => {
+        if (err) return done(err)
+      })
+      send('session:removeUserId', {}, (err) => {
+        if (err) return done(err)
+      })
+      send('location:redirect', {
+        url: 'login'
+      }, (err) => {
+        if (err) return done(err)
+      })
+    }
   },
   subscriptions: []
 }
