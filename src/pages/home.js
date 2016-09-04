@@ -15,7 +15,7 @@ const TopBar = (state, prev, send) => {
     <div class=${TopBarStyles}>
       Top bar
 
-      <a onclick=${onLogoutClick}>
+      <a onclick=${onLogoutClick} class="inline-block mt1">
         Logout
       </a>
     </div>

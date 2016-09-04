@@ -1,9 +1,13 @@
-const Choo = require('choo')
-const Log = require('choo-log')
+const choo = require('choo')
+const log = require('choo-log')
+const sheetify = require('sheetify')
+
+// Styles
+sheetify('basscss/css/basscss.min.css')
 
 // Middleware
-const App = Choo()
-App.use(Log())
+const App = choo()
+App.use(log())
 
 // Models
 const AppModel = require('./models/app')

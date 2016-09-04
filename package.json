@@ -10,6 +10,7 @@
     "report": "nyc report --reporter=html"
   },
   "dependencies": {
+    "basscss": "^8.0.2",
     "choo": "^3.2.2",
     "choo-log": "^1.4.0",
     "sheetify": "^5.1.0"
