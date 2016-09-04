@@ -22,7 +22,7 @@ const Login = require('./pages/login')
 const LoggedIn = require('./pages/logged_in')
 
 App.router((route) => [
-  route('/', Home, [
+  route('/', RequireLogin.bind(arguments, Home), [
     route('/logged_in', RequireLogin.bind(arguments, LoggedIn))
   ]),
   route('/login', Login)

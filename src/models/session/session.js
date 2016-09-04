@@ -31,7 +31,7 @@ module.exports = {
     }
   },
   effects: {
-    unauthenticated (payload, state, send, done) {
+    logout (payload, state, send, done) {
       send('session:removeToken', {}, (err) => {
         if (err) return done(err)
       })

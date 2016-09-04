@@ -4,7 +4,7 @@
   "description": "Created with choo-cli",
   "license": "MIT",
   "scripts": {
-    "start": "budo ./src/client.js --dir=. --pushstate --live --onupdate \"standard\" -- -t sheetify/transform -t es2040",
+    "start": "budo ./src/client.js --dir=. --pushstate --live --onupdate \"standard\" -- -t [ sheetify/transform -u sheetify-cssnext ] -t es2040",
     "lint": "standard --verbose | snazzy",
     "test": "nyc ava **/*.test.js --watch",
     "report": "nyc report --reporter=html"
@@ -23,6 +23,7 @@
     "es2040": "1.2.2",
     "jsdom": "^9.4.2",
     "nyc": "^8.1.0",
+    "sheetify-cssnext": "^1.0.7",
     "simulant": "^0.2.2",
     "sinon": "^1.17.5",
     "snazzy": "^4.0.0",

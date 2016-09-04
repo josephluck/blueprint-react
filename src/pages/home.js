@@ -1,22 +1,36 @@
-const Html = require('choo/html')
-const Sheetify = require('sheetify')
+const render = require('choo/html')
+const sheetify = require('sheetify')
 
-const classes = Sheetify `
-  h1 {
-    text-align: center;
+const TopBar = (state, prev, send) => {
+  const onLogoutClick = (e) => {
+    e.preventDefault()
+    send('session:logout')
   }
-`
+  const TopBarStyles = sheetify `
+    div {
+      text-align: center;
+    }
+  `
+  return render `
+    <div class=${TopBarStyles}>
+      Top bar
+
+      <a onclick=${onLogoutClick}>
+        Logout
+      </a>
+    </div>
+  `
+}
 
 module.exports = (state, prev, send) => {
-  return Html `
-    <div class=${classes}>
-      <h1>Hello, World!</h1>
-      <p>If you are seeing this, then the generator works!</p>
-      <h2>Demo</h2>
-      <h3>${state.title}</h3>
-      <input
-        type="text"
-        oninput=${(e) => send('update', { value: e.target.value })} />
+  const HomePageStyles = sheetify `
+    div {
+      text-align: center;
+    }
+  `
+  return render `
+    <div class=${HomePageStyles}>
+      ${TopBar(state, prev, send)}
     </div>
   `
 }

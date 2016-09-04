@@ -1,2 +1,2 @@
-const Session = require('./Session')
-module.exports = Session
+const session = require('./session')
+module.exports = session
