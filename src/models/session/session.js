@@ -4,64 +4,36 @@ import Api from '../../utils/api'
 export default {
   namespace: 'session',
   state: {
-    form: {
-      email: 'joseph.luck@local.co',
-      password: '12345678'
-    },
-    errors: {},
-    loading: false,
     user: {},
     token: null
   },
   reducers: {
-    onInputChange: (payload, state) => {
+    setToken(payload, state) {
       let newState = state
-      newState.form[payload.key] = payload.value
+      newState.token = payload.token
+      localStorage.setItem('token', payload.token)
       return newState
     },
-    loginSubmitted: (payload, state) => {
+    setUserId(payload, state) {
       let newState = state
-      newState.errors = {}
-      newState.loading = true
+      newState.userId = payload.userId
+      localStorage.setItem('userId', payload.userId)
       return newState
     },
-    loginSuccess: (payload, state) => {
+    removeToken(payload, state) {
       let newState = state
-      newState.user = payload
-      newState.errors = {}
-      newState.loading = false
-      return state
+      newState.token = null
+      localStorage.removeItem('token')
+      return newState
     },
-    loginError: (payload, state) => {
+    removeUserId(payload, state) {
       let newState = state
-      newState.errors = {
-        general: payload.message
-      }
-      newState.loading = false
+      newState.userId = null
+      localStorage.removeItem('userId')
       return newState
     }
   },
   effects: {
-    attemptLogin: (payload, state, send, done) => {
-      send('session:loginSubmitted', {}, (err) => {
-        if (err) return done(err)
-      })
-      Http({
-        uri: Api.getUrl('login'),
-        method: 'post',
-        json: state.form
-      }, (err, resp, body) => {
-        if (resp.statusCode === 401) {
-          send('session:loginError', body, (err) => {
-            if (err) return done(err)
-          })
-        } else {
-          send('session:loginSuccess', body, (err) => {
-            if (err) return done(err)
-          })
-        }
-      })
-    }
   },
   subscriptions: []
 }

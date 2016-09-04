@@ -3,14 +3,14 @@ import render from 'choo/html'
 export default (state, prev, send) => {
 	const onSubmit = (e) => {
 		e.preventDefault();
-		send('session:attemptLogin', state)
+		send('login:attemptLogin', state)
 	}
 	const component = render `
 		<div>
-			${state.session.errors.general ?
+			${state.login.errors.general ?
 				render `
 					<div>
-						${state.session.errors.general}
+						${state.login.errors.general}
 					</div>
 				`
 				:
@@ -18,8 +18,7 @@ export default (state, prev, send) => {
 			}
 		  <form
 		  	class="LoginPage"
-		  	onsubmit=${onSubmit}
-		  >
+		  	onsubmit=${onSubmit}>
 		    <h1>
 		    	Login
 		    </h1>
@@ -28,33 +27,30 @@ export default (state, prev, send) => {
 		    </label>
 		    <input
 		    	name="email"
-		    	value=${state.session.form.email}
+		    	value=${state.login.form.email}
 		    	onchange=${(e) => {
-		    		send('session:onInputChange', {
+		    		send('login:onInputChange', {
 		    			key: 'email',
 		    			value: e.target.value
 		    		})
 		    	}}
-		    	type="text"
-		    />
+		    	type="text"/>
 		    <label>
 		    	Password
 		    </label>
 		    <input
 		    	name="password"
-		    	value=${state.session.form.password}
+		    	value=${state.login.form.password}
 		    	onchange=${(e) => {
-		    		send('session:onInputChange', {
+		    		send('login:onInputChange', {
 		    			key: 'password',
 		    			value: e.target.value
 		    		})
 		    	}}
-		    	type="password"
-		    />
+		    	type="password"/>
 		    <button
 		    	type="submit"
-		    	disabled=${state.session.loading}
-		    >
+		    	disabled=${state.login.loading}>
 		    	Login
 		    </button>
 		  </form>

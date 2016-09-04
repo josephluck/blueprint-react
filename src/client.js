@@ -9,6 +9,8 @@ import TodosModel from './models/todos'
 App.model(TodosModel)
 import SessionModel from './models/session'
 App.model(SessionModel)
+import LoginModel from './models/login'
+App.model(LoginModel)
 
 import Home from './pages/home'
 import Login from './pages/login'
