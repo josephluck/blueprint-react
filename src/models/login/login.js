@@ -1,7 +1,7 @@
-import Http from 'choo/http'
-import Api from '../../utils/api'
+const Http = require('choo/http')
+const Api = require('../../utils/api')
 
-export default {
+module.exports = {
   namespace: 'login',
   state: {
     form: {
@@ -51,6 +51,9 @@ export default {
         method: 'post',
         json: state.form
       }, (err, resp, body) => {
+        if (err) {
+          return
+        }
         if (resp.statusCode === 401) {
           send('login:loginError', body, (err) => {
             if (err) return done(err)

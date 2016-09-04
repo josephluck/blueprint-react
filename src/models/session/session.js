@@ -1,37 +1,37 @@
-export default {
+module.exports = {
   namespace: 'session',
   state: {
     userId: window.localStorage.getItem('userId'),
     token: window.localStorage.getItem('token')
   },
   reducers: {
-    setToken(payload, state) {
+    setToken (payload, state) {
       let newState = state
       newState.token = payload.token
-      localStorage.setItem('token', payload.token)
+      window.localStorage.setItem('token', payload.token)
       return newState
     },
-    setUserId(payload, state) {
+    setUserId (payload, state) {
       let newState = state
       newState.userId = payload.userId
-      localStorage.setItem('userId', payload.userId)
+      window.localStorage.setItem('userId', payload.userId)
       return newState
     },
-    removeToken(payload, state) {
+    removeToken (payload, state) {
       let newState = state
       newState.token = null
-      localStorage.removeItem('token')
+      window.localStorage.removeItem('token')
       return newState
     },
-    removeUserId(payload, state) {
+    removeUserId (payload, state) {
       let newState = state
       newState.userId = null
-      localStorage.removeItem('userId')
+      window.localStorage.removeItem('userId')
       return newState
     }
   },
   effects: {
-    unauthenticated(payload, state, send, done) {
+    unauthenticated (payload, state, send, done) {
       send('session:removeToken', {}, (err) => {
         if (err) return done(err)
       })

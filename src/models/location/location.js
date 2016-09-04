@@ -1,15 +1,12 @@
-import Http from 'choo/http'
-import Api from '../../utils/api'
-
-export default {
+module.exports = {
   namespace: 'location',
   state: {
     user: {},
     token: null
   },
   reducers: {
-    redirect(payload, state) {
-      let newState = state;
+    redirect (payload, state) {
+      let newState = state
       newState.pathname = `${window.location.origin}/${payload.uri}`
       return newState
     }

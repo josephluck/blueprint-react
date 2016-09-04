@@ -1,34 +1,30 @@
-import Choo from 'choo'
-import Log from 'choo-log'
+const Choo = require('choo')
+const Log = require('choo-log')
 
 // Middleware
 const App = Choo()
 App.use(Log())
 
 // Models
-import AppModel from './models/app'
+const AppModel = require('./models/app')
 App.model(AppModel)
-import LocationModel from './models/location'
+const LocationModel = require('./models/location')
 App.model(LocationModel)
-import TodosModel from './models/todos'
-App.model(TodosModel)
-import SessionModel from './models/session'
+const SessionModel = require('./models/session')
 App.model(SessionModel)
-import LoginModel from './models/login'
+const LoginModel = require('./models/login')
 App.model(LoginModel)
 
 // Views
-import RequireLogin from './pages/require_login'
-import Home from './pages/home'
-import Login from './pages/login'
-import Todos from './pages/todos/todos'
-import LoggedIn from './pages/logged_in'
+const RequireLogin = require('./pages/require_login')
+const Home = require('./pages/home')
+const Login = require('./pages/login')
+const LoggedIn = require('./pages/logged_in')
 
 App.router((route) => [
   route('/', Home, [
-  	route('/logged_in', RequireLogin.bind(arguments, LoggedIn))
+    route('/logged_in', RequireLogin.bind(arguments, LoggedIn))
   ]),
-  route('/todos', Todos),
   route('/login', Login)
 ])
 

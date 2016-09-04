@@ -1,2 +1,2 @@
-import login from './login';
-export default login;
+const Login = require('./login')
+module.exports = Login

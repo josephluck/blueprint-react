@@ -1,2 +1,2 @@
-import Location from './location'
-export default Location
+const Location = require('./location')
+module.exports = Location

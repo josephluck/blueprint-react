@@ -1,2 +1,2 @@
-import RequireLogin from './require_login'
-export default RequireLogin
+const RequireLogin = require('./require_login')
+module.exports = RequireLogin

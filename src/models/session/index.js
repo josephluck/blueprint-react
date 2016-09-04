@@ -1,2 +1,2 @@
-import session from './session'
-export default session
+const Session = require('./Session')
+module.exports = Session
