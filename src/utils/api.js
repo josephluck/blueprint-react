@@ -5,6 +5,8 @@ module.exports = {
     switch (key) {
       case 'login':
         return `${ApiRoot}/auth/local`
+      case 'resources':
+      	return `${ApiRoot}/resources`
     }
     console.error(`Couldn't find the key ${key} in the URL configuration`)
   }

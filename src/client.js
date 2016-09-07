@@ -18,6 +18,8 @@ const SessionModel = require('./models/session')
 App.model(SessionModel)
 const LoginModel = require('./models/login')
 App.model(LoginModel)
+const ResourcesModel = require('./models/resources')
+App.model(ResourcesModel)
 
 // Views
 const RequireLogin = require('./pages/require_login')
