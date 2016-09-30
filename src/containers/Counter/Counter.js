@@ -10,7 +10,7 @@ class Counter extends React.Component {
           className={styles.button}
           onClick={this.props.increment}
         >
-          {'Increment'}
+          {'Incrementttt'}
         </button>
         <h1>
           {this.props.count}

@@ -4,3 +4,7 @@ browsers:
     version: latest
   - name: safari
     version: latest
+browserify:
+  - transform:
+      name: babelify
+      presets: es2015,stage-0,react

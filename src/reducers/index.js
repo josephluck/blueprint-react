@@ -1,5 +1,8 @@
 const combineReducers = require('redux').combineReducers
+const formReducer = require('redux-form').reducer
 
 module.exports = combineReducers({
-  counter: require('../containers/Counter/reducers')
+  form: formReducer,
+  counter: require('../containers/Counter/reducers'),
+  login: require('../containers/Login/reducers')
 })
