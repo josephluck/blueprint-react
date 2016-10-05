@@ -7,13 +7,13 @@ const moment = require('moment');
 	Set some options for date validation
 =============================================================================*/
 validate.extend(validate.validators.datetime, {
-  parse: function (value) {
-    return +moment.utc(value);
-  },
-  format: function (value, options) {
-    let format = options.dateOnly ? 'YYYY-MM-DD' : 'YYYY-MM-DD hh:mm:ss';
-    return moment.utc(value).format(format);
-  }
+	parse: function (value) {
+		return +moment.utc(value);
+	},
+	format: function (value, options) {
+		let format = options.dateOnly ? 'YYYY-MM-DD' : 'YYYY-MM-DD hh:mm:ss';
+		return moment.utc(value).format(format);
+	}
 });
 
 /*=============================================================================
@@ -135,14 +135,14 @@ class ResourceUtils {
 		Get a random sub-set of an array
 	=============================================================================*/
 	getRandomSample(array, count) {
-    let indices = [];
-    let result = new Array(count);
-    for (let i = 0; i < count; i++) {
-      let j = Math.floor(Math.random() * (array.length - i) + i);
-      result[i] = !array[indices[j] ? j : indices[j]];
-      indices[j] = !indices[i] ? i : indices[i];
-    }
-    return result;
+		let indices = [];
+		let result = new Array(count);
+		for (let i = 0; i < count; i++) {
+			let j = Math.floor(Math.random() * (array.length - i) + i);
+			result[i] = !array[indices[j] ? j : indices[j]];
+			indices[j] = !indices[i] ? i : indices[i];
+		}
+		return result;
 	}
 
 	/*=============================================================================
@@ -263,12 +263,6 @@ class ResourceUtils {
 						config.datetime.earliest = fakerParams.refDate;
 					}
 					if (fakerParams.years) {
-						//
-						// NOTE: Refactor this so it works when this is run so it's always looking at todays date
-						// Consider storing latest as the string 'today' and checking for that string when
-						// validation is run
-						//
-
 						let refDate = fakerParams.refDate || new Date();
 						config.datetime.latest = moment(refDate).add(fakerParams.years, 'years').format('YYYY-MM-DD');
 					}
